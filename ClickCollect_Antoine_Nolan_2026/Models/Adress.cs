@@ -7,6 +7,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 {
     public class Adress
     {
+        private int id;
         private string street="";
         private string number="";
         private string city="";
@@ -19,16 +20,18 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         }
 
-        public Adress(string _street, string _number, string _city, string _country)    
+        public Adress(int _id, string _street, string _number, string _city, string _country)    
         {
+            id = _id;
             Street = _street;
             Number = _number;
             City = _city;
             country = _country;
         }
 
-        public Adress(string _street, string _number, string _city, string _country, double _lon, double _lat)
+        public Adress(int _id, string _street, string _number, string _city, string _country, double _lon, double _lat)
         {
+            id = _id;
             Street = _street;
             Number = _number;
             City = _city;
@@ -36,6 +39,8 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             longitude = _lon; 
             latitude = _lat;
         }
+
+        public int Id { get => id;  }
 
         [Display(Name = "Numéro")]
         public string Number

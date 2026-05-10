@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Etude Antoine\\Cours\\BAC 2 Q2\\Analyse 2\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj",
+      "projectUniqueName": "C:\\Users\\Etude Antoine\\Cours\\BAC 2 Q2\\projet_csharp\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj",
       "projectName": "ClickCollect_Antoine_Nolan_2026",
-      "projectPath": "C:\\Users\\Etude Antoine\\Cours\\BAC 2 Q2\\Analyse 2\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj",
+      "projectPath": "C:\\Users\\Etude Antoine\\Cours\\BAC 2 Q2\\projet_csharp\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj",
       "packagesPath": "C:\\Users\\Etude Antoine\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Etude Antoine\\Cours\\BAC 2 Q2\\Analyse 2\\ClickCollect_Antoine_Nolan_2026\\obj\\",
+      "outputPath": "C:\\Users\\Etude Antoine\\Cours\\BAC 2 Q2\\projet_csharp\\ClickCollect_Antoine_Nolan_2026\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
