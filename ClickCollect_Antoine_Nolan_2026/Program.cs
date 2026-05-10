@@ -27,6 +27,12 @@ namespace ClickCollect_Antoine_Nolan_2026
             app.UseAuthorization();
 
             app.MapControllerRoute(
+                name: "viewProduct",
+                pattern: "product/{productId:alpha:maxlength(12)}",
+                defaults: new { controller = "Product", action = "ViewProduct" }
+                );
+
+            app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 

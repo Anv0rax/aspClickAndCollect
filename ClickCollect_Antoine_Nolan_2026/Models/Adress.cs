@@ -42,6 +42,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         public int Id { get => id;  }
 
+        public double Longitude
+        {
+            get => longitude;
+        }
+
+        public double Latitude
+        {
+            get => latitude;
+        }
+
         [Display(Name = "Numéro")]
         public string Number
         {
@@ -82,7 +92,15 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         public async Task InitLonLatAsync()
         {
-            (latitude, longitude) = await GetLonLatAsync(this.ToString());
+            (longitude, latitude) = await GetLonLatAsync(this.ToString());
+        }
+
+        public double GetDistanceWith(double lon, double lat)
+        {
+            if (Longitude != -1 && Latitude != -1)
+                return GetDistanceBetween(Longitude, Latitude, lon, lat);
+            else 
+                throw new Exception("Init lon and lat first");
         }
 
         public async static Task<(double lon, double lat)> GetLonLatAsync(string address)
@@ -107,17 +125,17 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         }
 
 
-        public static double GetDistanceBetween(double lat1, double lon1, double lat2, double lon2)
+        public static double GetDistanceBetween(double lon1, double lat1, double lon2, double lat2)
         {
             const double Radius = 6371;
-            double diffLat = (lat2 - lat1) * Math.PI / 180;
             double diffLon = (lon2 - lon1) * Math.PI / 180;
+            double diffLat = (lat2 - lat1) * Math.PI / 180;
 
             double a = Math.Sin(diffLat / 2) * Math.Sin(diffLat / 2)
                      + Math.Cos(lat1 * Math.PI / 180) * Math.Cos(lat2 * Math.PI / 180)
                      * Math.Sin(diffLon / 2) * Math.Sin(diffLon / 2);
 
-            return (Radius * 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a)));
+            return Radius * 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
         }
     }
 }
