@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ClickCollect_Antoine_Nolan_2026")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3aaf911737413a530d0c8d4261b698f2e2507bc0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+30aefdbc46ea6a85335d49838531fe9a75f555d4")]
 [assembly: System.Reflection.AssemblyProductAttribute("ClickCollect_Antoine_Nolan_2026")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ClickCollect_Antoine_Nolan_2026")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

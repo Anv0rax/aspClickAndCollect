@@ -102,14 +102,14 @@ CREATE TABLE ProductQuantity (
     FOREIGN KEY (orderId) REFERENCES Orders(orderId)
 );
 
-CREATE TABLE ShoppingCart (
-    productId INT,
-    userId INT,
-    quantity INT,
-    PRIMARY KEY (productId, userId),
-    FOREIGN KEY (productId) REFERENCES Products(productId),
-    FOREIGN KEY (userId) REFERENCES Customers(userId)
-);
+-- CREATE TABLE ShoppingCart (
+--     productId INT,
+--     userId INT,
+--     quantity INT,
+--     PRIMARY KEY (productId, userId),
+--     FOREIGN KEY (productId) REFERENCES Products(productId),
+--     FOREIGN KEY (userId) REFERENCES Customers(userId)
+-- );
 
 CREATE TABLE Ingredients (
     productId INT,
