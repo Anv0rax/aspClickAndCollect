@@ -1,0 +1,14 @@
+.vs/
+*.user
+*.suo
+
+**/bin/
+**/obj/
+
+*.nupkg
+**/packages/
+project.lock.json
+project.assets.json
+**/obj/*.nuget.*
+
+*.log
