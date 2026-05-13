@@ -1,26 +1,130 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model List<ClickCollect_Antoine_Nolan_2026.Models.Product>
+
+@{
+    ViewData["Title"] = "Boutique - Nos Produits";
 }
 
-<div class="card" style="max-width: 200px; max-height:300px">
-    <img src="https://www.internubel.be/productfotos/7678Materne%20mousseline%20pomme%20ss%20sucre.jpg" class="card-img-top" alt="Product Image">
-    <div class="card-body">
-        <h5 class="card-title">Mousseline de Pommes</h5>
-        <p class="card-text">Materne - Mousseline de pommes sans surcre ajouté</p>
-        <div class="d-flex justify-content-between align-items-center">
-            <span class="h5 mb-0">$99.99</span>
-           @*  <div>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-half text-warning"></i>
-                <small class="text-muted">(4.5)</small>
-            </div> *@
+<div class="container py-5">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
-    </div>
-    <div class="card-footer d-flex justify-content-between bg-light">
-        <button class="btn btn-primary btn-sm">View the product</button>
-        <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-heart"></i></button>
+    }
+    <div class="row">
+        <aside class="col-lg-3 mb-4">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body">
+                    <h5 class="mb-3">Rechercher</h5>
+                    <div class="input-group">
+                        <input type="text" class="form-control border-light" placeholder="Pomme, miel..." aria-label="Search">
+                        <button class="btn btn-primary" type="button">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="mb-3">Catégories</h5>
+                    <div class="list-group list-group-flush">
+                        <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0">
+                            Tous les produits
+                            <span class="badge bg-primary rounded-pill">@Model.Count</span>
+                        </a>
+                        @foreach (var cat in Model.SelectMany(p => p.CategoryProduct).GroupBy(c => c.Id).Select(g => g.First()))
+                        {
+                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0">
+                                @cat.NameCategory
+                                <span class="badge bg-secondary rounded-pill">
+                                    @Model.Count(p => p.CategoryProduct.Any(c => c.Id == cat.Id))
+                                </span>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="h4 mb-0">Nos Incontournables</h2>
+                <select class="form-select w-auto border-0 shadow-sm">
+                    <option selected>Trier par : Nouveautés</option>
+                    <option>Prix : Croissant</option>
+                    <option>Prix : Décroissant</option>
+                </select>
+            </div>
+
+            @if (Model == null || Model.Count == 0)
+            {
+                <div class="alert alert-warning">No products were found in the catalog.</div>
+            }
+            else
+            {
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col">
+                            <div class="card h-100 shadow-sm border-0 product-card">
+                                <div class="p-3 text-center">
+                                    <img src="@item.ImageLink" class="card-img-top rounded" alt="@item.Name" style="height: 180px; object-fit: contain;">
+                                </div>
+                                <div class="card-body d-flex flex-column">
+                                    <h6 class="card-subtitle mb-2 text-muted small">
+                                        @string.Join(", ", item.CategoryProduct.Select(c => c.NameCategory))
+                                    </h6>
+                                    <h5 class="card-title h6">@item.Name</h5>
+                                    <p class="small text-muted text-truncate" style="max-width: 100%;">@item.Description</p>
+                                    <div class="mt-auto">
+                                        <div class="mb-2">
+                                            <a asp-controller="Product" asp-action="ViewProduct" asp-route-id="@item.ProductId"
+                                               class="btn btn-sm btn-light w-100 border-0 shadow-sm" style="font-size: 0.8rem;">
+                                                <i class="bi bi-info-circle me-1"></i> Plus de détails
+                                            </a>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="h5 mb-0 text-primary">@item.Price.ToString("F2")€</span>
+                                            <button class="btn btn-sm btn-outline-primary rounded-circle">
+                                                <i class="bi bi-cart-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </main>
     </div>
 </div>
+
+<style>
+    .product-card {
+        transition: all 0.3s ease;
+    }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08) !important;
+        }
+
+    .list-group-item {
+        border: none;
+        padding: 0.75rem 0.5rem;
+        transition: background 0.2s;
+    }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+            color: #0d6efd;
+        }
+
+    .card-title {
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+    }
+</style>

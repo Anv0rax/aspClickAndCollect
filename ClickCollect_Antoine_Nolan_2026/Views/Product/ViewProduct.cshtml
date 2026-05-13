@@ -1,5 +1,59 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model Product
+
 @{
+    ViewData["Title"] = @Model.Name;
 }
+
+<div class="container py-5">
+    <div class="row py-5">
+        <!--I'm going to place the image of the product on the left side of the page.-->
+        <div class="col-md-5 text-center">
+            <img src="@Model.ImageLink" alt="@Model.Name" class="img-fluid rounded shadow" style="max-height : 400px; object-fit : contain;"/>
+        </div>
+
+
+        <div class="col-md-7">
+            <!--All the categories-->
+            <p class="text-muted small mb-1">
+                @string.Join(", ", Model.CategoryProduct.Select(c => c.NameCategory))
+            </p>
+
+            <!--The name of the product-->
+            <h1 class="h2 fw-bold mb-3">@Model.Name</h1>
+
+            <!--The description of the product-->
+
+            <p class="text-mutes mb-4">@Model.Description</p>
+            <hr />
+
+            <!--The price of the product-->
+            <div class="mb-4">
+                <span class="h3 text-primary fw-bold">@Model.Price.ToString("F2") €</span>
+            </div>
+
+            @if(Context.Session.GetInt32("UserId") != null)
+            {
+                <form method="post" asp-controller="Cart" asp-action="AddToCart">
+                    <input type="hidden" name="productId" value="@Model.ProductId" />
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <label class="form-label mb-0">Quantity :</label>
+                        <input type="number" name="quantity" value="1" min="1"
+                                class="form-control" style="width: 80px;" />
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="bi bi-cart-plus me-2"></i> Add to cart
+                    </button>
+                </form>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <a asp-controller="User" asp-action="Login">Log in</a> to add this product to your cart.
+                </div>
+            }
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary mt-3 w-100">
+                Back to catalog
+            </a>
+        </div>
+    </div>
+</div>

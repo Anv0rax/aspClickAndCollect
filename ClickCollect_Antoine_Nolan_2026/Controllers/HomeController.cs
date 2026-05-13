@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using ClickCollect_Antoine_Nolan_2026.DAL;
 using ClickCollect_Antoine_Nolan_2026.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,16 +7,17 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IProductDAL productDAL;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IProductDAL productDAL)
         {
-            _logger = logger;
+            this.productDAL = productDAL;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<Product> products = await Product.GetCatalogAsync(productDAL);
+            return View(products);
         }
 
         public IActionResult Privacy()
