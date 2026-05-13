@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Etude Antoine\\Cours\\BAC 2 Q2\\projet_csharp\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj": {}
+    "C:\\Users\\micky\\Desktop\\aspClickAndCollect\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Etude Antoine\\Cours\\BAC 2 Q2\\projet_csharp\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj": {
+    "C:\\Users\\micky\\Desktop\\aspClickAndCollect\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Etude Antoine\\Cours\\BAC 2 Q2\\projet_csharp\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj",
+        "projectUniqueName": "C:\\Users\\micky\\Desktop\\aspClickAndCollect\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj",
         "projectName": "ClickCollect_Antoine_Nolan_2026",
-        "projectPath": "C:\\Users\\Etude Antoine\\Cours\\BAC 2 Q2\\projet_csharp\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj",
-        "packagesPath": "C:\\Users\\Etude Antoine\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Etude Antoine\\Cours\\BAC 2 Q2\\projet_csharp\\ClickCollect_Antoine_Nolan_2026\\obj\\",
+        "projectPath": "C:\\Users\\micky\\Desktop\\aspClickAndCollect\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj",
+        "packagesPath": "C:\\Users\\micky\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\micky\\Desktop\\aspClickAndCollect\\ClickCollect_Antoine_Nolan_2026\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Etude Antoine\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\micky\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -50,6 +50,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
             "Microsoft.Data.SqlClient": {
               "target": "Package",
               "version": "[7.0.1, )"

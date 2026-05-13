@@ -1,0 +1,63 @@
+using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations;
+
+namespace ClickCollect_Antoine_Nolan_2026.Models
+{
+    public class Customer : User
+    {
+        private string email = string.Empty;
+        private string phoneNumber = string.Empty;
+        private Adress? adressCustomer;
+
+        // The reason im putting string.Empty is because there is a warning that asks the developper to put the
+        // variables in non-nullable type. Normally, just putting required in the attribute/property name is enough,
+        // but im forced to use string.empty so the warning doesn't appear anymore.
+
+        // Thus, it is really helpful with the required annotation. If the user leave the field empty, it will
+        // display directly the required error message.
+
+        [Required(ErrorMessage = "The email is required !")]
+        [EmailAddress(ErrorMessage = "Please respect the email format !")]
+        // EmailAddress checks if the email format is respected.
+        [StringLength(254, ErrorMessage = "A email adress can't be above 254 characters.")]
+        // 254 is the max length a email adress can be.
+        public string Email
+        {
+            get { return email; }
+            set { email = value; }
+        }
+
+        [Required(ErrorMessage = "The phone number is required.")]
+        [RegularExpression(@"^(\+32|0)[1-9][0-9]{7,8}$", ErrorMessage = "This phone number is incorrect. Please check if your phone number is from belgium (+32) ?")]
+        // This regex expression checks if the phone number is from belgium, and if the string is 7 to 8 digits long
+        public string PhoneNumber
+        {
+            get { return phoneNumber; }
+            set { phoneNumber = value; }
+        }
+
+        public Adress? AdressCustomer
+        {
+            get { return adressCustomer; }
+            set { adressCustomer = value; }
+        }
+
+        public Customer()
+        {
+
+        }
+
+        public Customer(int id, string username, string password, string firstName, string lastName, string email, string phoneNumber, Adress adressCustomer)
+            : base(id, username, password, firstName, lastName)
+        {
+            Email = email;
+            PhoneNumber = phoneNumber;
+            AdressCustomer = adressCustomer;
+        }
+
+        public Customer(int id, string username, string password)
+            : base(id, username, password)
+        {
+        }
+    }
+}

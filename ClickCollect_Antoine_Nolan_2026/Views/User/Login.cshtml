@@ -1,0 +1,35 @@
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <h2 class="mb-4">Login</h2>
+
+        @if (ViewData["Error"] != null)
+        {
+            <div class="alert alert-danger">@ViewData["Error"]</div>
+        }
+
+        @if (TempData["RegisterSuccess"] != null)
+        {
+            <div class="alert alert-success">@TempData["RegisterSuccess"]</div>
+        }
+
+        <form method="post" asp-controller="User" asp-action="Login">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Log in</button>
+        </form>
+
+        <p class="mt-3 text-center">
+            Don't have an account ? <a asp-controller="User" asp-action="Register">Sign up</a>
+        </p>
+    </div>
+</div>

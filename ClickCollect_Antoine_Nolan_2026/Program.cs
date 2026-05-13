@@ -1,3 +1,5 @@
+using ClickCollect_Antoine_Nolan_2026.DAL;
+
 namespace ClickCollect_Antoine_Nolan_2026
 {
     public class Program
@@ -8,6 +10,19 @@ namespace ClickCollect_Antoine_Nolan_2026
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // To configure the session, we need to addSession.
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(45);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+            string? connectionString = builder.Configuration.GetConnectionString("default");
+            builder.Services.AddTransient<IUserDAL>(u => new UserDAL(connectionString!));
+            builder.Services.AddTransient<IProductDAL>(p => new ProductDAL(connectionString!));
 
             var app = builder.Build();
 
@@ -24,13 +39,15 @@ namespace ClickCollect_Antoine_Nolan_2026
 
             app.UseRouting();
 
+            app.UseSession();
+
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "viewProduct",
-                pattern: "product/{productId:alpha:maxlength(12)}",
-                defaults: new { controller = "Product", action = "ViewProduct" }
-                );
+            //app.MapControllerRoute(
+            //    name: "viewProduct",
+            //    pattern: "product/{productId:alpha:maxlength(12)}",
+            //    defaults: new { controller = "Product", action = "ViewProduct" }
+            //    );
 
             app.MapControllerRoute(
                 name: "default",

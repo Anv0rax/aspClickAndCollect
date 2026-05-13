@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Xml.Linq;
 using System.Net.Http;
 using System.ComponentModel.DataAnnotations;
@@ -53,6 +53,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         }
 
         [Display(Name = "Numéro")]
+        [Required(ErrorMessage = "Veuillez mettre le numéro de votre maison.")]
         public string Number
         {
             get => number;
@@ -67,6 +68,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         }
 
         [Display(Name = "Ville")]
+        [Required(ErrorMessage = "Veuillez mettre la ville dans laquelle vous habitez.")]
         public string City
         {
             get => city;

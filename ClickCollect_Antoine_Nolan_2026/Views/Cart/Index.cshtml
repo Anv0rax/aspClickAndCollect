@@ -1,0 +1,81 @@
+@model List<ClickCollect_Antoine_Nolan_2026.Models.ProductQuantity>
+
+@{
+    ViewData["Title"] = "Your Shopping cart";
+}
+
+<div class="container py-5">
+    <h2 class="mb-4">Here's your shopping cart, @User.Identity.Name</h2>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="alert alert-info">
+            Your cart is empty ! <a asp-controller="Home" asp-action="Index">Back to the catalog</a>
+        </div>
+    }
+    else
+    {
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-3">
+                                <img src="@item.Product.ImageLink" alt="@item.Product.Name" style="width: 60px; height: 60px; object-fit: contain;"/>
+                                <span>@item.Product.Name</span>
+                            </div>
+                        </td>
+                        <td>@item.Product.Price.ToString("F2") €</td>
+                        <td>@item.Quantity</td>
+                        <td>@((item.Product.Price * item.Quantity).ToString("F2")) €</td>
+                        <td>
+                            <form method="post" asp-controller="Cart" asp-action="RemoveFromCart">
+                                <input type="hidden" name="productId" value="@item.GetProductID()" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    Remove the product
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end fw-bold">For each command you have a service fee of :</td>
+                    <td class="fw-bold text-primary">5.95 €</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-end fw-bold">Your total is :</td>
+                    <td class="fw-bold text-primary">
+                        @((Model.Sum(p => p.Product.Price * p.Quantity) + 5.95).ToString("F2")) €
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="d-flex justify-content-between mt-4">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary"> Continue to shop</a>
+            <a asp-controller="Order" asp-action="Confirm" class="btn btn-primary">Process to take order</a>
+        </div>
+    }
+</div>

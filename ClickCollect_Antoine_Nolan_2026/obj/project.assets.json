@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     "net8.0": {
+      "BCrypt.Net-Next/4.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/BCrypt-Net-Next.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/BCrypt-Net-Next.dll": {}
+        }
+      },
       "Microsoft.Bcl.Cryptography/8.0.0": {
         "type": "package",
         "compile": {
@@ -465,6 +474,31 @@
     }
   },
   "libraries": {
+    "BCrypt.Net-Next/4.2.0": {
+      "sha512": "gwLD2KfCuwQesP17aVh4h6lpiMPEVt5Lbpndo0ej903hNUUTtyxt3ARdDjmuydBRTAUICc7OVKVbaOvc6SQYXA==",
+      "type": "package",
+      "path": "bcrypt.net-next/4.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "bcrypt.net-next.4.2.0.nupkg.sha512",
+        "bcrypt.net-next.nuspec",
+        "ico.png",
+        "lib/net10.0/BCrypt-Net-Next.dll",
+        "lib/net10.0/BCrypt.Net-Next.xml",
+        "lib/net462/BCrypt-Net-Next.dll",
+        "lib/net462/BCrypt.Net-Next.xml",
+        "lib/net472/BCrypt-Net-Next.dll",
+        "lib/net472/BCrypt.Net-Next.xml",
+        "lib/net48/BCrypt-Net-Next.dll",
+        "lib/net48/BCrypt.Net-Next.xml",
+        "lib/netstandard2.0/BCrypt-Net-Next.dll",
+        "lib/netstandard2.0/BCrypt.Net-Next.xml",
+        "lib/netstandard2.1/BCrypt-Net-Next.dll",
+        "lib/netstandard2.1/BCrypt.Net-Next.xml",
+        "readme.md"
+      ]
+    },
     "Microsoft.Bcl.Cryptography/8.0.0": {
       "sha512": "Y3t/c7C5XHJGFDnohjf1/9SYF3ZOfEU1fkNQuKg/dGf9hN18yrQj2owHITGfNS3+lKJdW6J4vY98jYu57jCO8A==",
       "type": "package",
@@ -1197,27 +1231,28 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "BCrypt.Net-Next >= 4.2.0",
       "Microsoft.Data.SqlClient >= 7.0.1"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Etude Antoine\\.nuget\\packages\\": {},
+    "C:\\Users\\micky\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Etude Antoine\\Cours\\BAC 2 Q2\\projet_csharp\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj",
+      "projectUniqueName": "C:\\Users\\micky\\Desktop\\aspClickAndCollect\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj",
       "projectName": "ClickCollect_Antoine_Nolan_2026",
-      "projectPath": "C:\\Users\\Etude Antoine\\Cours\\BAC 2 Q2\\projet_csharp\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj",
-      "packagesPath": "C:\\Users\\Etude Antoine\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Etude Antoine\\Cours\\BAC 2 Q2\\projet_csharp\\ClickCollect_Antoine_Nolan_2026\\obj\\",
+      "projectPath": "C:\\Users\\micky\\Desktop\\aspClickAndCollect\\ClickCollect_Antoine_Nolan_2026\\ClickCollect_Antoine_Nolan_2026.csproj",
+      "packagesPath": "C:\\Users\\micky\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\micky\\Desktop\\aspClickAndCollect\\ClickCollect_Antoine_Nolan_2026\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Etude Antoine\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\micky\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -1250,6 +1285,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "BCrypt.Net-Next": {
+            "target": "Package",
+            "version": "[4.2.0, )"
+          },
           "Microsoft.Data.SqlClient": {
             "target": "Package",
             "version": "[7.0.1, )"
