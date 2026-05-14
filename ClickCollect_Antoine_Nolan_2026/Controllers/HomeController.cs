@@ -16,7 +16,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         
         public async Task<IActionResult> Index(string? sort=null, string? category=null)
         {
-            List<Product> catalog = await Product.GetCatalogAsync(productDAL);
+            List<Product> allProducts = await Product.GetCatalogAsync(productDAL);
+            ViewData["AllProducts"] = allProducts;
+
+            List<Product> catalog = allProducts;
+
             catalog = sort switch
             {
                 "descending" => catalog.OrderByDescending(p => p.Price).ToList(),
@@ -24,6 +28,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 "name" => catalog.OrderBy(p => p.Name).ToList(),
                 _ => catalog
             };
+
 
             if (!string.IsNullOrEmpty(category))
             {
