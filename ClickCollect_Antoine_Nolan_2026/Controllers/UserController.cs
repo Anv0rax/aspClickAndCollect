@@ -5,7 +5,7 @@ using BCrypt.Net;
 
 namespace ClickCollect_Antoine_Nolan_2026.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private readonly IUserDAL userDAL;
 

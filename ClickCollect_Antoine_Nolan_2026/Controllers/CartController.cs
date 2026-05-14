@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClickCollect_Antoine_Nolan_2026.Controllers
 {
-    public class CartController : Controller
+    public class CartController : BaseController
     {
         private readonly IProductDAL productDAL;
 

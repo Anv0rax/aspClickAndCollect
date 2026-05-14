@@ -31,7 +31,7 @@
                 <span class="h3 text-primary fw-bold">@Model.Price.ToString("F2") €</span>
             </div>
 
-            @if(Context.Session.GetInt32("UserId") != null)
+            @if((bool?)ViewData["IsLoggedIn"] == true)
             {
                 <form method="post" asp-controller="Cart" asp-action="AddToCart">
                     <input type="hidden" name="productId" value="@Model.ProductId" />

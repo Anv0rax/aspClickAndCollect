@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClickCollect_Antoine_Nolan_2026.Controllers
 {
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
 
         private readonly IProductDAL productDal;
@@ -25,6 +25,8 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
             if (p == null)
                 return View("ProductNotFound");
+
+            ViewData["IsLoggedIn"] = HttpContext.Session.GetInt32("UserId") != null;
 
             return View(p);
         }
