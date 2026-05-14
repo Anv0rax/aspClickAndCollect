@@ -13,11 +13,35 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         {
             this.productDAL = productDAL;
         }
-
-        public async Task<IActionResult> Index()
+        
+        public async Task<IActionResult> Index(string? sort=null, string? category=null)
         {
-            List<Product> products = await Product.GetCatalogAsync(productDAL);
-            return View(products);
+            List<Product> catalog = await Product.GetCatalogAsync(productDAL);
+            catalog = sort switch
+            {
+                "descending" => catalog.OrderByDescending(p => p.Price).ToList(),
+                "ascending" => catalog.OrderBy(p => p.Price).ToList(),
+                "name" => catalog.OrderBy(p => p.Name).ToList(),
+                _ => catalog
+            };
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                List<Product> sortedCatalog = new List<Product>();
+                foreach (Product product in catalog)
+                {
+                    if (product.CategoryProduct.Any(cat => cat.NameCategory == category))
+                    {
+                        sortedCatalog.Add(product);
+                    }
+                }
+                catalog = sortedCatalog;
+
+            }
+
+            ViewData["Sort"] = sort;
+            ViewData["Category"] = category;
+            return View(catalog);
         }
 
         public IActionResult Privacy()

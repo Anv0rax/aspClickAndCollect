@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Boutique - Nos Produits";
+    string sort = ViewData["Sort"] as string;
 }
 
 <div class="container py-5">
@@ -30,13 +31,15 @@
                 <div class="card-body">
                     <h5 class="mb-3">Catégories</h5>
                     <div class="list-group list-group-flush">
-                        <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0">
+                        <a asp-route-category="" asp-route-sort="@(ViewData["Sort"] as string ?? "")" 
+                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0">
                             Tous les produits
                             <span class="badge bg-primary rounded-pill">@Model.Count</span>
                         </a>
                         @foreach (var cat in Model.SelectMany(p => p.CategoryProduct).GroupBy(c => c.Id).Select(g => g.First()))
                         {
-                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0">
+                            <a asp-route-category="@cat.NameCategory" asp-route-sort="@(ViewData["Sort"] as string ?? "")" 
+                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0">
                                 @cat.NameCategory
                                 <span class="badge bg-secondary rounded-pill">
                                     @Model.Count(p => p.CategoryProduct.Any(c => c.Id == cat.Id))
@@ -50,11 +53,12 @@
 
         <main class="col-lg-9">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="h4 mb-0">Nos Incontournables</h2>
-                <select class="form-select w-auto border-0 shadow-sm">
-                    <option selected>Trier par : Nouveautés</option>
-                    <option>Prix : Croissant</option>
-                    <option>Prix : Décroissant</option>
+                <h2 class="h4 mb-0">Our catalog</h2>
+                <select class="form-select w-auto border-0 shadow-sm" onchange="sendSortProduct(this, '@(ViewData["Category"] as string ?? "")')">
+                    <option value="" selected="@(sort == null)">Sort by :</option>
+                    <option value="name" selected="@(sort == "name")">Name</option>
+                    <option value="ascending" selected="@(sort == "ascending")">Price : Ascending</option>
+                    <option value="descending" selected="@(sort == "descending")">Price : Descending</option>
                 </select>
             </div>
 
