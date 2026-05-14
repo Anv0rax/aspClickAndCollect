@@ -120,7 +120,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
             if (results.GetArrayLength() == 0)
             {
-                throw new Exception($"Invalid adress : {address}");
+                throw new ArgumentException($"Invalid adress : {address}");
             }
 
             var res = results[0];

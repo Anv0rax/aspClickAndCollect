@@ -80,10 +80,14 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             {
                 await adress.InitLonLatAsync();
             }
+            catch (ArgumentException ex)
+            {
+                ViewData["Error"] = $" {ex.Message} | Try again !";
+                return View(customer);
+            }
             catch (Exception ex)
             {
-                ViewData["Error"] = $" {ex.Message} | The address you put into the fields is not correct. Try again !";
-                return View(customer);
+                // the api is not available :'(
             }
 
             if (await userDAL.UsernameExistsAsync(customer.Username))
