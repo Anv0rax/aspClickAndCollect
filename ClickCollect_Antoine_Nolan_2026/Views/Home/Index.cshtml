@@ -31,13 +31,15 @@
                 <div class="card-body">
                     <h5 class="mb-3">Catégories</h5>
                     <div class="list-group list-group-flush">
-                        <a asp-route-category="" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0">
+                        <a asp-route-category="" asp-route-sort="@(ViewData["Sort"] as string ?? "")" 
+                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0">
                             Tous les produits
                             <span class="badge bg-primary rounded-pill">@Model.Count</span>
                         </a>
                         @foreach (var cat in Model.SelectMany(p => p.CategoryProduct).GroupBy(c => c.Id).Select(g => g.First()))
                         {
-                            <a asp-route-category="@cat.NameCategory" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0">
+                            <a asp-route-category="@cat.NameCategory" asp-route-sort="@(ViewData["Sort"] as string ?? "")" 
+                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0">
                                 @cat.NameCategory
                                 <span class="badge bg-secondary rounded-pill">
                                     @Model.Count(p => p.CategoryProduct.Any(c => c.Id == cat.Id))
