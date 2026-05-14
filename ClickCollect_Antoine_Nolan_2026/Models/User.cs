@@ -16,21 +16,24 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             private set { id = value; }
         }
 
+        [Display(Name = "Username")]
         [Required(ErrorMessage = "Username is required.")]
         [StringLength(25, MinimumLength = 4, ErrorMessage = "Username must be between 4 and 25 characters.")]
         [RegularExpression(@"^[a-zA-Z0-9._-]+$", ErrorMessage = "Username contains invalid characters (only letters, numbers, dots, underscores and hyphens allowed).")]
         public string Username { get; set; } = string.Empty;
 
+        [Display(Name = "Password")]
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password)] // We are precising that the string will be a password, which will be helpful for the UI
-        [StringLength(100, MinimumLength = 10, ErrorMessage = "Password must be at least 10 characters long.")]
+        [StringLength(100, MinimumLength = 12, ErrorMessage = "Password must be at least 12 characters long.")]
 
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]+$", ErrorMessage = "Password too weak: requires 1 uppercase, 1 lowercase, 1 number and 1 special character.")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]+$", ErrorMessage = "Password too weak: requires 1 uppercase, 1 lowercase, and one number")]
         // The regex of password: We want at least an uppercase, a lowercase, a number.
         // Here, the (?=.) means that we need in the password at least the input in front of the point.
         // For example, (?=.*\d) means that we need at least a digit.
         public string Password { get; set; } = string.Empty;
 
+        [Display(Name = "Last name")]
         [Required(ErrorMessage = "The name is required to continue.")]
         [RegularExpression(@"^[^\d]+$", ErrorMessage = "The name can't contain any digits. Please delete them.")]
         // The characters ^ means we are not authorizing what's going to be next. \d means any digit, so we don't accept any digits in the name
@@ -42,6 +45,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             set { lastName = value; }
         }
 
+        [Display(Name = "First name")]
         [Required(ErrorMessage = "The firstname is required to continue.")]
         [RegularExpression(@"^[^\d]+$", ErrorMessage = "The firstname can't contain any digits. Please delete them.")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "The firstname must have between 2 and 50 characters.")]

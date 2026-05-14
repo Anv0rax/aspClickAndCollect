@@ -15,6 +15,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
         public async Task<User?> GetUserByCredentialsAsync(string username, string password)
         {
             User? user = null;
+            string? hash = null;
 
             using (SqlConnection co = new SqlConnection(connectionString))
             {
@@ -30,33 +31,34 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                     LEFT JOIN Customers cu ON u.userId = cu.userId
                     LEFT JOIN Cachiers  ca ON u.userId = ca.userId
                     LEFT JOIN Preparers p  ON u.userId = p.userId
-                    WHERE u.username = @Username
-                    AND u.password = @Password", co);
+                    WHERE u.username = @Username", co);
                 // COALESCE(ca.shopId, p.shopId) returns the first non-NULL value of the two—if
                 // it's a Cashier, ca.shopId will have a value; otherwise, it's p.shopId.
 
                 cmd.Parameters.AddWithValue("Username", username);
-                cmd.Parameters.AddWithValue("Password", password);
 
                 await co.OpenAsync();
 
                 using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
                 {
-                    if (await reader.ReadAsync())
+                    if(await reader.ReadAsync())
                     {
-                        int id = reader.GetInt32(0);
-                        string uname = reader.GetString(1);
-                        string pswrd = reader.GetString(2);
-                        string role = await reader.IsDBNullAsync(3)
-                                           ? "Unknown"
-                                           : reader.GetString(3);
+                        hash = reader.GetString(2); // This is the hashed password from the DB
 
-                        if (role == "Customer")
-                            user = new Customer(id, uname, pswrd);
-                        else if (role == "Cashier")
-                            user = new Cashier(id, uname, pswrd, reader.GetInt32(4));
-                        else if (role == "Preparer")
-                            user = new Preparer(id, uname, pswrd, reader.GetInt32(4));
+                        // now we are going to verify with this fonction of the Bcrypt librairy to see if the password correspond to the hash.
+                        if (BCrypt.Net.BCrypt.Verify(password, hash))
+                        {
+                            int id = reader.GetInt32(0);
+                            string uname = reader.GetString(1);
+                            string role = await reader.IsDBNullAsync(3) ? "Unknown" : reader.GetString(3);
+
+                            if (role == "Customer")
+                                user = new Customer(id, uname, hash);
+                            else if (role == "Cashier")
+                                user = new Cashier(id, uname, hash, reader.GetInt32(4));
+                            else if (role == "Preparer")
+                                user = new Preparer(id, uname, hash, reader.GetInt32(4));
+                        }
                     }
                 }
             }
@@ -90,8 +92,8 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                 // Insert the address first and retrieve its generated ID
                 SqlCommand cmdAddress = new SqlCommand(
                     @"INSERT INTO Adresses (street, number, city, country)
-              VALUES (@Street, @Number, @City, @Country);
-              SELECT SCOPE_IDENTITY();", co);
+                        VALUES (@Street, @Number, @City, @Country);
+                        SELECT SCOPE_IDENTITY();", co);
 
                 cmdAddress.Parameters.AddWithValue("Street", adress.Street);
                 cmdAddress.Parameters.AddWithValue("Number", adress.Number);
@@ -99,6 +101,8 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                 cmdAddress.Parameters.AddWithValue("Country", adress.Country);
 
                 int addressId = Convert.ToInt32(await cmdAddress.ExecuteScalarAsync());
+
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(customer.Password);
 
                 // Insert the user and retrieve its generated ID
                 SqlCommand cmdUser = new SqlCommand(
@@ -109,7 +113,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                 cmdUser.Parameters.AddWithValue("Firstname", customer.FirstName);
                 cmdUser.Parameters.AddWithValue("Lastname", customer.LastName);
                 cmdUser.Parameters.AddWithValue("Username", customer.Username);
-                cmdUser.Parameters.AddWithValue("Password", customer.Password);
+                cmdUser.Parameters.AddWithValue("Password", hashedPassword);
                 cmdUser.Parameters.AddWithValue("AddressId", addressId);
 
                 int userId = Convert.ToInt32(await cmdUser.ExecuteScalarAsync());

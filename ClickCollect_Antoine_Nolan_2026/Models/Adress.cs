@@ -52,23 +52,24 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             get => latitude;
         }
 
-        [Display(Name = "Numéro")]
-        [Required(ErrorMessage = "Veuillez mettre le numéro de votre maison.")]
+        [Display(Name = "House number")]
+        [Required(ErrorMessage = "Please enter your house number.")]
         public string Number
         {
             get => number;
             set => number = value; 
         }
 
-        [Display(Name = "Nom de rue")]
+        [Display(Name = "Street")]
+        [Required(ErrorMessage = "Please enter your street name.")]
         public string Street
         {
             get => street;
             set { street = value; }
         }
 
-        [Display(Name = "Ville")]
-        [Required(ErrorMessage = "Veuillez mettre la ville dans laquelle vous habitez.")]
+        [Display(Name = "City")]
+        [Required(ErrorMessage = "Please enter your city.")]
         public string City
         {
             get => city;
@@ -79,10 +80,13 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
                 {
                     throw new ArgumentNullException("Can't be empty");
                 }
+
+                city = value;
             }
         }
 
-        [Display(Name = "Pays")]
+        [Display(Name = "Country")]
+        [Required(ErrorMessage = "Please enter your country.")]
         public string Country
         {
             get => country;

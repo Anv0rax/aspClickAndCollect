@@ -27,26 +27,29 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 ViewData["Error"] = "The username or password is missing.";
                 return View();
             }
-            // Retrieve user by username only
-            User? user = await userDAL.GetUserByUsernameAsync(username);
+
+            // We use GetUserByCredentialsAsync, beacause this method aleardy checks the password with BCrypt
+            User? user = await userDAL.GetUserByCredentialsAsync(username, password);
 
             // Verify the password against the hashed version in DB
-            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
+            if (user == null)
             {
+                // if null, the username is null or BCrypt.Verify sent "False" in the DAL
                 ViewData["Error"] = "The username or password is incorrect.";
                 return View();
             }
 
+            // If the program execute this lign, that means the password is correct.
             HttpContext.Session.SetInt32("UserId", user.Id);
 
-            if (user is Customer)
-                return RedirectToAction("Index", "Home");
-            else if (user is Cashier)
-                return RedirectToAction("Index", "Cashier");
-            else if (user is Preparer)
-                return RedirectToAction("Index", "Preparer");
-
-            return RedirectToAction("Index", "Home");
+            // this just redirects the user to his correct view according to his role
+            return user switch
+            {
+                Customer => RedirectToAction("Index", "Home"),
+                Cashier => RedirectToAction("Index", "Cashier"),
+                Preparer => RedirectToAction("Index", "Preparer"),
+                _ => RedirectToAction("Index", "Home")
+            };
         }
 
         public IActionResult Logout()
