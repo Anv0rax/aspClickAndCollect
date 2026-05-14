@@ -1,4 +1,11 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function sendSortProduct(select, category) {
+    var sort = select.value;
+    if (category == '') {
+        var url = "?sort=" + sort
+    }
+    else {
+        var url = "?category=" + encodeURIComponent(category) + "&sort=" + sort;
+    }
 
-// Write your JavaScript code.
+    window.location.href = url;
+}
