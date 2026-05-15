@@ -19,7 +19,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         [Display(Name = "Username")]
         [Required(ErrorMessage = "Username is required.")]
         [StringLength(25, MinimumLength = 4, ErrorMessage = "Username must be between 4 and 25 characters.")]
-        [RegularExpression(@"^[a-zA-Z0-9._-]+$", ErrorMessage = "Username contains invalid characters.")]
+        [RegularExpression(@"^[-a-zA-Z0-9_]+$", ErrorMessage = "Username contains invalid characters.")]
         public string Username { get; set; } = string.Empty;
 
         [Display(Name = "Password")]
@@ -27,7 +27,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         [DataType(DataType.Password)]
         [StringLength(100, MinimumLength = 12, ErrorMessage = "Must be at least 12 characters long.")]
 
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{12,40}$", ErrorMessage = "Requires at least 12 characters with 1 uppercase, 1 lowercase, and one number")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{12,40}$", ErrorMessage = "Requires at least 12 characters with 1 uppercase, 1 lowercase and 1 number")]
         public string Password { get; set; } = string.Empty;
 
         [Display(Name = "Last name")]

@@ -54,6 +54,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         [Display(Name = "House number")]
         [Required(ErrorMessage = "Please enter your house number.")]
+        [RegularExpression(@"^[-a-zA-Z0-9\. ,]+$", ErrorMessage = "Invalid format for a number.")]
         public string Number
         {
             get => number;
@@ -62,6 +63,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         [Display(Name = "Street")]
         [Required(ErrorMessage = "Please enter your street name.")]
+        [RegularExpression(@"^[-a-zA-Z0-9\. ,]+$", ErrorMessage = "Invalid format for a street name.")]
         public string Street
         {
             get => street;
@@ -70,6 +72,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         [Display(Name = "City")]
         [Required(ErrorMessage = "Please enter your city.")]
+        [RegularExpression(@"^[-a-zA-Z0-9\. ,]+$", ErrorMessage = "Invalid format for a city name.")]
         public string City
         {
             get => city;
@@ -87,6 +90,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         [Display(Name = "Country")]
         [Required(ErrorMessage = "Please enter your country.")]
+        [RegularExpression(@"^[-a-zA-Z0-9\. ,]+$", ErrorMessage = "Invalid format for a country name")]
         public string Country
         {
             get => country;

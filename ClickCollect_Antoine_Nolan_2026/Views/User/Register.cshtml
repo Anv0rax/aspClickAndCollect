@@ -56,20 +56,24 @@
             <h5 class="mt-4 mb-2">Address</h5>
 
             <div class="mb-3">
-                <label class="form-label">Street</label>
-                <input type="text" class="form-control" name="adress.Street" required />
+                <label asp-for="Adress.Street" class="form-label"></label>
+                <input asp-for="Adress.Street" class="form-control" />
+                <span asp-validation-for="Adress.Street" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label class="form-label">Number</label>
-                <input type="text" class="form-control" name="adress.Number" required />
+                <label asp-for="Adress.Number" class="form-label"></label>
+                <input asp-for="Adress.Number" class="form-control" />
+                <span asp-validation-for="Adress.Number" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label class="form-label">City</label>
-                <input type="text" class="form-control" name="adress.City" required />
+                <label asp-for="Adress.City" class="form-label"></label>
+                <input asp-for="Adress.City" class="form-control" />
+                <span asp-validation-for="Adress.City" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label class="form-label">Country</label>
-                <input type="text" class="form-control" name="adress.Country" required />
+                <label asp-for="Adress.Country" class="form-label"></label>
+                <input asp-for="Adress.Country" value="Belgium" class="form-control" />
+                <span asp-validation-for="Adress.Country" class="text-danger"></span>
             </div>
 
             <button type="submit" class="btn btn-primary w-100 mt-2">Create account</button>
