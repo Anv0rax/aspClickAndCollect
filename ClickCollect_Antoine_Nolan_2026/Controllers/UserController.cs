@@ -96,7 +96,6 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 return View(customer);
             }
 
-            customer.Password = BCrypt.Net.BCrypt.HashPassword(customer.Password);
 
             await userDAL.RegisterCustomerAsync(customer, adress);
 

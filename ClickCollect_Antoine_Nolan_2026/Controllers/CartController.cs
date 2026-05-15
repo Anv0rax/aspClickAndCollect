@@ -47,6 +47,12 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             if (HttpContext.Session.GetInt32("UserId") == null)
                 return RedirectToAction("Login", "User");
 
+            if (quantity < 1 || quantity > 999)
+            {
+                TempData["Error"] = "Please choose between 1 and 999 products.";
+                return RedirectToAction("ViewProduct", "Product", new { id = productId });
+            }
+
             Product? pt = await Product.GetProductByIdAsync(productDAL, productId);
 
             if(pt == null)

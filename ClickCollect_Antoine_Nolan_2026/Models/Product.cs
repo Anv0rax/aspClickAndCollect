@@ -26,7 +26,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             set { name =  value; }
         }
 
-        [StringLength(50, ErrorMessage = "The description of the product is way too long !")]
+        [StringLength(500, ErrorMessage = "The description of the product is way too long !")]
         [DataType(DataType.MultilineText)]
         // This will indicate the application that the field description is a long paragraph, not a simple lign text.
         public string Description

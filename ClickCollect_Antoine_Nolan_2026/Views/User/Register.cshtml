@@ -1,4 +1,4 @@
-@model ClickCollect_Antoine_Nolan_2026.Models.ViewModels.RegisterViewModel
+@model ClickCollect_Antoine_Nolan_2026.Models.Customer
 
 @{
     ViewData["Title"] = "Register";
@@ -13,62 +13,63 @@
             <div class="alert alert-danger">@ViewData["Error"]</div>
         }
 
+        @if (TempData["RegisterSuccess"] != null)
+        {
+            <div class="alert alert-success">@TempData["RegisterSuccess"]</div>
+        }
+
         <form method="post" asp-controller="User" asp-action="Register">
 
             <h5 class="mt-3 mb-2">Account information</h5>
 
             <div class="mb-3">
-                <label asp-for="Customer.FirstName" class="form-label"></label>
-                <input asp-for="Customer.FirstName" class="form-control" />
-                <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
+                <label asp-for="FirstName" class="form-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Customer.LastName" class="form-label"></label>
-                <input asp-for="Customer.LastName" class="form-control" />
-                <span asp-validation-for="Customer.LastName" class="text-danger"></span>
+                <label asp-for="LastName" class="form-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Customer.Username" class="form-label"></label>
-                <input asp-for="Customer.Username" class="form-control" />
-                <span asp-validation-for="Customer.Username" class="text-danger"></span>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label asp-for="Customer.Password" class="form-label"></label>
-                <input asp-for="Customer.Password" type="password" class="form-control" />
-                <span asp-validation-for="Customer.Password" class="text-danger"></span>
+                <label asp-for="Username" class="form-label"></label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Customer.Email" class="form-label"></label>
-                <input asp-for="Customer.Email" class="form-control" />
-                <span asp-validation-for="Customer.Email" class="text-danger"></span>
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Customer.PhoneNumber" class="form-label"></label>
-                <input asp-for="Customer.PhoneNumber" class="form-control" />
-                <span asp-validation-for="Customer.PhoneNumber" class="text-danger"></span>
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="PhoneNumber" class="form-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
 
             <h5 class="mt-4 mb-2">Address</h5>
 
-            <div class="col-md-9 mb-3">
-                <label asp-for="Customer.AdressCustomer.Street" class="form-label"></label>
-                <input asp-for="Customer.AdressCustomer.Street" class="form-control" />
-                <span asp-validation-for="Customer.AdressCustomer.Street" class="text-danger"></span>
-            </div>
-            <div class="col-md-3 mb-3">
-                <label asp-for="Customer.AdressCustomer.Number" class="form-label"></label>
-                <input asp-for="Customer.AdressCustomer.Number" class="form-control" />
-                <span asp-validation-for="Customer.AdressCustomer.Number" class="text-danger"></span>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label asp-for="Customer.AdressCustomer.City" class="form-label"></label>
-                <input asp-for="Customer.AdressCustomer.City" class="form-control" />
-                <span asp-validation-for="Customer.AdressCustomer.City" class="text-danger"></span>
+            <div class="mb-3">
+                <label class="form-label">Street</label>
+                <input type="text" class="form-control" name="adress.Street" required />
             </div>
             <div class="mb-3">
-                <label asp-for="Customer.AdressCustomer.Country" class="form-label"></label>
-                <input asp-for="Customer.AdressCustomer.Country" class="form-control" />
-                <span asp-validation-for="Customer.AdressCustomer.Country" class="text-danger"></span>
+                <label class="form-label">Number</label>
+                <input type="text" class="form-control" name="adress.Number" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">City</label>
+                <input type="text" class="form-control" name="adress.City" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Country</label>
+                <input type="text" class="form-control" name="adress.Country" required />
             </div>
 
             <button type="submit" class="btn btn-primary w-100 mt-2">Create account</button>
