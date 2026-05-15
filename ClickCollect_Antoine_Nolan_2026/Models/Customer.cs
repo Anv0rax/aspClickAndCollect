@@ -21,6 +21,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         // EmailAddress checks if the email format is respected.
         [StringLength(254, ErrorMessage = "A email adress can't be above 254 characters.")]
         // 254 is the max length a email adress can be.
+        [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]{2,}$", ErrorMessage = "The email format is incorrect. Did you forget the extension (e.g., .com, .be)?")]
         public string Email
         {
             get { return email; }
@@ -28,8 +29,8 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         }
 
         [Required(ErrorMessage = "The phone number is required.")]
-        [RegularExpression(@"^(\+32|0)[1-9][0-9]{7,8}$", ErrorMessage = "This phone number is incorrect. Please check if your phone number is from belgium (+32) ?")]
-        // This regex expression checks if the phone number is from belgium, and if the string is 7 to 8 digits long
+        [RegularExpression(@"^(\+32\s*|0)[1-9](\s*[0-9]){7,8}\s*$", ErrorMessage = "This phone number is incorrect. Please check if your phone number is from belgium (+32) ?")]
+        // This regex expression checks if the phone number is from belgium, and if the string is 7 to 12 digits long
         public string PhoneNumber
         {
             get { return phoneNumber; }

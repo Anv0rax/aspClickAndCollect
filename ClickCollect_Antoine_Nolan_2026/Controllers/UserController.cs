@@ -41,6 +41,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
             // If the program execute this lign, that means the password is correct.
             HttpContext.Session.SetInt32("UserId", user.Id);
+            HttpContext.Session.SetString("Username", user.Username);
 
             // this just redirects the user to his correct view according to his role
             return user switch

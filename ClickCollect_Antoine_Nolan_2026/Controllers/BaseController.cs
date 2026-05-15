@@ -15,6 +15,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             // Since the role of the user is not a attribute in the User class, I will simply stock the
             // role in a temp string : its different from the model !
             ViewData["Role"] = HttpContext.Session.GetString("Role");
+            ViewData["Username"] = HttpContext.Session.GetString("Username");
 
             base.OnActionExecuting(context);
         }
