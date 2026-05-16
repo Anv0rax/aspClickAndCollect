@@ -46,7 +46,21 @@
 			private set { orderId = value; }
 		}
 
-	}
+        public bool Equals(Order _o)
+        {
+            return _o.OrderId == this.OrderId;
+        }
+
+        public bool Equals(int _oId)
+        {
+            return _oId == this.OrderId;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.OrderId.GetHashCode();
+        }
+    }
 
     public enum OrderStatusEnum
     {
