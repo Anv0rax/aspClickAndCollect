@@ -1,5 +1,6 @@
 using ClickCollect_Antoine_Nolan_2026.DAL;
 using ClickCollect_Antoine_Nolan_2026.Models;
+using ClickCollect_Antoine_Nolan_2026.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -107,7 +108,27 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
         public async Task<IActionResult> Confirm()
         {
-            return View("Index");
+            if (HttpContext.Session.GetInt32("UserId") == null)
+                return RedirectToAction("Login", "User");
+
+            List<ProductQuantity> validCart = new List<ProductQuantity>();
+            bool errorInCart;
+            ConfirmCartViewModel vm = new ConfirmCartViewModel();
+
+            (validCart, errorInCart) = await GetValidatedCartAsync();
+            if (errorInCart)
+                TempData["Error"] = "WARNING : A product not found was in your list. This product is then removed from your shopping list.";
+
+            SaveCartToSession(validCart);
+            (validCart, errorInCart) = await GetValidatedCartAsync();
+            if (errorInCart)
+                TempData["Error"] = "WARNING : A product not found was in your list. This product is then removed from your shopping list.";
+
+            vm.Cart = validCart;
+
+
+
+            return View(vm);
         }
 
         public async Task<IActionResult> Index()
@@ -115,15 +136,32 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             if(HttpContext.Session.GetInt32("UserId") == null)
                 return RedirectToAction("Login", "User");
 
+            List<ProductQuantity> validCart = new List<ProductQuantity>();
+            bool errorInCart;
+
+            (validCart, errorInCart) = await GetValidatedCartAsync();
+            if(errorInCart)
+                TempData["Error"] = "WARNING : A product not found was in your list. This product is then removed from your shopping list.";
+
+            SaveCartToSession(validCart);
+
+            return View(validCart);
+        }
+
+        public async Task<(List<ProductQuantity>, bool)> GetValidatedCartAsync()
+        {
             List<ProductQuantity> cart = GetCartFromSession();
             List<ProductQuantity> validCart = new List<ProductQuantity>();
+            bool error = false;
 
-            foreach(ProductQuantity item in cart)
+            foreach (ProductQuantity item in cart)
             {
                 Product? pt = await Product.GetProductByIdAsync(productDAL, item.GetProductID());
 
                 if (pt == null)
-                    TempData["Error"] = "WARNING : A product not found was in your list. This product is then removed from your shopping list.";
+                {
+                    error = true;
+                }
                 else
                 {
                     item.Quantity = Math.Clamp(item.Quantity, 1, 500);
@@ -131,9 +169,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 }
             }
 
-            SaveCartToSession(validCart);
-
-            return View(validCart);
+            return (validCart, error);
         }
     }
 }

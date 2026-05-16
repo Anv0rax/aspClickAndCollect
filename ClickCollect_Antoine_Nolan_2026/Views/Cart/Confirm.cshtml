@@ -1,0 +1,66 @@
+﻿@model List<ProductQuantity>;
+@{
+    ViewData["Title"] = "Confirm command";
+}
+
+<table class="table table-hover align-middle">
+    <thead class="table-light">
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="@Model[i].Product.ImageLink" alt="@Model[i].Product.Name" style="width: 60px; height: 60px; object-fit: contain;" />
+                        <a asp-controller="Product" asp-action="ViewProduct"
+                           asp-route-id="@Model[i].Product.ProductId">
+                            @Model[i].Product.Name
+                        </a>
+                    </div>
+                </td>
+                <td>@Model[i].Product.Price.ToString("F2") €</td>
+                <td>
+                    <input type="number" asp-for="@Model[i].Quantity" value="@Model[i].Quantity" min="1" max="500"
+                           class="form-control" style="width: 80px;" />
+                </td>
+                <td>@((Model[i].Product.Price * Model[i].Quantity).ToString("F2")) €</td>
+                <td>
+                    <button type="submit" name="action" class="btn btn-sm btn-outline-danger" value="@Model[i].Product.ProductId">
+                        Remove the product
+                    </button>
+                    <input type="hidden" asp-for="@Model[i].Product.ProductId" />
+                    <input type="hidden" asp-for="@Model[i].Product.Price" />
+                    <input type="hidden" asp-for="@Model[i].Product.Name" />
+                    <input type="hidden" asp-for="@Model[i].Product.ImageLink" />
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-end fw-bold">For each command you have a service fee of :</td>
+            <td class="fw-bold text-primary">5.95 €</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="3" class="text-end fw-bold">Your total is :</td>
+            <td class="fw-bold text-primary">
+                @((Model.Sum(p => p.Product.Price * p.Quantity) + 5.95).ToString("F2")) €
+            </td>
+            <td>
+                <button type="submit" name="action" class="btn btn-primary" value="save">
+                    Save cart changes
+                </button>
+            </td>
+        </tr>
+    </tfoot>
+</table>
