@@ -6,7 +6,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ClickCollect_Antoine_Nolan_2026.DAL
 {
-    public class ShopDAL
+    public class ShopDAL : IShopDAL
     {
         private readonly string connectionString;
 
