@@ -23,6 +23,7 @@ namespace ClickCollect_Antoine_Nolan_2026
             string? connectionString = builder.Configuration.GetConnectionString("default");
             builder.Services.AddTransient<IUserDAL>(u => new UserDAL(connectionString!));
             builder.Services.AddTransient<IProductDAL>(p => new ProductDAL(connectionString!));
+            builder.Services.AddTransient<IShopDAL>(s => new ShopDAL(connectionString!));
 
             var app = builder.Build();
 

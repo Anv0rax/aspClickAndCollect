@@ -10,10 +10,12 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
     public class CartController : BaseController
     {
         private readonly IProductDAL productDAL;
+        private readonly IShopDAL shopDAL;
 
-        public CartController(IProductDAL productDAL)
+        public CartController(IProductDAL productDAL, IShopDAL shopDAL)
         {
             this.productDAL = productDAL;
+            this.shopDAL = shopDAL; 
         }
 
         // Since we are stocking the shopping cart in a session, we
@@ -126,7 +128,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
             vm.Cart = validCart;
 
-
+            vm.Shops = await Shop.GetShopsAndTimeSlotsFromTodayAsync(shopDAL);
 
             return View(vm);
         }
