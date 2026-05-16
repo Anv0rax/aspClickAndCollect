@@ -46,7 +46,10 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                                 reader.GetString("city"), reader.GetString("country"),
                                 reader.GetDouble("longitude"), reader.GetDouble("latitude"));
 
-                            //Shop? shop = shops.FirstOrDefault(p => p.Id == shopId);
+                            Shop shop = new Shop(shopId, reader.GetString("name"),
+                                reader.GetString("maplink"), shopAdress);
+
+                            shops.Add(shop);
 
                             //reader.GetString("ShopId");
 
