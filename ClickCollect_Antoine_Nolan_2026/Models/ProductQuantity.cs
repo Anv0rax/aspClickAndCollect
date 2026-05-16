@@ -15,6 +15,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             set { product = value; }
         }
 
+        [Range(0, 500)]
         public int Quantity
         {
             get { return quantity; }

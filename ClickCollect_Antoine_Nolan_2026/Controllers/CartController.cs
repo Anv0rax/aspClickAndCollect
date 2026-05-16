@@ -47,9 +47,9 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             if (HttpContext.Session.GetInt32("UserId") == null)
                 return RedirectToAction("Login", "User");
 
-            if (quantity < 1 || quantity > 999)
+            if (quantity < 1 || quantity > 100)
             {
-                TempData["Error"] = "Please choose between 1 and 999 products.";
+                TempData["Error"] = "Please choose between 1 and 100 products.";
                 return RedirectToAction("ViewProduct", "Product", new { id = productId });
             }
 
@@ -76,10 +76,6 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // i will add a new method, to simply delete a product from the shopping list of the customer
-        // For that, i will use a lambda expression, to remove all the products where the productID is the same as the id from the parameters of the method.
-        // Then of course i will save the cart.
-
         [HttpPost]
         public IActionResult RemoveFromCart(int productId)
         {
@@ -89,11 +85,30 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             return RedirectToAction("Index");
         }
 
-        // I'm going to check if every product in the shopping list are in the database.
-        // For that, i will get the cart of the user, and for each product, im checking his ID.
-        // By getting all the product ID, I can tell with the method GetProductByIdAsync if one product is not in the database.
-        // Those products will be deleted from the user cart, by just not adding them into the validCart list.
-        // I will save the new list, and return the view with the ValidCart.
+        [HttpPost]
+        public IActionResult UpdateCart(List<ProductQuantity> cart, string action)
+        {
+            if(!(action == "save" || action == "confirm"))
+            { 
+                int prodId;
+
+                if(int.TryParse(action, out prodId))
+                    cart.RemoveAll(p => p.GetProductID() == prodId);
+            }
+
+            SaveCartToSession(cart);
+
+            if(action == "confirm")
+            {
+                return RedirectToAction("Confirm");
+            }
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Confirm()
+        {
+            return View("Index");
+        }
 
         public async Task<IActionResult> Index()
         {
@@ -110,7 +125,10 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 if (pt == null)
                     TempData["Error"] = "WARNING : A product not found was in your list. This product is then removed from your shopping list.";
                 else
+                {
+                    item.Quantity = Math.Clamp(item.Quantity, 1, 500);
                     validCart.Add(item);
+                }
             }
 
             SaveCartToSession(validCart);
