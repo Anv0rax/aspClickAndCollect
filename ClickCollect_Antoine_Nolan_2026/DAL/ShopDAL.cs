@@ -15,7 +15,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
             connectionString = _connectionString;
         }
 
-        public async Task<List<Shop>> GetShopsAsync()
+        public async Task<List<Shop>> GetShopsAndTimeslotsFromNowAsync()
         {
             List<Shop> shops = new List<Shop>();
 
@@ -23,51 +23,54 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
             {
                 SqlCommand cmd = new SqlCommand(
                     @"SELECT 
-                        a.adressId, a.street, a.number, a.city, a.country, a.longitude, a.latitude,
                         s.shopId, s.name, s.maplink, 
-                        t.timeslot, t.pickUpTime
-                    FROM dbo.Shops s
-                    INNER JOIN dbo.Adresses a ON a.adressId = s.adressId
-                    LEFT JOIN dbo.Timeslots t ON t.shopId = s.shopId", co);
+                        a.adressId, a.street, a.number, a.city, a.country, a.longitude, a.latitude,
+                        t.timeslot,
+                        (SELECT COUNT(orderID) 
+                            FROM Orders o 
+                            INNER JOIN Timeslots ts ON o.timeslot = ts.timeslot 
+                                                    and o.shopId = ts.shopId) 
+                        as ordersPerTimeslot
+                    FROM Shops s
+                    INNER JOIN Adresses a ON a.adressId = s.adressId
+                    LEFT JOIN Timeslots t ON t.shopId = s.shopId
+                    WHERE t.timeslot > @now
+                    ORDER BY s.shopId;", co);
+
+                cmd.Parameters.Add("@now", SqlDbType.DateTime2).Value = DateTime.UtcNow;
 
                 await co.OpenAsync();
 
                 using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
                 {
                     int shopId = 0;
+                    Shop? currentShop = null;
                     while (await reader.ReadAsync())
                     {
-                        if (shopId != reader.GetInt32("shopId"))
+                        int rowShopId = reader.GetInt32("shopId");
+
+                        if (shopId != rowShopId)
                         {
-                            shopId = reader.GetInt32("shopId");
+                            shopId = rowShopId;
 
                             Adress shopAdress = new Adress(reader.GetInt32("adressld"),
                                 reader.GetString("street"), reader.GetString("number"),
                                 reader.GetString("city"), reader.GetString("country"),
                                 reader.GetDouble("longitude"), reader.GetDouble("latitude"));
 
-                            Shop shop = new Shop(shopId, reader.GetString("name"),
+                            currentShop = new Shop(shopId, reader.GetString("name"),
                                 reader.GetString("maplink"), shopAdress);
 
-                            shops.Add(shop);
-
-                            //reader.GetString("ShopId");
-
-                            //if (shop == null)
-                            //{
-                            //    shop = new Shop(shopId, reader.GetString("ShopId"), reader.GetString(2),);
-                            //    shops.Add(shop);
-                            //}
-
-                            //if (!await reader.IsDBNullAsync(5))
-                            //{
-                            //    Category c = new Category
-                            //    {
-                            //        Id = reader.GetInt32(5),
-                            //        NameCategory = reader.GetString(6)
-                            //    };
-                            //    shop.Timeslots.Add(c);
-                            //}
+                            shops.Add(currentShop);
+                        }
+                        if(currentShop != null)
+                        {
+                            Timeslot ts = new Timeslot(reader.GetDateTime("timeslot"), currentShop);
+                            if (ts != null)
+                            {
+                                ts.NumberOfOrders = reader.GetInt32("ordersPerTimeslot");
+                                currentShop.Timeslots.Add(ts);
+                            }
                         }
                     }
                 }

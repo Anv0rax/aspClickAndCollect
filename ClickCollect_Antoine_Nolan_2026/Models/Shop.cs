@@ -1,3 +1,5 @@
+using ClickCollect_Antoine_Nolan_2026.DAL;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace ClickCollect_Antoine_Nolan_2026.Models
@@ -46,5 +48,10 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             get => insertMap;
             private set => insertMap = value;
         }
+
+        public List<Timeslot> Timeslots { get; set; }
+
+        public static async Task<List<Shop>> GetShopsAndTimeSlotsFromTodayAsync(ShopDAL shopDAL)
+            => await shopDAL.GetShopsAndTimeslotsFromNowAsync();
     }
 }

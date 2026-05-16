@@ -44,5 +44,22 @@
                 orders.Add(o);
             }
         }
+
+        public int NumberOfOrders { get; set; } // because, without that, we sould take all in orders in db
+
+        public override string ToString()
+        {
+            return $"{InShop.Id}) {StartTime.ToString("dd'/'MM'/'yyyy")} : {StartTime.ToString("H")} -> {EndTime.ToString("H")}";
+        }
+
+        public bool Equals(Timeslot _ts)
+        {
+            return _ts.InShop.Id == InShop.Id && _ts.StartTime == StartTime;
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
     }
 }
