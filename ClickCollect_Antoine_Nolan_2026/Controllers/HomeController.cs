@@ -9,13 +9,15 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
     {
         private readonly IProductDAL productDAL;
 
-        public HomeController(IProductDAL productDAL)
+        public HomeController(IProductDAL productDAL, IUserDAL userDAL)
         {
             this.productDAL = productDAL;
         }
         
         public async Task<IActionResult> Index(string? sort=null, string? category=null)
         {
+            
+
             List<Product> allProducts = await Product.GetCatalogAsync(productDAL);
             ViewData["AllProducts"] = allProducts;
 

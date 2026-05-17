@@ -14,5 +14,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
         // This will registers a new customer into the database.
 
         Task<User?> GetUserByUsernameAsync(string username);
+
+        Task<Customer?> GetCustomerByIdAsync(int id);
     }
 }
