@@ -1,4 +1,6 @@
-﻿namespace ClickCollect_Antoine_Nolan_2026.Models
+﻿using ClickCollect_Antoine_Nolan_2026.DAL;
+
+namespace ClickCollect_Antoine_Nolan_2026.Models
 {
     public class Order
     {
@@ -78,6 +80,9 @@
         {
             get => boxDeposit;
         }
+
+        public static async Task<bool> InsertOrderAsync(IOrderDAL orderDAL, Order order)
+            => await orderDAL.InsertOrderAsync(order);
     }
 
     public enum OrderStatusEnum

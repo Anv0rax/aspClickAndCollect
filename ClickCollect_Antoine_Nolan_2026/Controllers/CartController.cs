@@ -12,11 +12,15 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
     {
         private readonly IProductDAL productDAL;
         private readonly IShopDAL shopDAL;
+        private readonly IUserDAL userDAL;
+        private readonly IOrderDAL orderDAL;
 
-        public CartController(IProductDAL productDAL, IShopDAL shopDAL)
+        public CartController(IProductDAL productDAL, IShopDAL shopDAL, IUserDAL userDAL, IOrderDAL orderDAL)
         {
             this.productDAL = productDAL;
-            this.shopDAL = shopDAL; 
+            this.shopDAL = shopDAL;
+            this.userDAL = userDAL;
+            this.orderDAL = orderDAL;
         }
 
         // Since we are stocking the shopping cart in a session, we
@@ -161,7 +165,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         [HttpPost]
         public async Task<IActionResult> ValidCommand(int shopId, DateTime timeslot)
         {
-            string? userId = HttpContext.Session.GetString("Username");
+            int? userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null)
                 return RedirectToAction("Login", "User");
 
@@ -178,14 +182,27 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 TempData["Error"] = "Take another shop";
                 return RedirectToAction("SelectShop");
             }
+
             Timeslot? thisTimeslot = thisShop.Timeslots.FirstOrDefault(t => t.StartTime == timeslot);
             if (thisTimeslot == null)
             {
                 TempData["Error"] = "Take another timeslot";
                 return RedirectToAction("Confirm", new { shopId = shopId });
             }
+            
+            Customer? thisUser = await Models.User.GetCustomerByIdAsync(userDAL, (int)userId);
+            if (thisUser == null)
+                return RedirectToAction("Login", "User");
 
-            return RedirectToAction("Confirm", new { shopId = shopId });
+            Order thisOrder = new Order(0, OrderStatusEnum.Processing.ToString(), 0, 0, thisUser);
+
+            if (await Models.Order.InsertOrderAsync(orderDAL, thisOrder))
+            {
+                TempData["Success"] = $"Order Confirmed at {thisShop.Name} For {thisTimeslot.StartTime.ToString("dd'/'MM'/'yyyy ': between' HH")}h00 and {thisTimeslot.EndTime.ToString("HH")}h00";
+                return RedirectToAction("Home", "Index");
+            }
+            TempData["Error"] = "Error, try again";
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Index()

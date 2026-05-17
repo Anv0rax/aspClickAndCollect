@@ -88,6 +88,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             await userDAL.RegisterCustomerAsync(customer, adress);
         }
 
+        public static async Task<User?> GetUserByUsernameAsync(IUserDAL userDAL, string username)
+        {
+            return await userDAL.GetUserByUsernameAsync(username);
+        }
+
         public static async Task<Customer?> GetCustomerByIdAsync(IUserDAL userDAL, int userId)
         {
             return await userDAL.GetCustomerByIdAsync(userId);
