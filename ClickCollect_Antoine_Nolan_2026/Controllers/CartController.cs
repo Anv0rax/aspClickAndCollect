@@ -142,23 +142,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SelectTimeslot(int shopId)
+        public async Task<IActionResult> Confirm(int shopId)
         {
             if (HttpContext.Session.GetInt32("UserId") == null)
                 return RedirectToAction("Login", "User");
-            int i = 0;
 
             ConfirmCartViewModel vm = new ConfirmCartViewModel();
             vm.Cart = GetCartFromSession();
             List<Shop> shops = await Shop.GetShopsAndTimeslotsFromTodayAsync(shopDAL);
 
-            while(i < shops.Count && shops[i].Id != shopId)
-            {
-                i++;
-            }
-
-            try { vm.Shop = shops[i]; }
-            catch (Exception ex) { vm.Shop = shops[1]; }
+            vm.Shop = shops.FirstOrDefault(s => s.Id == shopId) ?? shops[1];
 
             return View(vm);
         }
