@@ -5,6 +5,8 @@
         private DateTime timeslot;
         private Shop shop;
 
+        public Timeslot() { }
+
         public Timeslot(DateTime _datefrom, Shop _shop)
         {
             StartTime = _datefrom;

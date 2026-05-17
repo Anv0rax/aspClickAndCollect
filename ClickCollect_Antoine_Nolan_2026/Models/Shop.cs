@@ -57,7 +57,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             set { timeslots = value; }
         }
 
-        public static async Task<List<Shop>> GetShopsAndTimeslotsFromTodayAsync(IShopDAL shopDAL)
+        public static async Task<List<Shop>> GetShopsAndTimeslotsAsync(IShopDAL shopDAL)
             => await shopDAL.GetShopsAndTimeslotsAsync();
 
         public static async Task<List<Shop>> GetShopsAsync(IShopDAL shopDAL)

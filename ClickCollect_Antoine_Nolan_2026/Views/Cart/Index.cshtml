@@ -55,6 +55,7 @@
                             </td>
                             <td>@((Model[i].Product.Price * Model[i].Quantity).ToString("F2")) €</td>
                             <td>
+                                <input class="d-none" type="submit" name="action" value="save" />
                                 <button type="submit" name="action" class="btn btn-sm btn-outline-danger" value="@Model[i].Product.ProductId">
                                     Remove the product
                                 </button>

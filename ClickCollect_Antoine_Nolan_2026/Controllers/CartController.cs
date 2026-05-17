@@ -1,6 +1,7 @@
 using ClickCollect_Antoine_Nolan_2026.DAL;
 using ClickCollect_Antoine_Nolan_2026.Models;
 using ClickCollect_Antoine_Nolan_2026.ViewModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -142,6 +143,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         }
 
         [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Confirm(int shopId)
         {
             if (HttpContext.Session.GetInt32("UserId") == null)
@@ -149,11 +151,41 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
             ConfirmCartViewModel vm = new ConfirmCartViewModel();
             vm.Cart = GetCartFromSession();
-            List<Shop> shops = await Shop.GetShopsAndTimeslotsFromTodayAsync(shopDAL);
+            List<Shop> shops = await Shop.GetShopsAndTimeslotsAsync(shopDAL);
 
             vm.Shop = shops.FirstOrDefault(s => s.Id == shopId) ?? shops[1];
 
             return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ValidCommand(int shopId, DateTime timeslot)
+        {
+            string? userId = HttpContext.Session.GetString("Username");
+            if (userId == null)
+                return RedirectToAction("Login", "User");
+
+            if (shopId == 0 || timeslot == default(DateTime))
+            {
+                TempData["Error"] = "Take another timeslot";
+                return RedirectToAction("Confirm", new { shopId = 1 });
+            }
+
+            List<Shop> shops = await Shop.GetShopsAndTimeslotsAsync(shopDAL);
+            Shop? thisShop = shops.FirstOrDefault(s => s.Id == shopId);
+            if (thisShop == null)
+            {
+                TempData["Error"] = "Take another shop";
+                return RedirectToAction("SelectShop");
+            }
+            Timeslot? thisTimeslot = thisShop.Timeslots.FirstOrDefault(t => t.StartTime == timeslot);
+            if (thisTimeslot == null)
+            {
+                TempData["Error"] = "Take another timeslot";
+                return RedirectToAction("Confirm", new { shopId = shopId });
+            }
+
+            return RedirectToAction("Confirm", new { shopId = shopId });
         }
 
         public async Task<IActionResult> Index()

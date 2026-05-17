@@ -6,12 +6,13 @@
         private OrderStatusEnum status = OrderStatusEnum.Processing;
         private int numberOfBoxUsed = 0;
         private int numberOfBoxReturned = 0;
+        private Customer customer = new Customer();
         private static double taxOfService = 5.95;
         private static double boxDeposit = 5.95;
 
         public Order() { }
 
-        public Order(int _orderId, string _status, int _numberOfBoxUsed, int _numberOfBoxReturned)
+        public Order(int _orderId, string _status, int _numberOfBoxUsed, int _numberOfBoxReturned, Customer _customer)
         {
             OrderId = _orderId;
             NumberOfBoxUsed = _numberOfBoxUsed;
@@ -20,6 +21,13 @@
             {
                 Status = OrderStatusEnum.Canceled;
             }
+            Client = _customer;
+        }
+
+        public Customer Client
+        {
+            get => customer;
+            set { customer = value; }
         }
 
         public int NumberOfBoxReturned
