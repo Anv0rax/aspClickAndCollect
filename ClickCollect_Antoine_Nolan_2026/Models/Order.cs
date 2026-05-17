@@ -8,13 +8,14 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         private OrderStatusEnum status = OrderStatusEnum.Processing;
         private int numberOfBoxUsed = 0;
         private int numberOfBoxReturned = 0;
+        private Timeslot slot = new Timeslot();
         private Customer customer = new Customer();
         private static double taxOfService = 5.95;
         private static double boxDeposit = 5.95;
 
         public Order() { }
 
-        public Order(int _orderId, string _status, int _numberOfBoxUsed, int _numberOfBoxReturned, Customer _customer)
+        public Order(int _orderId, string _status, int _numberOfBoxUsed, int _numberOfBoxReturned, Timeslot _slot, Customer _customer)
         {
             OrderId = _orderId;
             NumberOfBoxUsed = _numberOfBoxUsed;
@@ -23,6 +24,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             {
                 Status = OrderStatusEnum.Canceled;
             }
+            Slot = _slot;
             Client = _customer;
         }
 
@@ -30,6 +32,12 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         {
             get => customer;
             set { customer = value; }
+        }
+
+        public Timeslot Slot
+        {
+            get => slot;
+            set { slot = value; }
         }
 
         public int NumberOfBoxReturned

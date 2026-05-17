@@ -194,7 +194,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             if (thisUser == null)
                 return RedirectToAction("Login", "User");
 
-            Order thisOrder = new Order(0, OrderStatusEnum.Processing.ToString(), 0, 0, thisUser);
+            Order thisOrder = new Order(0, OrderStatusEnum.Processing.ToString(), 0, 0, thisTimeslot, thisUser);
 
             if (await Models.Order.InsertOrderAsync(orderDAL, thisOrder))
             {

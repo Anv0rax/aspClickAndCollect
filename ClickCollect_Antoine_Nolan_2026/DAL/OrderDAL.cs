@@ -16,22 +16,25 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
         {
             bool succes = false;
 
-            //using (SqlConnection con = new SqlConnection(connectionString))
-            //{
-            //    SqlCommand cmd = new SqlCommand
-            //        (
-            //            @"INSERT INTO dbo.Movies (Title, Duration, Synopsis)
-            //              VALUES (@Title, @Duration, @Synopsis)"
-            //            , con
-            //        );
-            //    cmd.Parameters.AddWithValue("Title", movie.Title);
-            //    cmd.Parameters.AddWithValue("Duration", movie.Duration);
-            //    cmd.Parameters.AddWithValue("Synopsis", movie.Synopsis);
-            //    await con.OpenAsync();
-            //    int res = await cmd.ExecuteNonQueryAsync();
-            //    succes = res > 0;
-            //}
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand(
+                        @"INSERT INTO Orders (
+                            status, numberOfBoxUsed, numberOfBoxReturned,
+                            userId, shopId, timeslot)
+                        VALUES (@status, @numberOfBoxUsed, @numberOfBoxReturned,
+                            @userId, @shopId, @timeslot)", con);
 
+                cmd.Parameters.AddWithValue("@status", order.Status.ToString());
+                cmd.Parameters.AddWithValue("@numberOfBoxUsed", order.NumberOfBoxUsed);
+                cmd.Parameters.AddWithValue("@numberOfBoxReturned", order.NumberOfBoxReturned);
+                cmd.Parameters.AddWithValue("@userId", order.Client.Id);
+                cmd.Parameters.AddWithValue("@shopId", order.Slot.InShop.Id);
+                cmd.Parameters.AddWithValue("@timeslot", order.Slot.StartTime);
+                await con.OpenAsync();
+                int res = await cmd.ExecuteNonQueryAsync();
+                succes = res > 0;
+            }
             return succes;
         }
     }
