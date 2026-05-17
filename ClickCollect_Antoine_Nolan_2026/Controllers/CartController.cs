@@ -103,28 +103,17 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
             if(action == "confirm")
             {
-                return RedirectToAction("Confirm");
+                return RedirectToAction("SelectShop");
             }
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Confirm()
+        public async Task<IActionResult> SelectShop()
         {
             if (HttpContext.Session.GetInt32("UserId") == null)
                 return RedirectToAction("Login", "User");
 
-            List<ProductQuantity> validCart = new List<ProductQuantity>();
-            bool errorInCart;
-            ConfirmCartViewModel vm = new ConfirmCartViewModel();
-
-            (validCart, errorInCart) = await GetValidatedCartAsync();
-            if (errorInCart)
-                TempData["Error"] = "WARNING : A product not found was in your list. This product is then removed from your shopping list.";
-
-            SaveCartToSession(validCart);
-            
-            vm.Cart = validCart;
-            vm.Shops = await Shop.GetShopsAndTimeSlotsFromTodayAsync(shopDAL);
+            List<Shop> shops = await Shop.GetShopsAndTimeSlotsFromTodayAsync(shopDAL);
 
             TempData["Distances"] = null;
 
@@ -140,7 +129,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             //    TempData["Distances"] = distances;
             //}
 
-            return View(vm);
+            return View(shops);
         }
 
         public async Task<IActionResult> Index()

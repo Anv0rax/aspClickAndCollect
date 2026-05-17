@@ -1,0 +1,45 @@
+﻿@model List<Shop>
+<main class="container py-4">
+    <h1 class="h1 fw-bold mb-3">Select a shop</h1>
+
+    <form method="post" asp-action="SelectTimeslot" class="pb-4">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div class="col">
+                    <input type="radio" name="SelectedShopId"
+                           id="shop-@Model[i].Id"
+                           value="@Model[i].Id"
+                           class="shop-radio" hidden />
+
+                    <label for="shop-@Model[i].Id" class="card h-100 shadow-sm product-card shop-card w-100">
+                        <div class="card-body">
+                            <h2 class="h4 mb-3">@Model[i].Name</h2>
+                            <p class="text-muted">@Model[i].Adress.ToString()</p>
+                        </div>
+                        <div class="p-2">
+                            @Html.Raw(Model[i].InsertMap)
+                        </div>
+                    </label>
+                </div>
+            }
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Confirm</button>
+    </form>
+
+    @* <div class="col">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-2">
+                            @Model[i].Name
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div> *@
+</main>
