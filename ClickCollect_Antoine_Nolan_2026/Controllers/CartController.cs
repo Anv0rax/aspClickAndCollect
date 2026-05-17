@@ -89,9 +89,12 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateCart(List<ProductQuantity> cart, string action)
+        public async Task<IActionResult> UpdateCart(List<ProductQuantity> cart, string action)
         {
-            if(!(action == "save" || action == "confirm"))
+            List<ProductQuantity> validCart = new List<ProductQuantity>();
+            bool errorInCart;
+
+            if (!(action == "save" || action == "confirm"))
             { 
                 int prodId;
 
@@ -101,7 +104,13 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
             SaveCartToSession(cart);
 
-            if(action == "confirm")
+            (validCart, errorInCart) = await GetValidatedCartAsync();
+            if (errorInCart)
+                TempData["Error"] = "WARNING : A product not found was in your list. This product is then removed from your shopping list.";
+
+            SaveCartToSession(validCart);
+
+            if (action == "confirm")
             {
                 return RedirectToAction("SelectShop");
             }
@@ -113,23 +122,45 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             if (HttpContext.Session.GetInt32("UserId") == null)
                 return RedirectToAction("Login", "User");
 
-            List<Shop> shops = await Shop.GetShopsAndTimeSlotsFromTodayAsync(shopDAL);
+            List<Shop> shops = await Shop.GetShopsAsync(shopDAL);
 
             TempData["Distances"] = null;
 
-            //if(User lon != -1 && custo lat != -1)
+            //if (User lon != -1 && custo lat != -1)
             //{
             //    List<double> distances = new List<double>();
             //    double userlon = change;
             //    double userlat = change;
-            //    for (int i = 0 ; i < vm.Shops.Count ; i++)
+            //    for (int i = 0; i < shops.Count; i++)
             //    {
-            //        ViewData["Distances"].Add(vm.Shops[i].Adress!.GetDistanceWith(userlon, userlat));
+            //        distances.Add(shops[i].Adress!.GetDistanceWith(userlon, userlat));
             //    }
-            //    TempData["Distances"] = distances;
+            //    TempData["Distances"] = System.Text.Json.JsonSerializer.Serialize(distances);
             //}
 
             return View(shops);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SelectTimeslot(int shopId)
+        {
+            if (HttpContext.Session.GetInt32("UserId") == null)
+                return RedirectToAction("Login", "User");
+            int i = 0;
+
+            ConfirmCartViewModel vm = new ConfirmCartViewModel();
+            vm.Cart = GetCartFromSession();
+            List<Shop> shops = await Shop.GetShopsAndTimeslotsFromTodayAsync(shopDAL);
+
+            while(i < shops.Count && shops[i].Id != shopId)
+            {
+                i++;
+            }
+
+            try { vm.Shop = shops[i]; }
+            catch (Exception ex) { vm.Shop = shops[1]; }
+
+            return View(vm);
         }
 
         public async Task<IActionResult> Index()

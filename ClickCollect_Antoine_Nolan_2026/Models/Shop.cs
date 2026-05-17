@@ -10,6 +10,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         private string name = string.Empty;
         private string insertMap = string.Empty;
         private Adress? adress;
+        private List<Timeslot> timeslots;
 
         public Shop() { }
 
@@ -19,6 +20,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             Name = _name;
             InsertMap = _insertMap;
             Adress = _adress;
+            Timeslots = new List<Timeslot>();
         }
 
         public int Id
@@ -49,9 +51,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             private set => insertMap = value;
         }
 
-        public List<Timeslot> Timeslots { get; set; }
+        public List<Timeslot> Timeslots
+        {
+            get { return timeslots; }
+            set { timeslots = value; }
+        }
 
-        public static async Task<List<Shop>> GetShopsAndTimeSlotsFromTodayAsync(IShopDAL shopDAL)
-            => await shopDAL.GetShopsAndTimeslotsFromNowAsync();
+        public static async Task<List<Shop>> GetShopsAndTimeslotsFromTodayAsync(IShopDAL shopDAL)
+            => await shopDAL.GetShopsAndTimeslotsAsync();
+
+        public static async Task<List<Shop>> GetShopsAsync(IShopDAL shopDAL)
+            => await shopDAL.GetShopsAsync();
     }
 }

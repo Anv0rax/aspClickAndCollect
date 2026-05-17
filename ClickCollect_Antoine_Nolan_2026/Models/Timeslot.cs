@@ -49,7 +49,7 @@
 
         public override string ToString()
         {
-            return $"{InShop.Id}) {StartTime.ToString("dd'/'MM'/'yyyy")} : {StartTime.ToString("H")} -> {EndTime.ToString("H")}";
+            return $"{InShop.Id}) {StartTime.ToString("dd'/'MM'/'yyyy")} : {StartTime.ToString("HH")} -> {EndTime.ToString("HH")}";
         }
 
         public bool Equals(Timeslot _ts)
