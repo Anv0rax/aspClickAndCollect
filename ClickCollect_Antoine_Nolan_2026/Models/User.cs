@@ -1,3 +1,4 @@
+using ClickCollect_Antoine_Nolan_2026.DAL;
 using System.ComponentModel.DataAnnotations;
 
 namespace ClickCollect_Antoine_Nolan_2026.Models
@@ -70,6 +71,26 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             Password = password;
             FirstName = firstName;
             LastName = lastName;
+        }
+
+        public static async Task<User ?> GetUserByCredentialsAsync(IUserDAL userDAL, string username, string password)
+        {
+            return await userDAL.GetUserByCredentialsAsync(username, password);
+        }
+        // it will retrive a user from the database based on username and password
+
+        public static async Task<bool> UsernameExistsAsync(IUserDAL userDAL, string username)
+        {
+            return await userDAL.UsernameExistsAsync(username);
+        }
+        public static async Task RegisterCustomerAsync(IUserDAL userDAL, Customer customer, Adress adress)
+        {
+            await userDAL.RegisterCustomerAsync(customer, adress);
+        }
+
+        public static async Task<Customer?> GetCustomerByIdAsync(IUserDAL userDAL, int userId)
+        {
+            return await userDAL.GetCustomerByIdAsync(userId);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             }
 
             // We use GetUserByCredentialsAsync, beacause this method aleardy checks the password with BCrypt
-            User? user = await userDAL.GetUserByCredentialsAsync(username, password);
+            Models.User? user = await Models.User.GetUserByCredentialsAsync(userDAL, username, password);
 
             // Verify the password against the hashed version in DB
             if (user == null)
@@ -91,14 +91,14 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 // the api is not available :'(
             }
 
-            if (await userDAL.UsernameExistsAsync(customer.Username))
+            if (await Models.User.UsernameExistsAsync(userDAL, customer.Username))
             {
                 ViewData["Error"] = "This username is already taken.";
                 return View(customer);
             }
 
 
-            await userDAL.RegisterCustomerAsync(customer, adress);
+            await Models.User.RegisterCustomerAsync(userDAL, customer, adress);
 
             TempData["RegisterSuccess"] = "Account created successfully. You can now log in.";
             return RedirectToAction("Login");

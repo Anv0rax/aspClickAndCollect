@@ -143,12 +143,12 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                     WHEN ca.userId IS NOT NULL THEN 'Cashier'
                     WHEN p.userId  IS NOT NULL THEN 'Preparer'
                 END AS role,
-                COALESCE(ca.shopId, p.shopId) AS shopId
-              FROM Users u
-              LEFT JOIN Customers cu ON u.userId = cu.userId
-              LEFT JOIN Cachiers  ca ON u.userId = ca.userId
-              LEFT JOIN Preparers p  ON u.userId = p.userId
-              WHERE u.username = @Username", co);
+                    COALESCE(ca.shopId, p.shopId) AS shopId
+                    FROM Users u
+                    LEFT JOIN Customers cu ON u.userId = cu.userId
+                    LEFT JOIN Cachiers  ca ON u.userId = ca.userId
+                    LEFT JOIN Preparers p  ON u.userId = p.userId
+                    WHERE u.username = @Username", co);
 
                 cmd.Parameters.AddWithValue("Username", username);
 
@@ -176,6 +176,55 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
             }
 
             return user;
+        }
+
+        public async Task<Customer?> GetCustomerByIdAsync(int userId)
+        {
+            Customer? customer = null;
+
+            using (SqlConnection co = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand(
+                    @"SELECT u.userId, u.username, u.password, u.firstname, u.lastname,
+                     cu.email, cu.phoneNumber,
+                     a.adressId, a.street, a.number, a.city, a.country
+                        FROM Users u
+                        INNER JOIN Customers cu ON u.userId = cu.userId
+                        INNER JOIN Adresses a ON u.adressId = a.adressId
+                        WHERE u.userId = @UserId", co);
+
+                cmd.Parameters.AddWithValue("UserId", userId);
+
+                await co.OpenAsync();
+
+                using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        Adress adress = new Adress(
+                            reader.GetInt32(7),
+                            reader.GetString(8),
+                            reader.GetString(9),
+                            reader.GetString(10),
+                            reader.GetString(11)
+                        );
+
+                        customer = new Customer(
+                            reader.GetInt32(0),
+                            reader.GetString(1),
+                            reader.GetString(2)
+                        );
+
+                        customer.FirstName = reader.GetString(3);
+                        customer.LastName = reader.GetString(4);
+                        customer.Email = reader.GetString(5);
+                        customer.PhoneNumber = reader.GetString(6);
+                        customer.Adress = adress;
+                    }
+                }   
+            }
+
+            return customer;
         }
     }
 }
