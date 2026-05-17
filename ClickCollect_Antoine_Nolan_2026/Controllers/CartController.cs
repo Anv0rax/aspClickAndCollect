@@ -184,7 +184,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             }
 
             Timeslot? thisTimeslot = thisShop.Timeslots.FirstOrDefault(t => t.StartTime == timeslot);
-            if (thisTimeslot == null)
+            if (thisTimeslot == null && thisTimeslot.NumberOfOrders > 9)
             {
                 TempData["Error"] = "Take another timeslot";
                 return RedirectToAction("Confirm", new { shopId = shopId });
@@ -199,7 +199,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             if (await Models.Order.InsertOrderAsync(orderDAL, thisOrder))
             {
                 TempData["Success"] = $"Order Confirmed at {thisShop.Name} For {thisTimeslot.StartTime.ToString("dd'/'MM'/'yyyy ': between' HH")}h00 and {thisTimeslot.EndTime.ToString("HH")}h00";
-                return RedirectToAction("Home", "Index");
+                return RedirectToAction("Index", "Home");
             }
             TempData["Error"] = "Error, try again";
             return RedirectToAction("Index");
