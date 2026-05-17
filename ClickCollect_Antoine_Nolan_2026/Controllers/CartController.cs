@@ -194,14 +194,23 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             if (thisUser == null)
                 return RedirectToAction("Login", "User");
 
-            Order thisOrder = new Order(0, OrderStatusEnum.Processing.ToString(), 0, 0, thisTimeslot, thisUser);
+            Order thisOrder = new Order(0, OrderStatusEnum.Processing.ToString(), 0, 0, thisTimeslot, thisUser, GetCartFromSession());
+            int orderId = await Models.Order.InsertOrderAsync(orderDAL, thisOrder);
+            if (orderId == 0)
+            {
+                TempData["Error"] = "Error for creating the command, try again";
+                return RedirectToAction("Index");
+            }
 
-            if (await Models.Order.InsertOrderAsync(orderDAL, thisOrder))
+            thisOrder.OrderId = orderId;
+            int number = await thisOrder.InsertContentAsync(orderDAL);
+            if (number > 0)
             {
                 TempData["Success"] = $"Order Confirmed at {thisShop.Name} For {thisTimeslot.StartTime.ToString("dd'/'MM'/'yyyy ': between' HH")}h00 and {thisTimeslot.EndTime.ToString("HH")}h00";
                 return RedirectToAction("Index", "Home");
             }
-            TempData["Error"] = "Error, try again";
+
+            TempData["Error"] = "Error in the content of the cart, try again";
             return RedirectToAction("Index");
         }
 

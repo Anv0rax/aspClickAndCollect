@@ -10,6 +10,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         private int numberOfBoxReturned = 0;
         private Timeslot slot = new Timeslot();
         private Customer customer = new Customer();
+        private List<ProductQuantity> content = new List<ProductQuantity>();
         private static double taxOfService = 5.95;
         private static double boxDeposit = 5.95;
 
@@ -26,6 +27,20 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             }
             Slot = _slot;
             Client = _customer;
+        }
+
+
+
+        public Order(int _orderId, string _status, int _numberOfBoxUsed, int _numberOfBoxReturned, Timeslot _slot, Customer _customer, List<ProductQuantity> _content)
+            : this (_orderId, _status, _numberOfBoxUsed, _numberOfBoxReturned, _slot, _customer)
+        {
+            Content = _content;
+        }
+
+        public List<ProductQuantity> Content
+        {
+            get => content;
+            set { content = value; }
         }
 
         public Customer Client
@@ -61,7 +76,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public int OrderId
         {
             get => orderId;
-            private set { orderId = value; }
+            set { orderId = value; }
         }
 
         public bool Equals(Order _o)
@@ -78,7 +93,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         {
             return this.OrderId.GetHashCode();
         }
-
+        
         public static double TaxOfService
         {
             get => taxOfService;
@@ -89,8 +104,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             get => boxDeposit;
         }
 
-        public static async Task<bool> InsertOrderAsync(IOrderDAL orderDAL, Order order)
+        public static async Task<int> InsertOrderAsync(IOrderDAL orderDAL, Order order)
             => await orderDAL.InsertOrderAsync(order);
+
+        public async Task<int> InsertContentAsync(IOrderDAL orderDAL)
+            => await orderDAL.InsertContentAsync(this);
     }
 
     public enum OrderStatusEnum
