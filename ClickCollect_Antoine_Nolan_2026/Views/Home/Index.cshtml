@@ -34,7 +34,7 @@
                     <h5 class="mb-3">Categories</h5>
                     <div class="list-group list-group-flush">
                         <a asp-route-category="" asp-route-sort="@sort"
-                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0 @(selectedCategory == "" ? "active" : "")">
+                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-2 @(selectedCategory == "" ? "active" : "")">
                             All the products 
                             <span class="badge @(selectedCategory == "" ? "bg-primary" : "bg-secondary") rounded-pill">
                                 @allProducts?.Count
@@ -61,8 +61,8 @@
                 <select class="form-select w-auto border-0 shadow-sm" onchange="sendSortProduct(this, '@(ViewData["Category"] as string ?? "")')">
                     <option value="" selected="@(sort == null)">Sort by :</option>
                     <option value="name" selected="@(sort == "name")">Name</option>
-                    <option value="ascending" selected="@(sort == "ascending")">Price : Ascending</option>
-                    <option value="descending" selected="@(sort == "descending")">Price : Descending</option>
+                    <option value="ascending" selected="@(sort == "ascending")">Price : Ascending ⬆️</option>
+                    <option value="descending" selected="@(sort == "descending")">Price : Descending ⬇️</option>
                 </select>
             </div>
 

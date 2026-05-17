@@ -1,7 +1,10 @@
-﻿@model List<ProductQuantity>;
+﻿@model ConfirmCartViewModel;
 @{
     ViewData["Title"] = "Confirm command";
 }
+<br />
+<h1>Your cart</h1>
+<br />
 
 <table class="table table-hover align-middle">
     <thead class="table-light">
@@ -15,52 +18,73 @@
     </thead>
     <tbody>
 
-        @for (int i = 0; i < Model.Count; i++)
+        @for (int i = 0; i < Model.Cart.Count; i++)
         {
             <tr>
                 <td>
                     <div class="d-flex align-items-center gap-3">
-                        <img src="@Model[i].Product.ImageLink" alt="@Model[i].Product.Name" style="width: 60px; height: 60px; object-fit: contain;" />
-                        <a asp-controller="Product" asp-action="ViewProduct"
-                           asp-route-id="@Model[i].Product.ProductId">
-                            @Model[i].Product.Name
-                        </a>
+                        <img src="@Model.Cart[i].Product.ImageLink" alt="@Model.Cart[i].Product.Name" style="width: 60px; height: 60px; object-fit: contain;" />
+                        <span>
+                            @Model.Cart[i].Product.Name
+                        </span>
                     </div>
                 </td>
-                <td>@Model[i].Product.Price.ToString("F2") €</td>
+                <td>@Model.Cart[i].Product.Price.ToString("F2") €</td>
                 <td>
-                    <input type="number" asp-for="@Model[i].Quantity" value="@Model[i].Quantity" min="1" max="500"
+                    <input type="number" asp-for="@Model.Cart[i].Quantity" value="@Model.Cart[i].Quantity" min="1" max="500"
                            class="form-control" style="width: 80px;" />
                 </td>
-                <td>@((Model[i].Product.Price * Model[i].Quantity).ToString("F2")) €</td>
-                <td>
-                    <button type="submit" name="action" class="btn btn-sm btn-outline-danger" value="@Model[i].Product.ProductId">
-                        Remove the product
-                    </button>
-                    <input type="hidden" asp-for="@Model[i].Product.ProductId" />
-                    <input type="hidden" asp-for="@Model[i].Product.Price" />
-                    <input type="hidden" asp-for="@Model[i].Product.Name" />
-                    <input type="hidden" asp-for="@Model[i].Product.ImageLink" />
-                </td>
+                <td>@((Model.Cart[i].Product.Price * Model.Cart[i].Quantity).ToString("F2")) €</td>
             </tr>
         }
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="3" class="text-end fw-bold">For each command you have a service fee of :</td>
-            <td class="fw-bold text-primary">5.95 €</td>
-            <td></td>
+            <td colspan="3" class="text-end fw-bold">Service fee :</td>
+            <td class="fw-bold text-primary">@Order.TaxOfService €</td>
         </tr>
         <tr>
             <td colspan="3" class="text-end fw-bold">Your total is :</td>
             <td class="fw-bold text-primary">
-                @((Model.Sum(p => p.Product.Price * p.Quantity) + 5.95).ToString("F2")) €
-            </td>
-            <td>
-                <button type="submit" name="action" class="btn btn-primary" value="save">
-                    Save cart changes
-                </button>
+                @((Model.Cart.Sum(p => p.Product.Price * p.Quantity) + @Order.TaxOfService).ToString("F2")) €
             </td>
         </tr>
     </tfoot>
 </table>
+
+<h1>Select a shop</h1>
+
+@{
+    int shopSelected = 0;
+}
+<div class="row container-fluid py-3">
+    <aside class="col-lg-3 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    @for(int i=0 ; i < Model.Shops.Count ; i++)
+                    {
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-2">
+                                @Model.Shops[i].Name
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </aside>
+    <main class="col-lg-9 pt-3">
+        <div class="row py-4">
+            <div class="col-md-4">
+                <h2 class="h2 fw-bold mb-3">@Model.Shops[shopSelected].Name</h2>
+
+                <h3 class="h3 fw-bold mb-3">Adress</h3>
+                <p class="text-mutes mb-4">
+                    @Model.Shops[shopSelected].Adress.ToString()
+                </p>
+            </div>
+            <div class="col-md-7 text-center">
+                @Html.Raw(Model.Shops[shopSelected].InsertMap) @*https://stackoverflow.com/questions/19980657/display-string-as-html-in-asp-net-mvc-view*@
+            </div>
+        </div>
+    </main>
+</div>

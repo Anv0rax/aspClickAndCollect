@@ -69,13 +69,13 @@
                 <tfoot>
                     <tr>
                         <td colspan="3" class="text-end fw-bold">For each command you have a service fee of :</td>
-                        <td class="fw-bold text-primary">5.95 €</td>
+                        <td class="fw-bold text-primary">@Order.TaxOfService €</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td colspan="3" class="text-end fw-bold">Your total is :</td>
                         <td class="fw-bold text-primary">
-                            @((Model.Sum(p => p.Product.Price * p.Quantity) + 5.95).ToString("F2")) €
+                            @((Model.Sum(p => p.Product.Price * p.Quantity) + @Order.TaxOfService).ToString("F2")) €
                         </td>
                         <td>
                             <button type="submit" name="action" class="btn btn-primary" value="save">

@@ -82,7 +82,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         [HttpPost]
         public IActionResult RemoveFromCart(int productId)
         {
-            List<ProductQuantity?> cart = GetCartFromSession();
+            List<ProductQuantity> cart = GetCartFromSession();
             cart.RemoveAll(p => p.GetProductID() == productId);
             SaveCartToSession(cart);
             return RedirectToAction("Index");
@@ -122,13 +122,23 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 TempData["Error"] = "WARNING : A product not found was in your list. This product is then removed from your shopping list.";
 
             SaveCartToSession(validCart);
-            (validCart, errorInCart) = await GetValidatedCartAsync();
-            if (errorInCart)
-                TempData["Error"] = "WARNING : A product not found was in your list. This product is then removed from your shopping list.";
-
+            
             vm.Cart = validCart;
-
             vm.Shops = await Shop.GetShopsAndTimeSlotsFromTodayAsync(shopDAL);
+
+            TempData["Distances"] = null;
+
+            //if(User lon != -1 && custo lat != -1)
+            //{
+            //    List<double> distances = new List<double>();
+            //    double userlon = change;
+            //    double userlat = change;
+            //    for (int i = 0 ; i < vm.Shops.Count ; i++)
+            //    {
+            //        ViewData["Distances"].Add(vm.Shops[i].Adress!.GetDistanceWith(userlon, userlat));
+            //    }
+            //    TempData["Distances"] = distances;
+            //}
 
             return View(vm);
         }

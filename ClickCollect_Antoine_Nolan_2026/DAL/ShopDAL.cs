@@ -29,15 +29,14 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                         (SELECT COUNT(orderID) 
                             FROM Orders o 
                             INNER JOIN Timeslots ts ON o.timeslot = ts.timeslot 
-                                                    and o.shopId = ts.shopId) 
-                        as ordersPerTimeslot
+                                                    and o.shopId = ts.shopId) as ordersPerTimeslot
                     FROM Shops s
                     INNER JOIN Adresses a ON a.adressId = s.adressId
                     LEFT JOIN Timeslots t ON t.shopId = s.shopId
-                    WHERE t.timeslot > @now
+                    
                     ORDER BY s.shopId;", co);
-
-                cmd.Parameters.Add("@now", SqlDbType.DateTime2).Value = DateTime.UtcNow;
+                // WHERE t.timeslot > @now
+                // cmd.Parameters.Add("@now", SqlDbType.DateTime2).Value = DateTime.Now;
 
                 await co.OpenAsync();
 
@@ -53,17 +52,17 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                         {
                             shopId = rowShopId;
 
-                            Adress shopAdress = new Adress(reader.GetInt32("adressld"),
+                            Adress shopAdress = new Adress(reader.GetInt32("adressId"),
                                 reader.GetString("street"), reader.GetString("number"),
                                 reader.GetString("city"), reader.GetString("country"),
-                                reader.GetDouble("longitude"), reader.GetDouble("latitude"));
+                                (double)reader.GetDecimal("longitude"), (double)reader.GetDecimal("latitude"));
 
                             currentShop = new Shop(shopId, reader.GetString("name"),
                                 reader.GetString("maplink"), shopAdress);
 
                             shops.Add(currentShop);
                         }
-                        if(currentShop != null)
+                        if(currentShop != null && !reader.IsDBNull(reader.GetOrdinal("timeslot")))
                         {
                             Timeslot ts = new Timeslot(reader.GetDateTime("timeslot"), currentShop);
                             if (ts != null)
