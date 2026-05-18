@@ -15,8 +15,19 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             this.userDAL = userDAL;
         }
 
+        // This will check if the user is aleady authentificated. If it's the case, he's directly directed to the catalog.
         public IActionResult Login()
         {
+            if (HttpContext.Session.GetInt32("UserId") != null)
+            {
+                string? userRole = HttpContext.Session.GetString("Role");
+
+                if (userRole == "Preparer") return RedirectToAction("Index", "Preparer");
+                if (userRole == "Cashier") return RedirectToAction("Index", "Cashier");
+                
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -28,6 +39,9 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 ViewData["Error"] = "The username or password is missing.";
                 return View();
             }
+
+            if (HttpContext.Session.GetInt32("UserId") != null)
+                return View();
 
             // We use GetUserByCredentialsAsync, beacause this method aleardy checks the password with BCrypt
             Models.User? user = await Models.User.GetUserByCredentialsAsync(userDAL, username, password);
@@ -81,6 +95,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
         public IActionResult Register()
         {
+            if (HttpContext.Session.GetInt32("UserId") != null)
+            {
+                string? userRole = HttpContext.Session.GetString("Role");
+
+                if (userRole == "Preparer") return RedirectToAction("Index", "Preparer");
+                if (userRole == "Cashier") return RedirectToAction("Index", "Cashier");
+
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -106,7 +130,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 ViewData["Error"] = $" {ex.Message} | Try again !";
                 return View(customer);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // the api is not available :'(
             }

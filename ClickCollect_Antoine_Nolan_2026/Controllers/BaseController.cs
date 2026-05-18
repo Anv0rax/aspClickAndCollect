@@ -28,5 +28,20 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             if (userRole != neededRole)
                 context.Result = RedirectToAction("Index", "Home");
         }
+
+        // This method is used so the employees can't go to the cart or something else.
+        protected void RestrictToCustomersOnly(ActionExecutingContext context)
+        {
+            string? userRole = HttpContext.Session.GetString("Role");
+
+            if (userRole == "Preparer")
+            {
+                context.Result = RedirectToAction("Index", "Preparer");
+            }
+            else if (userRole == "Cashier")
+            {
+                context.Result = RedirectToAction("Index", "Cashier");
+            }
+        }
     }
 }
