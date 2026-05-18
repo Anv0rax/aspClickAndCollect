@@ -91,14 +91,16 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
 
                 // Insert the address first and retrieve its generated ID
                 SqlCommand cmdAddress = new SqlCommand(
-                    @"INSERT INTO Adresses (street, number, city, country)
-                        VALUES (@Street, @Number, @City, @Country);
+                    @"INSERT INTO Adresses (street, number, city, country, longitude, latitude)
+                        VALUES (@Street, @Number, @City, @Country, @Longitude, @Latitude);
                         SELECT SCOPE_IDENTITY();", co);
 
                 cmdAddress.Parameters.AddWithValue("Street", adress.Street);
                 cmdAddress.Parameters.AddWithValue("Number", adress.Number);
                 cmdAddress.Parameters.AddWithValue("City", adress.City);
                 cmdAddress.Parameters.AddWithValue("Country", adress.Country);
+                cmdAddress.Parameters.AddWithValue("Longitude", adress.Longitude);
+                cmdAddress.Parameters.AddWithValue("Latitude", adress.Latitude);
 
                 int addressId = Convert.ToInt32(await cmdAddress.ExecuteScalarAsync());
 
@@ -187,7 +189,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                 SqlCommand cmd = new SqlCommand(
                     @"SELECT u.userId, u.username, u.password, u.firstname, u.lastname,
                      cu.email, cu.phoneNumber,
-                     a.adressId, a.street, a.number, a.city, a.country
+                     a.adressId, a.street, a.number, a.city, a.country, a.longitude, a.latitude
                         FROM Users u
                         INNER JOIN Customers cu ON u.userId = cu.userId
                         INNER JOIN Adresses a ON u.adressId = a.adressId
@@ -201,12 +203,22 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                 {
                     if (await reader.ReadAsync())
                     {
+                        double lon = -1;
+                        double lat = -1;
+
+                        if (!reader.IsDBNull(12))
+                            lon = (double)reader.GetDecimal(12);
+
+                        if (!reader.IsDBNull(13))
+                            lat = (double)reader.GetDecimal(13);
+
                         Adress adress = new Adress(
                             reader.GetInt32(7),
                             reader.GetString(8),
                             reader.GetString(9),
                             reader.GetString(10),
-                            reader.GetString(11)
+                            reader.GetString(11),
+                            lon, lat
                         );
 
                         customer = new Customer(

@@ -31,7 +31,7 @@
                             <p class="text-muted">@Model[i].Adress!.ToString()</p>
                             @if (TempData["Distances"] != null && distances != null)
                             {
-                                <p>Distance with you : @distances[i] km</p>
+                                <p>Distance with you : @(distances[i]:f3) km</p>
                             }
                         </div>
                         <div class="p-2">

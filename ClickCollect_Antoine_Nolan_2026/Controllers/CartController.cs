@@ -189,7 +189,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 if (userLon != -1 && userLat != -1)
                 {
                     double distance = vm.Shop.Adress.GetDistanceWith(userLon, userLat);
-                    TempData["Distances"] = $"{distance} km";
+                    TempData["Distances"] = $"{distance:f2} km";
                 }
 
             }
