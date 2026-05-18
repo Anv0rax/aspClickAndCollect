@@ -63,13 +63,13 @@
             <div class="col-lg-6 mb-4">
                 <div class="row py-4">
                     <h2 class="h2 fw-bold mb-3">@Model.Shop.Name</h2>
-                    <p class="text-mutes mb-4">
-                        @Model.Shop.Adress!.ToString()
-                    </p>
-                    @if(TempData["Distance"] != null)
+                    @if (TempData["Distance"] != null)
                     {
                         <p>Distance : @(TempData["Distance"] as string)</p>
                     }
+                    <p class="text-mutes mb-4">
+                        @Model.Shop.Adress!.ToString()
+                    </p>
                 </div>
 
                 <div class="col-md-11 text-center">
