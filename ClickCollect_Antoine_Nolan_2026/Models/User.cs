@@ -14,7 +14,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public int Id
         {
             get { return id; }
-            private set { id = value; }
+            set { id = value; }
         }
 
         [Display(Name = "Username")]

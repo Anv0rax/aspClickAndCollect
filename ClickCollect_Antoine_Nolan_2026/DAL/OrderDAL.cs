@@ -1,4 +1,4 @@
-﻿using ClickCollect_Antoine_Nolan_2026.Models;
+using ClickCollect_Antoine_Nolan_2026.Models;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
 using System.Transactions;
@@ -106,6 +106,67 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                 res = false;
             }
             return res;
+        }
+
+        public async Task<List<Order>> GetOrdersToPrepareAsync(int shopId)
+        {
+            var orders = new List<Order>();
+
+            // TODO: Put back DateTime.Today.AddDays(1) on the 19-05-26 bcz the timeslot are not going this much
+            DateTime nextDay = new DateTime(2026, 05, 20);
+
+            
+            string query = @"SELECT o.orderId AS OrderId, o.status AS OrderStatus, 
+                            o.numberOfBoxUsed AS BoxUsed, o.numberOfBoxReturned AS BoxReturned,
+                            o.timeslot AS OrderTime, u.userId AS CustomerId, u.username AS CustomerName
+                                 FROM Orders o
+                                 INNER JOIN Users u ON o.userId = u.userId
+                                 WHERE o.shopId = @ShopId
+                                   AND CONVERT(date, o.timeslot) = CONVERT(date, @NextDay)
+                                   AND o.status = 'Processing'";
+
+            using (SqlConnection co = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, co))
+                {
+                    cmd.Parameters.AddWithValue("@ShopId", shopId);
+                    cmd.Parameters.AddWithValue("@NextDay", nextDay);
+
+                    await co.OpenAsync();
+
+                    using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // im going to create the customer => (u.userId -> CustomerId, u.username -> CustomerName)
+                            Customer customer = new Customer
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("CustomerId")),
+                                Username = reader.GetString(reader.GetOrdinal("CustomerName"))
+                            };
+
+                            // then i create the timeslot => (o.timeslot -> OrderTime)
+                            Timeslot timeslot = new Timeslot
+                            {
+                                StartTime = reader.GetDateTime(reader.GetOrdinal("OrderTime"))
+                            };
+
+                            // using the order constructor to then init every part of the order.
+                            Order order = new Order(
+                                reader.GetInt32(reader.GetOrdinal("OrderId")),
+                                reader.GetString(reader.GetOrdinal("OrderStatus")),
+                                reader.GetInt32(reader.GetOrdinal("BoxUsed")),
+                                reader.GetInt32(reader.GetOrdinal("BoxReturned")),
+                                timeslot,
+                                customer
+                            );
+
+                            orders.Add(order);
+                        }
+                    }
+                }
+            }
+            return orders;
         }
     }
 }
