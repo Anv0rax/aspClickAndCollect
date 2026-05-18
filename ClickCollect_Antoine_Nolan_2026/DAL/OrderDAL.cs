@@ -168,5 +168,90 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
             }
             return orders;
         }
+
+        public async Task<Order?> GetOrderDetailsAsync(int orderId)
+        {
+            Order? order = null;
+
+            using (SqlConnection co = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand(
+                     @"SELECT o.orderId, o.status, o.numberOfBoxUsed, o.numberOfBoxReturned,
+                     o.timeslot, u.userId, u.username,
+                     p.productId, p.name, p.price, p.imageLink, pq.quantity
+                        FROM Orders o
+                          INNER JOIN Users u ON o.userId = u.userId
+                          LEFT JOIN ProductQuantity pq ON o.orderId = pq.orderId
+                          LEFT JOIN Products p ON pq.productId = p.productId
+                          WHERE o.orderId = @OrderId", co);
+
+                cmd.Parameters.AddWithValue("@OrderId", orderId);
+
+                await co.OpenAsync();
+
+                using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        if(order == null)
+                        {
+                            Customer customer = new Customer(
+                                reader.GetInt32(5),
+                                reader.GetString(6),
+                                string.Empty
+                            );
+
+                            Timeslot timeslot = new Timeslot
+                            {
+                                StartTime = reader.GetDateTime(4)
+                            };
+
+                            order = new Order(
+                                reader.GetInt32(0),
+                                reader.GetString(1),
+                                reader.GetInt32(2),
+                                reader.GetInt32(3),
+                                timeslot,
+                                customer
+                            );
+                        }
+
+                        if(!await reader.IsDBNullAsync(7))
+                        {
+                            Product product = new Product
+                            {
+                                ProductId = reader.GetInt32(7),
+                                Name = reader.GetString(8),
+                                Price = (double)reader.GetDecimal(9),
+                                ImageLink = reader.GetString(10)
+                            };
+
+                            order.Content.Add(new ProductQuantity(product, reader.GetInt32(11)));
+                        }
+                    }
+                }
+            }
+            return order;
+        }
+
+        public async Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatusEnum status, int numberOfBoxUsed)
+        {
+            using (SqlConnection co = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand(
+                    @"UPDATE Orders 
+              SET status = @Status, numberOfBoxUsed = @NumberOfBoxUsed
+              WHERE orderId = @OrderId", co);
+
+                cmd.Parameters.AddWithValue("@Status", status.ToString());
+                cmd.Parameters.AddWithValue("@NumberOfBoxUsed", numberOfBoxUsed);
+                cmd.Parameters.AddWithValue("@OrderId", orderId);
+
+                await co.OpenAsync();
+
+                int rows = await cmd.ExecuteNonQueryAsync();
+                return rows > 0;
+            }
+        }
     }
 }
