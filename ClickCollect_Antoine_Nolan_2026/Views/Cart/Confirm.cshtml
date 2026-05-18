@@ -64,7 +64,7 @@
                 <div class="row py-4">
                     <h2 class="h2 fw-bold mb-3">@Model.Shop.Name</h2>
                     <p class="text-mutes mb-4">
-                        @Model.Shop.Adress.ToString()
+                        @Model.Shop.Adress!.ToString()
                     </p>
                     @if(TempData["Distance"] != null)
                     {
@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="col-md-11 text-center">
-                    @Html.Raw(Model.Shop.InsertMap) @*https://stackoverflow.com/questions/19980657/display-string-as-html-in-asp-net-mvc-view*@
+                    <iframe class="shop_on_map" src="@(Model.Shop.InsertMap)"></iframe>
                 </div>
                 <button class="btn btn-primary col-md-11 my-2" type="submit"  >Confirm Order</button>
             </div>

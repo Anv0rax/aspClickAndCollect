@@ -15,7 +15,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
             connectionString = _connectionString;
         }
 
-        public async Task<List<Shop>> GetShopsAndTimeslotsAsync()
+        public async Task<List<Shop>?> GetShopsAndTimeslotsAsync()
         {
             List<Shop> shops = new List<Shop>();
 
@@ -75,7 +75,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
             return shops;
         }
 
-        public async Task<List<Shop>> GetShopsAsync()
+        public async Task<List<Shop>?> GetShopsAsync()
         {
             List<Shop> shops = new List<Shop>();
 
