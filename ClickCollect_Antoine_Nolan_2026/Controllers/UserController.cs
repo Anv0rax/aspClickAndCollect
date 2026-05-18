@@ -1,7 +1,8 @@
-using ClickCollect_Antoine_Nolan_2026.DAL;
-using Microsoft.AspNetCore.Mvc;
-using ClickCollect_Antoine_Nolan_2026.Models;
 using BCrypt.Net;
+using ClickCollect_Antoine_Nolan_2026.DAL;
+using ClickCollect_Antoine_Nolan_2026.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ClickCollect_Antoine_Nolan_2026.Controllers
 {
@@ -42,6 +43,25 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             // If the program execute this lign, that means the password is correct.
             HttpContext.Session.SetInt32("UserId", user.Id);
             HttpContext.Session.SetString("Username", user.Username);
+
+            string roleName = user switch
+            {
+                Customer => "Customer",
+                Cashier => "Cashier",
+                Preparer => "Preparer",
+                _ => "Unknown"
+            };
+            HttpContext.Session.SetString("Role", roleName);
+
+            // Since the method HttpContext waits an int and not a int? , I have to check the value of the shopId, and not the direct property.
+            if (user is Cashier cashier && cashier.ShopId.HasValue)
+            {
+                HttpContext.Session.SetInt32("ShopId", cashier.ShopId.Value);
+            }
+            else if (user is Preparer preparer && preparer.ShopId.HasValue)
+            {
+                HttpContext.Session.SetInt32("ShopId", preparer.ShopId.Value);
+            }
 
             // this just redirects the user to his correct view according to his role
             return user switch

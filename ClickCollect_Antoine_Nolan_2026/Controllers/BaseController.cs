@@ -19,5 +19,14 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
             base.OnActionExecuting(context);
         }
+
+        // This method will deny the access to the user if the user don't have the correct role
+        protected void RestrictToRole(ActionExecutingContext context, string neededRole)
+        {
+            string? userRole = HttpContext.Session.GetString("Role");
+
+            if (userRole != neededRole)
+                context.Result = RedirectToAction("Index", "Home");
+        }
     }
 }
