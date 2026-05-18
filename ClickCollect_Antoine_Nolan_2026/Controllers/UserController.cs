@@ -1,7 +1,8 @@
-using ClickCollect_Antoine_Nolan_2026.DAL;
-using Microsoft.AspNetCore.Mvc;
-using ClickCollect_Antoine_Nolan_2026.Models;
 using BCrypt.Net;
+using ClickCollect_Antoine_Nolan_2026.DAL;
+using ClickCollect_Antoine_Nolan_2026.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ClickCollect_Antoine_Nolan_2026.Controllers
 {
@@ -14,8 +15,19 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             this.userDAL = userDAL;
         }
 
+        // This will check if the user is aleady authentificated. If it's the case, he's directly directed to the catalog.
         public IActionResult Login()
         {
+            if (HttpContext.Session.GetInt32("UserId") != null)
+            {
+                string? userRole = HttpContext.Session.GetString("Role");
+
+                if (userRole == "Preparer") return RedirectToAction("Index", "Preparer");
+                if (userRole == "Cashier") return RedirectToAction("Index", "Cashier");
+                
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -27,6 +39,9 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 ViewData["Error"] = "The username or password is missing.";
                 return View();
             }
+
+            if (HttpContext.Session.GetInt32("UserId") != null)
+                return View();
 
             // We use GetUserByCredentialsAsync, beacause this method aleardy checks the password with BCrypt
             Models.User? user = await Models.User.GetUserByCredentialsAsync(userDAL, username, password);
@@ -42,6 +57,25 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             // If the program execute this lign, that means the password is correct.
             HttpContext.Session.SetInt32("UserId", user.Id);
             HttpContext.Session.SetString("Username", user.Username);
+
+            string roleName = user switch
+            {
+                Customer => "Customer",
+                Cashier => "Cashier",
+                Preparer => "Preparer",
+                _ => "Unknown"
+            };
+            HttpContext.Session.SetString("Role", roleName);
+
+            // Since the method HttpContext waits an int and not a int? , I have to check the value of the shopId, and not the direct property.
+            if (user is Cashier cashier && cashier.ShopId.HasValue)
+            {
+                HttpContext.Session.SetInt32("ShopId", cashier.ShopId.Value);
+            }
+            else if (user is Preparer preparer && preparer.ShopId.HasValue)
+            {
+                HttpContext.Session.SetInt32("ShopId", preparer.ShopId.Value);
+            }
 
             // this just redirects the user to his correct view according to his role
             return user switch
@@ -61,6 +95,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
         public IActionResult Register()
         {
+            if (HttpContext.Session.GetInt32("UserId") != null)
+            {
+                string? userRole = HttpContext.Session.GetString("Role");
+
+                if (userRole == "Preparer") return RedirectToAction("Index", "Preparer");
+                if (userRole == "Cashier") return RedirectToAction("Index", "Cashier");
+
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -86,7 +130,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 ViewData["Error"] = $" {ex.Message} | Try again !";
                 return View(customer);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // the api is not available :'(
             }

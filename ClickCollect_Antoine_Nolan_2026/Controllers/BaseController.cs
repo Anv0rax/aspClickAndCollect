@@ -19,5 +19,29 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
             base.OnActionExecuting(context);
         }
+
+        // This method will deny the access to the user if the user don't have the correct role
+        protected void RestrictToRole(ActionExecutingContext context, string neededRole)
+        {
+            string? userRole = HttpContext.Session.GetString("Role");
+
+            if (userRole != neededRole)
+                context.Result = RedirectToAction("Index", "Home");
+        }
+
+        // This method is used so the employees can't go to the cart or something else.
+        protected void RestrictToCustomersOnly(ActionExecutingContext context)
+        {
+            string? userRole = HttpContext.Session.GetString("Role");
+
+            if (userRole == "Preparer")
+            {
+                context.Result = RedirectToAction("Index", "Preparer");
+            }
+            else if (userRole == "Cashier")
+            {
+                context.Result = RedirectToAction("Index", "Cashier");
+            }
+        }
     }
 }

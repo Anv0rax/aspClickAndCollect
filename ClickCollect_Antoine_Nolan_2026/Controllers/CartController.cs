@@ -3,6 +3,7 @@ using ClickCollect_Antoine_Nolan_2026.Models;
 using ClickCollect_Antoine_Nolan_2026.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -14,6 +15,14 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         private readonly IShopDAL shopDAL;
         private readonly IUserDAL userDAL;
         private readonly IOrderDAL orderDAL;
+
+        // This will deny access to the shopping cart and so taking orders.
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            base.OnActionExecuting(context);
+
+            RestrictToCustomersOnly(context);
+        }
 
         public CartController(IProductDAL productDAL, IShopDAL shopDAL, IUserDAL userDAL, IOrderDAL orderDAL)
         {
