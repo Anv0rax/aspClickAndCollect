@@ -109,6 +109,9 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         public async Task<int> InsertContentAsync(IOrderDAL orderDAL)
             => await orderDAL.InsertContentAsync(this);
+
+        public async Task<bool> DeleteOrderAsync(IOrderDAL orderDAL)
+            => await orderDAL.DeleteOrderAsync(this);
     }
 
     public enum OrderStatusEnum

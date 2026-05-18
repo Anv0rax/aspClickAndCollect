@@ -124,24 +124,38 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
         public async Task<IActionResult> SelectShop()
         {
-            if (HttpContext.Session.GetInt32("UserId") == null)
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
                 return RedirectToAction("Login", "User");
 
-            List<Shop> shops = await Shop.GetShopsAsync(shopDAL);
+            List<Shop>? shops = await Shop.GetShopsAsync(shopDAL);
+            if (shops == null)
+            {
+                TempData["Error"] = "Error with shop selection";
+                return RedirectToAction("Index", "Home");
+            }
 
             TempData["Distances"] = null;
 
-            //if (User lon != -1 && custo lat != -1)
-            //{
-            //    List<double> distances = new List<double>();
-            //    double userlon = change;
-            //    double userlat = change;
-            //    for (int i = 0; i < shops.Count; i++)
-            //    {
-            //        distances.Add(shops[i].Adress!.GetDistanceWith(userlon, userlat));
-            //    }
-            //    TempData["Distances"] = System.Text.Json.JsonSerializer.Serialize(distances);
-            //}
+            Customer? thisUser = await Models.User.GetCustomerByIdAsync(userDAL, (int)userId);
+            if (thisUser == null)
+                return RedirectToAction("Login", "User");
+
+            if(thisUser.Adress != null)
+            {
+                double userLon = thisUser.Adress.Longitude;
+                double userLat = thisUser.Adress.Latitude;
+                if (userLon != -1 && userLat != -1)
+                {
+                    List<double> distances = new List<double>();
+                    for (int i = 0; i < shops.Count; i++)
+                    {
+                        distances.Add(shops[i].Adress!.GetDistanceWith(userLon, userLat));
+                    }
+                    TempData["Distances"] = System.Text.Json.JsonSerializer.Serialize(distances);
+                }
+
+            }
 
             return View(shops);
         }
@@ -150,14 +164,35 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         [HttpGet]
         public async Task<IActionResult> Confirm(int shopId)
         {
-            if (HttpContext.Session.GetInt32("UserId") == null)
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
                 return RedirectToAction("Login", "User");
 
             ConfirmCartViewModel vm = new ConfirmCartViewModel();
             vm.Cart = GetCartFromSession();
-            List<Shop> shops = await Shop.GetShopsAndTimeslotsAsync(shopDAL);
-
+            List<Shop>? shops = await Shop.GetShopsAndTimeslotsAsync(shopDAL);
+            if (shops == null)
+            {
+                TempData["Error"] = "Error with shop selection";
+                return RedirectToAction("Index", "Home");
+            }
             vm.Shop = shops.FirstOrDefault(s => s.Id == shopId) ?? shops[1];
+
+            Customer? thisUser = await Models.User.GetCustomerByIdAsync(userDAL, (int)userId);
+            if (thisUser == null)
+                return RedirectToAction("Login", "User");
+
+            if (thisUser.Adress != null && vm.Shop.Adress != null)
+            {
+                double userLon = thisUser.Adress.Longitude;
+                double userLat = thisUser.Adress.Latitude;
+                if (userLon != -1 && userLat != -1)
+                {
+                    double distance = vm.Shop.Adress.GetDistanceWith(userLon, userLat);
+                    TempData["Distances"] = $"{distance} km";
+                }
+
+            }
 
             return View(vm);
         }
@@ -175,7 +210,13 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 return RedirectToAction("Confirm", new { shopId = 1 });
             }
 
-            List<Shop> shops = await Shop.GetShopsAndTimeslotsAsync(shopDAL);
+            List<Shop>? shops = await Shop.GetShopsAndTimeslotsAsync(shopDAL);
+            if(shops == null)
+            {
+                TempData["Error"] = "Error with shop selection";
+                return RedirectToAction("Index", "Home");
+            }
+
             Shop? thisShop = shops.FirstOrDefault(s => s.Id == shopId);
             if (thisShop == null)
             {
@@ -210,6 +251,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            await thisOrder.DeleteOrderAsync(orderDAL);
             TempData["Error"] = "Error in the content of the cart, try again";
             return RedirectToAction("Index");
         }

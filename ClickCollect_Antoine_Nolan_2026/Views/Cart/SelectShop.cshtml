@@ -29,13 +29,13 @@
                         <div class="card-body">
                             <h2 class="h4 mb-3">@Model[i].Name</h2>
                             <p class="text-muted">@Model[i].Adress!.ToString()</p>
-                            @if (TempData["Distance"] != null && distances != null)
+                            @if (TempData["Distances"] != null && distances != null)
                             {
                                 <p>Distance with you : @distances[i] km</p>
                             }
                         </div>
                         <div class="p-2">
-                            @Html.Raw(Model[i].InsertMap)
+                            <iframe class="shop_on_map" src="@(Model[i].InsertMap)"></iframe>
                         </div>
                     </label>
                 </div>

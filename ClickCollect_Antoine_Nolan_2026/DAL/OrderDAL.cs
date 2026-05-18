@@ -76,5 +76,36 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
             }
             return res;
         }
+
+        public async Task<bool> DeleteOrderAsync(Order order)
+        {
+            bool res = false;
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    await con.OpenAsync();
+
+                    SqlCommand cmdPq = new SqlCommand(
+                        @"DELETE FROM ProductQuantity
+                        WHERE orderId = @orderId", con);
+                    cmdPq.Parameters.AddWithValue("@orderId", order.OrderId);
+                    await cmdPq.ExecuteNonQueryAsync();
+
+                    SqlCommand cmdOrder = new SqlCommand(
+                        @"DELETE FROM Orders
+                        WHERE orderId = @orderId", con);
+                    cmdOrder.Parameters.AddWithValue("@orderId", order.OrderId);
+                    await cmdOrder.ExecuteNonQueryAsync();
+
+                    res = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                res = false;
+            }
+            return res;
+        }
     }
 }
