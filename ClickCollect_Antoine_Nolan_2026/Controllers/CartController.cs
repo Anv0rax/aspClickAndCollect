@@ -58,6 +58,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         // If its aleardy in the cart, i will increase the quantity.
         // When its done, I will call SaveCartToSession method.
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> AddToCart(int productId, int quantity)
         {
@@ -93,6 +94,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public IActionResult RemoveFromCart(int productId)
         {
@@ -102,6 +104,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             return RedirectToAction("Index");
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> UpdateCart(List<ProductQuantity> cart, string action)
         {
@@ -169,6 +172,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             return View(shops);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         [HttpGet]
         public async Task<IActionResult> Confirm(int shopId)
@@ -206,6 +210,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             return View(vm);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> ValidCommand(int shopId, DateTime timeslot)
         {

@@ -13,11 +13,6 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         {
             this.productDal = productDal;
         }
-        //public async Task<IActionResult> ShowDetails(int id)
-        //{
-        //    Movie movie = await Movie.GetMovieAsync(id, moviesDAL);
-        //    return View(movie);
-        //}
 
         public async Task<IActionResult> ViewProduct(int id)
         {

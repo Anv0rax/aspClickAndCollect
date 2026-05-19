@@ -36,6 +36,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 return View(new List<Order>());
             }
         }
+
         // This will display the details of an spefiic order.
         public async Task<IActionResult> Details(int id)
         {
@@ -81,6 +82,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         }
 
         // Processes the preparation form and updates the order status
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Prepare(int id, int numberOfBoxUsed)
         {

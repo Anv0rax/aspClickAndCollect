@@ -8,20 +8,28 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
     public class HomeController : BaseController
     {
         private readonly IProductDAL productDAL;
+        private readonly IUserDAL userDAL;
 
         public HomeController(IProductDAL productDAL, IUserDAL userDAL)
         {
             this.productDAL = productDAL;
+            this.userDAL = userDAL;
         }
         
-        public async Task<IActionResult> Index(string? sort=null, string? category=null)
+        public async Task<IActionResult> Index(string? search = null, string? sort=null, string? category=null)
         {
-            
-
             List<Product> allProducts = await Product.GetCatalogAsync(productDAL);
+            List<Product> catalog;
             ViewData["AllProducts"] = allProducts;
 
-            List<Product> catalog = allProducts;
+            if (!string.IsNullOrEmpty(search))
+            {
+                ViewData["Search"] = search;
+                search = search.ToLower();
+                catalog = allProducts.Where(prod =>
+                    prod.Name.ToLower().Contains(search) || prod.Description.ToLower().Contains(search)).ToList();
+            }
+            else catalog = allProducts;
 
             catalog = sort switch
             {

@@ -1,10 +1,11 @@
-@model List<ClickCollect_Antoine_Nolan_2026.Models.Product>
+@model List<Product>
 
 @{
     ViewData["Title"] = "Boutique - Nos Produits";
-    string? sort = ViewData["Sort"] as string;
-    var allProducts = ViewData["AllProducts"] as List<Product>;
-    var selectedCategory = ViewData["Category"] as string ?? "";
+    string sort = ViewData["Sort"] as string ?? "";
+    string selectedCategory = ViewData["Category"] as string ?? "";
+    string search = ViewData["Search"] as string ?? "";
+    List<Product> allProducts = ViewData["AllProducts"] as List<Product> ?? new List<Product>();
 }
 
 <div class="container py-5">
@@ -15,25 +16,41 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
     <div class="row">
         <aside class="col-lg-3 mb-4">
             <div class="card shadow-sm border-0 mb-4">
-                <div class="card-body">
-                    <h5 class="mb-3">Rechercher</h5>
+                <form method="get" asp-action="Index" class="card-body">
+                    <h5 class="mb-3">Search</h5>
                     <div class="input-group">
-                        <input type="text" class="form-control border-light" placeholder="Pomme, miel..." aria-label="Search">
-                        <button class="btn btn-primary" type="button">
-                            <i class="bi bi-search"></i>
+                        <input type="text" name="search" class="form-control border-light" placeholder="Pomme, miel..." aria-label="Search" value="@search" />
+                        @if(!string.IsNullOrEmpty(selectedCategory))
+                        {
+                            <input type="hidden" name="category" value="@selectedCategory" />
+                        }
+                        @if (!string.IsNullOrEmpty(sort))
+                        {
+                            <input type="hidden" name="sort" value="@sort" />
+                        }
+                        <button class="btn btn-primary" type="submit">
+                            <i class="bi bi-search"> 🔎 </i>
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
 
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <h5 class="mb-3">Categories</h5>
                     <div class="list-group list-group-flush">
-                        <a asp-route-category="" asp-route-sort="@sort"
+                        <a asp-route-search="@search" asp-route-category=" " asp-route-sort=" @sort"
                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-2 @(selectedCategory == "" ? "active" : "")">
                             All the products 
                             <span class="badge @(selectedCategory == "" ? "bg-primary" : "bg-secondary") rounded-pill">
@@ -42,7 +59,7 @@
                         </a>
                         @foreach (var cat in allProducts?.SelectMany(p => p.CategoryProduct).GroupBy(c => c.Id).Select(g => g.First()) ?? Enumerable.Empty<ClickCollect_Antoine_Nolan_2026.Models.Category>())
                         {
-                            <a asp-route-category="@cat.NameCategory" asp-route-sort="@sort"
+                            <a asp-route-search="@search" asp-route-category="@cat.NameCategory" asp-route-sort="@sort"
                                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0 @(selectedCategory == cat.NameCategory ? "active" : "")">
                                 @cat.NameCategory
                                 <span class="badge @(selectedCategory == cat.NameCategory ? "bg-white text-primary" : "bg-secondary") rounded-pill">
@@ -58,7 +75,7 @@
         <main class="col-lg-9">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="h4 mb-0">Our catalog</h2>
-                <select class="form-select w-auto border-0 shadow-sm" onchange="sendSortProduct(this, '@(ViewData["Category"] as string ?? "")')">
+                <select class="form-select w-auto border-0 shadow-sm" onchange="sendSortProduct(this, '@selectedCategory', '@search')">
                     <option value="" selected="@(sort == null)">Sort by :</option>
                     <option value="name" selected="@(sort == "name")">Name</option>
                     <option value="ascending" selected="@(sort == "ascending")">Price : Ascending ⬆️</option>
