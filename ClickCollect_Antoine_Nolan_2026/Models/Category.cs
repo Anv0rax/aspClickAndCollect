@@ -33,5 +33,26 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             Id = id;
             NameCategory = nameCategory;
         }
+
+        public override string ToString()
+            => $"{Id} : {NameCategory}";
+
+        public override bool Equals(object? obj)
+        {
+            try
+            {
+                return this.ToString() == obj!.ToString();
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool Equals(Category cat)
+            => cat.Id == this.Id;
+
+        public override int GetHashCode()
+            => this.ToString().GetHashCode();
     }
 }

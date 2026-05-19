@@ -1,4 +1,5 @@
 ﻿using ClickCollect_Antoine_Nolan_2026.DAL;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClickCollect_Antoine_Nolan_2026.Models
 {
@@ -29,18 +30,31 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             Client = _customer;
         }
 
-
-
         public Order(int _orderId, string _status, int _numberOfBoxUsed, int _numberOfBoxReturned, Timeslot _slot, Customer _customer, List<ProductQuantity> _content)
             : this (_orderId, _status, _numberOfBoxUsed, _numberOfBoxReturned, _slot, _customer)
         {
             Content = _content;
         }
 
+        public Order(int _orderId, string _status, int _numberOfBoxUsed, int _numberOfBoxReturned, Timeslot _slot, Customer _customer, ProductQuantity _content)
+            : this(_orderId, _status, _numberOfBoxUsed, _numberOfBoxReturned, _slot, _customer)
+        {
+            if (_content != null)
+            {
+                Content.Add(_content);
+            }
+        }
+
         public List<ProductQuantity> Content
         {
             get => content;
-            set { content = value; }
+            set 
+            {
+                if (value != null)
+                {
+                    content = value;
+                }
+            }
         }
 
         public Customer Client
@@ -55,12 +69,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             set { slot = value; }
         }
 
+        [Range(0,100)]
+        [Display(Name = "Number of box returned")]
         public int NumberOfBoxReturned
         {
             get => numberOfBoxReturned;
             set { numberOfBoxReturned = value; }
         }
 
+        [Range(0, 100)]
+        [Display(Name = "Number of box used")]
         public int NumberOfBoxUsed
         {
             get => numberOfBoxUsed;
@@ -79,6 +97,18 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             set { orderId = value; }
         }
 
+        public override bool Equals(object? obj)
+        {
+            try
+            {
+                return this.ToString() == obj!.ToString();
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public bool Equals(Order _o)
         {
             return _o.OrderId == this.OrderId;
@@ -90,9 +120,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         }
 
         public override int GetHashCode()
-        {
-            return this.OrderId.GetHashCode();
-        }
+            => this.ToString().GetHashCode();
         
         public static double TaxOfService
         {
@@ -112,6 +140,9 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         public async Task<bool> DeleteOrderAsync(IOrderDAL orderDAL)
             => await orderDAL.DeleteOrderAsync(this);
+
+        public override string ToString()
+            => $"Order number {orderId}";
     }
 
     public enum OrderStatusEnum

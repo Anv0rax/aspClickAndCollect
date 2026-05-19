@@ -4,11 +4,10 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 {
     public class ProductQuantity
     {
-        private Product product;
-        private int quantity;
+        private Product product = new Product();
+        private int quantity = 0;
 
         [Required(ErrorMessage = "To define a product quantity, you need to define a product first.")]
-
         public Product Product
         {
             get { return product; }
@@ -22,10 +21,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             set { quantity = value; }
         }
 
-        public ProductQuantity()
-        {
-            product = new Product();
-        }
+        public ProductQuantity() { }
 
         public ProductQuantity(Product p, int quantity)
         {
@@ -33,7 +29,6 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             Quantity = quantity;
         }
 
-        // To get a product id :
         public int GetProductID()
         {
             return product.ProductId;

@@ -18,9 +18,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         [Required(ErrorMessage = "The email is required !")]
         [EmailAddress(ErrorMessage = "Please respect the email format !")]
-        // EmailAddress checks if the email format is respected.
         [StringLength(254, ErrorMessage = "A email adress can't be above 254 characters.")]
-        // 254 is the max length a email adress can be.
         [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]{2,}$", ErrorMessage = "The email format is incorrect. Did you forget the extension (e.g., .com, .be)?")]
         public string Email
         {
@@ -47,6 +45,13 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public Customer()
         {
 
+        }
+
+        public Customer(int id, string username, string password, string firstName, string lastName, string email, string phoneNumber)
+            : base(id, username, password, firstName, lastName)
+        {
+            Email = email;
+            PhoneNumber = phoneNumber;
         }
 
         public Customer(int id, string username, string password, string firstName, string lastName, string email, string phoneNumber, Adress adress)

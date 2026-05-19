@@ -73,6 +73,27 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             LastName = lastName;
         }
 
+        public override string ToString()
+            => $"{Id} : {Username}";
+
+        public override int GetHashCode()
+            => this.ToString().GetHashCode();
+
+        public override bool Equals(object? obj)
+        {
+            try
+            {
+                return base.ToString() == obj!.ToString();
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool Equals(User u)
+            => u.Id == this.Id;
+
         public static async Task<User ?> GetUserByCredentialsAsync(IUserDAL userDAL, string username, string password)
         {
             return await userDAL.GetUserByCredentialsAsync(username, password);

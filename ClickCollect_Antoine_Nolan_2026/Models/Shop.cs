@@ -10,7 +10,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         private string name = string.Empty;
         private string insertMap = string.Empty;
         private Adress? adress;
-        private List<Timeslot> timeslots;
+        private List<Timeslot> timeslots = new List<Timeslot>();
 
         public Shop() { }
 
@@ -20,7 +20,24 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             Name = _name;
             InsertMap = _insertMap;
             Adress = _adress;
-            Timeslots = new List<Timeslot>();
+        }
+
+        public Shop(int _id, string _name, string _insertMap, Adress _adress, List<Timeslot> _ts)
+        {
+            Id = _id;
+            Name = _name;
+            InsertMap = _insertMap;
+            Adress = _adress;
+            Timeslots = _ts;
+        }
+
+        public Shop(int _id, string _name, string _insertMap, Adress _adress, Timeslot _ts)
+        {
+            Id = _id;
+            Name = _name;
+            InsertMap = _insertMap;
+            Adress = _adress;
+            Timeslots.Add(_ts);
         }
 
         public int Id
@@ -56,6 +73,27 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             get { return timeslots; }
             set { timeslots = value; }
         }
+
+        public override string ToString()
+            => $"{Id} : {Name} at {Adress!.ToString()}";
+
+        public override bool Equals(object? obj)
+        {
+            try
+            {
+                return this.ToString() == obj!.ToString();
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool Equals(Shop s)
+            => s.Id == this.Id;
+
+        public override int GetHashCode()
+            => this.ToString().GetHashCode();
 
         public static async Task<List<Shop>?> GetShopsAndTimeslotsAsync(IShopDAL shopDAL)
             => await shopDAL.GetShopsAndTimeslotsAsync();
