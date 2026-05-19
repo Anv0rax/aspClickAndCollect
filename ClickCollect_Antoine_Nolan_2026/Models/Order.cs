@@ -1,4 +1,4 @@
-﻿using ClickCollect_Antoine_Nolan_2026.DAL;
+using ClickCollect_Antoine_Nolan_2026.DAL;
 
 namespace ClickCollect_Antoine_Nolan_2026.Models
 {
@@ -21,9 +21,13 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             OrderId = _orderId;
             NumberOfBoxUsed = _numberOfBoxUsed;
             NumberOfBoxReturned = _numberOfBoxReturned;
-            if (!Enum.TryParse(_status, out OrderStatusEnum Status))
+            if (!Enum.TryParse(_status, out OrderStatusEnum parsedStatus))
             {
-                Status = OrderStatusEnum.Canceled;
+                this.status = OrderStatusEnum.Canceled;
+            }
+            else
+            {
+                this.status = parsedStatus;
             }
             Slot = _slot;
             Client = _customer;
@@ -112,6 +116,8 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         public async Task<bool> DeleteOrderAsync(IOrderDAL orderDAL)
             => await orderDAL.DeleteOrderAsync(this);
+        public static async Task<List<Order>> GetOrdersByCustomerAsync(IOrderDAL orderDAL, int userId)
+             => await orderDAL.GetOrdersByCustomerAsync(userId);
     }
 
     public enum OrderStatusEnum

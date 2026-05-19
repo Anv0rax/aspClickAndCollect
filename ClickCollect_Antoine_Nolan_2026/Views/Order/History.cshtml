@@ -1,0 +1,68 @@
+@model List<ClickCollect_Antoine_Nolan_2026.Models.Order>
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">My Orders</h2>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="alert alert-info">
+            You have no orders yet. <a asp-controller="Home" asp-action="Index">Start shopping</a>
+        </div>
+    }
+    else
+    {
+        <table class="table table-hover align-middle border">
+            <thead class="table-light">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Shop</th>
+                    <th>Pickup Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td><span class="badge bg-secondary">#@order.OrderId</span></td>
+                        <td>@order.Slot?.InShop?.Name</td>
+                        <td>@order.Slot?.StartTime.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            @switch (order.Status)
+                            {
+                                case ClickCollect_Antoine_Nolan_2026.Models.OrderStatusEnum.Processing:
+                                    <span class="badge bg-warning text-dark">Processing</span>
+                                    break;
+                                case ClickCollect_Antoine_Nolan_2026.Models.OrderStatusEnum.Ready:
+                                    <span class="badge bg-success">Ready</span>
+                                    break;
+                                case ClickCollect_Antoine_Nolan_2026.Models.OrderStatusEnum.Fullfilled:
+                                    <span class="badge bg-primary">Fulfilled</span>
+                                    break;
+                                case ClickCollect_Antoine_Nolan_2026.Models.OrderStatusEnum.Canceled:
+                                    <span class="badge bg-danger">Canceled</span>
+                                    break;
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary mt-3">
+        Back to catalog
+    </a>
+</div>

@@ -31,24 +31,12 @@
                         </a>
                     </li>
                     <li>
-                        <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link px-2 text-dark">
-                            Features
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link px-2 text-dark">
-                            Pricing
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link px-2 text-dark">
-                            FAQs
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link px-2 text-dark">
-                            About
-                        </a>
+                        @if ((bool?)ViewData["IsLoggedIn"] == true && (string?)ViewData["Role"] == "Customer")
+                        {
+                            <a asp-controller="Order" asp-action="History" class="btn btn-outline-secondary me-2">
+                                My Orders
+                            </a>
+                        }
                     </li>
                 </ul>
                 @if ((bool?)ViewData["IsLoggedIn"] == true)

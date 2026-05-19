@@ -1,4 +1,4 @@
-﻿namespace ClickCollect_Antoine_Nolan_2026.Models
+namespace ClickCollect_Antoine_Nolan_2026.Models
 {
     public class Timeslot
     {
@@ -16,7 +16,7 @@
         public Shop InShop
         {
             get { return shop; }
-            private set { shop = value; }
+            set { shop = value; }
         }
 
         public DateTime StartTime

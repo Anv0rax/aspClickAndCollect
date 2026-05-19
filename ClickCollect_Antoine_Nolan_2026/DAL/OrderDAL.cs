@@ -253,5 +253,57 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                 return rows > 0;
             }
         }
+
+        public async Task<List<Order>> GetOrdersByCustomerAsync(int userId)
+        {
+            List<Order> orders = new List<Order>();
+
+            using (SqlConnection co = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand(
+                    @"SELECT o.orderId, o.status, o.numberOfBoxUsed, 
+                     o.numberOfBoxReturned, o.timeslot,
+                     s.name AS shopName
+              FROM Orders o
+              INNER JOIN Shops s ON o.shopId = s.shopId
+              WHERE o.userId = @UserId
+              ORDER BY o.timeslot DESC", co);
+
+                cmd.Parameters.AddWithValue("@UserId", userId);
+
+                await co.OpenAsync();
+
+                using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        Timeslot timeslot = new Timeslot
+                        {
+                            StartTime = reader.GetDateTime(4)
+                        };
+
+                        // Store shop name in timeslot's shop
+                        Shop shop = new Shop
+                        {
+                            Name = reader.GetString(5)
+                        };
+                        timeslot.InShop = shop;
+
+                        Order order = new Order(
+                            reader.GetInt32(0),
+                            reader.GetString(1),
+                            reader.GetInt32(2),
+                            reader.GetInt32(3),
+                            timeslot,
+                            new Customer()
+                        );
+
+                        orders.Add(order);
+                    }
+                }
+            }
+
+            return orders;
+        }
     }
 }
