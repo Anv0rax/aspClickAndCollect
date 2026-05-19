@@ -3,50 +3,8 @@
     ViewData["Title"] = "Confirm command";
 }
 <main class="container py-4">
-    <h1 class="h1 fw-bold m-3">Your cart</h1>
 
-    <table class="table table-hover align-middle">
-        <thead class="table-light">
-            <tr>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Subtotal</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-
-            @for (int i = 0; i < Model.Cart.Count; i++)
-            {
-                <tr>
-                    <td>
-                        <div class="d-flex align-items-center gap-3">
-                            <img src="@Model.Cart[i].Product.ImageLink" alt="@Model.Cart[i].Product.Name" style="width: 60px; height: 60px; object-fit: contain;" />
-                            <span>
-                                @Model.Cart[i].Product.Name
-                            </span>
-                        </div>
-                    </td>
-                    <td>@Model.Cart[i].Product.Price.ToString("F2") €</td>
-                    <td>@Model.Cart[i].Quantity</td>
-                    <td>@((Model.Cart[i].Product.Price * Model.Cart[i].Quantity).ToString("F2")) €</td>
-                </tr>
-            }
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3" class="text-end fw-bold">Service fee :</td>
-                <td class="fw-bold text-primary">@Order.TaxOfService €</td>
-            </tr>
-            <tr>
-                <td colspan="3" class="text-end fw-bold">Your total is :</td>
-                <td class="fw-bold text-primary">
-                    @((Model.Cart.Sum(p => p.Product.Price * p.Quantity) + @Order.TaxOfService).ToString("F2")) €
-                </td>
-            </tr>
-        </tfoot>
-    </table>
+    <partial name="_CartContentPartial" model="@Model.Cart"></partial>
 
     @if (TempData["Error"] != null)
     {

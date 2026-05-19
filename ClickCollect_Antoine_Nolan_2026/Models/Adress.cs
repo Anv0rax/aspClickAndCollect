@@ -134,7 +134,6 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             return (lon, lat);
         }
 
-
         public static double GetDistanceBetween(double lon1, double lat1, double lon2, double lat2)
         {
             const double Radius = 6371;
