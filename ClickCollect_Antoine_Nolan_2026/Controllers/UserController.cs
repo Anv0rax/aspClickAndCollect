@@ -31,6 +31,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
@@ -108,6 +109,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Register(Customer customer, Adress adress)
         {

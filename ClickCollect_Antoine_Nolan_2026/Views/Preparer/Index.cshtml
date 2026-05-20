@@ -1,17 +1,65 @@
+@model List<ClickCollect_Antoine_Nolan_2026.Models.Order>
+
 @{
     ViewData["Title"] = "Preparer Area";
 }
 
 <div class="container mt-5">
-    <div class="card border-warning mb-3">
+    <div class="card border-warning mb-3 shadow-sm">
         <div class="card-header bg-warning text-dark fw-bold">📋 Order Fulfillment Area</div>
         <div class="card-body">
-            <h5 class="card-title">Hello, @ViewData["Username"] !</h5>
+            <h5 class="card-title">Hello, @Context.Session.GetString("Username") !</h5>
             <p class="card-text">Welcome to your workspace. This is where you can manage and approve the store's order list.</p>
             <hr />
-            <div class="alert alert-info">
-                <strong>Status :</strong> Completly fonctionnal.
-            </div>
+
+            @if (ViewData["Error"] != null)
+            {
+                <div class="alert alert-danger">@ViewData["Error"]</div>
+            }
+            else if (Model == null || Model.Count == 0)
+            {
+                <div class="alert alert-success d-flex align-items-center border-success" role="alert">
+                    <span class="fs-4 me-2">🎉</span>
+                    <div>
+                        <strong>Work for today is done!</strong> All orders are completed or no orders are scheduled for tomorrow.
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle border">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Pickup Time</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                <tr>
+                                    <td><span class="badge bg-secondary">#@order.OrderId</span></td>
+                                    <td>
+                                        <i class="bi bi-clock me-1"></i> @order.Slot?.StartTime.ToString("dd/MM/yyyy HH:mm")
+                                    </td>
+                                    <td class="text-end">
+                                        <a class="btn btn-sm btn-outline-primary rounded-pill me-2"
+                                           asp-controller="Preparer" asp-action="Details" asp-route-id="@order.OrderId">
+                                            ? Details
+                                        </a>
+                                        <a class="btn btn-sm btn-success rounded-pill fw-bold"
+                                           asp-controller="Preparer" asp-action="Prepare" asp-route-id="@order.OrderId">
+                                            v Start Preparing
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
         </div>
     </div>
 </div>

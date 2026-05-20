@@ -1,10 +1,16 @@
-﻿function sendSortProduct(select, category) {
+﻿function sendSortProduct(select, category, search) {
     var sort = select.value;
-    if (category == '') {
-        var url = "?sort=" + sort
+
+    if (search == '') {
+        if (category == '') {
+            var url = "?sort=" + sort
+        }
+        else {
+            var url = "?category=" + encodeURIComponent(category) + "&sort=" + sort;
+        }
     }
     else {
-        var url = "?category=" + encodeURIComponent(category) + "&sort=" + sort;
+        var url = "?search=" + encodeURIComponent(search) + "&category=" + encodeURIComponent(category) + "&sort=" + sort;
     }
 
     window.location.href = url;

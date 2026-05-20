@@ -1,9 +1,11 @@
-﻿namespace ClickCollect_Antoine_Nolan_2026.Models
+namespace ClickCollect_Antoine_Nolan_2026.Models
 {
     public class Timeslot
     {
-        private DateTime timeslot;
-        private Shop shop;
+        private DateTime timeslot = new DateTime();
+        private Shop shop = new Shop();
+        private List<Order> orders = new List<Order>();
+        private static int maxOrders = 10;
 
         public Timeslot() { }
 
@@ -16,7 +18,7 @@
         public Shop InShop
         {
             get { return shop; }
-            private set { shop = value; }
+            set { shop = value; }
         }
 
         public DateTime StartTime
@@ -30,9 +32,6 @@
             get => timeslot.AddHours(1);
         }
 
-        private List<Order> orders;
-        private static int maxOrders = 10;
-
         public List<Order> Orders
         {
             get => orders;
@@ -41,7 +40,7 @@
 
         public void AddOrder(Order o)
         { 
-            if(orders.Count < maxOrders && !orders.Contains(o))
+            if(orders.Count < maxOrders && !orders.Contains(o) && o != null)
             {
                 orders.Add(o);
             }
@@ -57,6 +56,18 @@
         public bool Equals(Timeslot _ts)
         {
             return _ts.InShop.Id == InShop.Id && _ts.StartTime == StartTime;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            try
+            {
+                return this.ToString() == obj!.ToString();
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public override int GetHashCode()

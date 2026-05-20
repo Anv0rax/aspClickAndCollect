@@ -61,12 +61,42 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         [Required(ErrorMessage = "You need at least one category for your product. A product can't be without a category.")]
         [MinLength(1, ErrorMessage = "You should take at least one category.")]
-
         public List<Category> CategoryProduct
         {
             get { return categoryProduct; }
             set { categoryProduct = value; }
         }
+
+        public Product(int productId, string name, string description, double price, string imageLink, Category category)
+        {
+            ProductId = productId;
+            Name = name ?? throw new ArgumentNullException("The name of the product can't be null !");
+            Description = description ?? string.Empty;
+            Price = price;
+            ImageLink = imageLink ?? throw new ArgumentNullException("The link for the image of the product is null ! ");
+            categoryProduct.Add(category ?? throw new ArgumentNullException("There is no category for the product !"));
+        }
+
+        public override string ToString()
+            => $"{ProductId} : {Name} {Price}";
+
+        public override int GetHashCode()
+            => this.ToString().GetHashCode() ;
+
+        public override bool Equals(object? obj)
+        {
+            try
+            {
+                return this.ToString() == obj!.ToString();
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool Equal(Product p)
+            => p.ProductId == this.ProductId ;
 
         // Retrieves all products from the database
         public static async Task<List<Product>> GetCatalogAsync(IProductDAL productDAL)
