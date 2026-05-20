@@ -22,18 +22,18 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
             using (SqlConnection co = new SqlConnection(connectionString))
             {
                 SqlCommand cmd = new SqlCommand(
-                    @"SELECT 
+                    @"SELECT
                         s.shopId, s.name, s.maplink, 
                         a.adressId, a.street, a.number, a.city, a.country, a.longitude, a.latitude,
                         t.timeslot,
-                        (SELECT COUNT(orderID) 
-                            FROM Orders o 
-                            INNER JOIN Timeslots ts ON o.timeslot = ts.timeslot 
-                                                    and o.shopId = ts.shopId) as ordersPerTimeslot
-                    FROM Shops s
+                        COUNT(o.orderId) as ordersPerTimeslot
+                    FROM Timeslots t
+                    INNER JOIN Shops s ON t.shopId = s.shopId
                     INNER JOIN Adresses a ON a.adressId = s.adressId
-                    LEFT JOIN Timeslots t ON t.shopId = s.shopId
-                    
+                    LEFT JOIN Orders o ON o.timeslot = t.timeslot AND o.shopId = t.shopId
+                    GROUP BY s.shopId, s.name, s.maplink, 
+                             a.adressId, a.street, a.number, a.city, a.country, a.longitude, a.latitude,
+                             t.timeslot
                     ORDER BY s.shopId;", co);
 
                 await co.OpenAsync();
