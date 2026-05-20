@@ -1,5 +1,7 @@
 using ClickCollect_Antoine_Nolan_2026.Models;
 using Microsoft.Data.SqlClient;
+using System.Data;
+using System.Linq.Expressions;
 
 namespace ClickCollect_Antoine_Nolan_2026.DAL
 {
@@ -250,9 +252,50 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
             return customer;
         }
 
-        //public async Task<Cashier?> GetCashierAsync(int cashierId)
-        //{
+        public async Task<Cashier?> GetCashierAsync(int cashierId)
+        {
+            try
+            {
+                using (SqlConnection co = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(
+                        @"SELECT c.userId,
+	                        u.username,
+	                        u.lastname,
+	                        u.firstname,
+	                        s.shopId,
+	                        s.name
 
-        //}
+                        FROM cachiers c
+                        INNER JOIN users u ON u.userId = c.userId
+                        INNER JOIN shops s ON s.shopId = c.shopId
+                        WHERE c.userId = @cashierId;", co);
+
+                    cmd.Parameters.AddWithValue("@cashierId", cashierId);
+                    await co.OpenAsync();
+
+                    Cashier? cashier = null;
+                    Shop? shop = null;
+
+                    using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            if (!reader.IsDBNull(reader.GetOrdinal("userId")) && cashier == null)
+                            {
+                                shop = new Shop(reader.GetInt32("shopId"),
+                                    reader.GetString("name"));
+
+                                cashier = new Cashier(reader.GetInt32("userId"),
+                                    reader.GetString("username"), reader.GetString("lastname"),
+                                    reader.GetString("firstname"), shop);
+                            }
+                        }
+                    }
+                    return cashier;
+                }
+            }
+            catch { return null; }
+        }
     }
 }
