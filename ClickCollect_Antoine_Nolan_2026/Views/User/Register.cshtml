@@ -8,15 +8,7 @@
     <div class="col-md-6">
         <h2 class="mb-4">Create an account</h2>
 
-        @if (ViewData["Error"] != null)
-        {
-            <div class="alert alert-danger">@ViewData["Error"]</div>
-        }
-
-        @if (TempData["RegisterSuccess"] != null)
-        {
-            <div class="alert alert-success">@TempData["RegisterSuccess"]</div>
-        }
+        <partial name="_ErrorSuccessMessagesPartial" />
 
         <form method="post" asp-controller="User" asp-action="Register">
 

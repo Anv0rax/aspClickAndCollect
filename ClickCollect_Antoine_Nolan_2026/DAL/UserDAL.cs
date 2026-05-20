@@ -55,9 +55,14 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                             if (role == "Customer")
                                 user = new Customer(id, uname, hash);
                             else if (role == "Cashier")
-                                user = new Cashier(id, uname, hash, reader.GetInt32(4));
+                            {
+                                Shop itsShop = new Shop(reader.GetInt32(4));
+                                user = new Cashier(id, uname, hash, itsShop);
+                            }
                             else if (role == "Preparer")
+                            {
                                 user = new Preparer(id, uname, hash, reader.GetInt32(4));
+                            }
                         }
                     }
                 }
@@ -170,9 +175,14 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                         if (role == "Customer")
                             user = new Customer(id, uname, pswrd);
                         else if (role == "Cashier")
-                            user = new Cashier(id, uname, pswrd, reader.GetInt32(4));
+                        {
+                            Shop itsShop = new Shop(reader.GetInt32(4));
+                            user = new Cashier(id, uname, pswrd, itsShop);
+                        }
                         else if (role == "Preparer")
+                        {
                             user = new Preparer(id, uname, pswrd, reader.GetInt32(4));
+                        }
                     }
                 }
             }

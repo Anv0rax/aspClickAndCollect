@@ -7,13 +7,7 @@
 <div class="container py-5">
     <h2 class="mb-4">Here's your shopping cart, @ViewData["Username"] !</h2>
 
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            @TempData["Error"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
+    <partial name="_ErrorSuccessMessagesPartial" />
 
     @if (Model == null || Model.Count == 0)
     {

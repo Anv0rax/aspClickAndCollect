@@ -1,13 +1,7 @@
 ﻿@model List<Shop>
 <main class="container py-4">
 
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            @TempData["Error"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
+    <partial name="_ErrorSuccessMessagesPartial" />
 
     <h1 class="h1 fw-bold mb-3">Select a shop</h1>
 

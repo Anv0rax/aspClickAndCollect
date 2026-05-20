@@ -69,9 +69,9 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             HttpContext.Session.SetString("Role", roleName);
 
             // Since the method HttpContext waits an int and not a int? , I have to check the value of the shopId, and not the direct property.
-            if (user is Cashier cashier && cashier.ShopId.HasValue)
+            if (user is Cashier cashier && cashier.ItsShop != null)
             {
-                HttpContext.Session.SetInt32("ShopId", cashier.ShopId.Value);
+                HttpContext.Session.SetInt32("ShopId", cashier.ItsShop.Id);
             }
             else if (user is Preparer preparer && preparer.ShopId.HasValue)
             {
@@ -146,7 +146,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
             await Models.User.RegisterCustomerAsync(userDAL, customer, adress);
 
-            TempData["RegisterSuccess"] = "Account created successfully. You can now log in.";
+            TempData["Success"] = "Account created successfully. You can now log in.";
             return RedirectToAction("Login");
         }
     }

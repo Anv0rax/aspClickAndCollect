@@ -14,6 +14,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         public Shop() { }
 
+        public Shop(int _id) 
+        {
+            Id = _id;
+        }
+
         public Shop(int _id, string _name, string _insertMap, Adress _adress)
         {
             Id = _id;
