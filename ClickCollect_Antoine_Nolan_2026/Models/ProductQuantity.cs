@@ -14,18 +14,23 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             set { product = value; }
         }
 
-        [Range(0, 500)]
+        [Range(1, 500)]
         public int Quantity
         {
             get { return quantity; }
-            set { quantity = value; }
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException("Quantity must be greater than 0.");
+                quantity = value;
+            }
         }
 
         public ProductQuantity() { }
 
         public ProductQuantity(Product p, int quantity)
         {
-            Product = p;
+            Product = p ?? throw new ArgumentNullException("A product is required to put a quantity on it.");
             Quantity = quantity;
         }
 
@@ -33,5 +38,21 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         {
             return product.ProductId;
         }
+
+        public override string ToString()
+            => $"The product {product.Name} has, for the quantity, {quantity} unit(s)";
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is ProductQuantity other)
+                return product.ProductId == other.product.ProductId;
+            return false;
+        }
+
+        //public override int GetHashCode()
+        //    => product.ProductId.GetHashCode();
+
+        public override int GetHashCode()
+            => this.ToString().GetHashCode();
     }
 }

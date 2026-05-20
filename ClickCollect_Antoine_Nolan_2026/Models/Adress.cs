@@ -20,23 +20,23 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         }
 
-        public Adress(int _id, string _street, string _number, string _city, string _country)    
+        // Checking for each constructor if each object received in the parameters are not null with
+        // a simple null-coalescing operator. For example, if _street is null, the right part of the line will execute, which
+        // is here a throw. So we do verify each object for each constructor to see if they are null.
+
+        public Adress(int _id, string _street, string _number, string _city, string _country)
         {
             id = _id;
-            Street = _street;
-            Number = _number;
-            City = _city;
-            country = _country;
+            Street = _street ?? throw new ArgumentNullException("Street can be null.");
+            Number = _number ?? throw new ArgumentNullException("Number cannot be null.");
+            City = _city ?? throw new ArgumentNullException("City cannot be null.");
+            Country = _country ?? throw new ArgumentNullException("Country cannot be null.");
         }
 
         public Adress(int _id, string _street, string _number, string _city, string _country, double _lon, double _lat)
+            : this(_id, _street, _number, _city, _country)
         {
-            id = _id;
-            Street = _street;
-            Number = _number;
-            City = _city;
-            country = _country;
-            longitude = _lon; 
+            longitude = _lon;
             latitude = _lat;
         }
 
@@ -98,7 +98,13 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         }
 
         public override string ToString()
-            => $"{number}, {street}, {city}, {country}";
+            => $"This adress is located at {number}, {street}, {city}, {country}";
+
+        public bool Equals(Adress a)
+            => a.Id == this.Id;
+
+        public override int GetHashCode()
+            => this.ToString().GetHashCode();
 
         public async Task InitLonLatAsync()
         {
