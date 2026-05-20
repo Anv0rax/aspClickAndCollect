@@ -21,7 +21,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         [Required(ErrorMessage = "Username is required.")]
         [StringLength(25, MinimumLength = 4, ErrorMessage = "Username must be between 4 and 25 characters.")]
         [RegularExpression(@"^[-a-zA-Z0-9_]+$", ErrorMessage = "Username contains invalid characters.")]
-        public string Username { get; set; } = string.Empty;
+        public string Username
+        {
+            get { return username; }
+            set { username = value; }
+        }
 
         [Display(Name = "Password")]
         [Required(ErrorMessage = "Password is required.")]
@@ -29,7 +33,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         [StringLength(100, MinimumLength = 12, ErrorMessage = "Must be at least 12 characters long.")]
 
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{12,40}$", ErrorMessage = "Requires at least 12 characters with 1 uppercase, 1 lowercase and 1 number")]
-        public string Password { get; set; } = string.Empty;
+        public string Password
+        {
+            get { return password; }
+            set { password = value; }
+        }
 
         [Display(Name = "Last name")]
         [Required(ErrorMessage = "The name is required to continue.")]
@@ -60,17 +68,15 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public User(int id, string username, string password)
         {
             Id = id;
-            Username = username;
-            Password = password;
+            Username = username ?? throw new ArgumentNullException("The user must have a username.");
+            Password = password ?? throw new ArgumentNullException("The password is null.");
         }
 
         public User(int id, string username, string password, string firstName, string lastName)
+            : this(id, username, password) // ← réutilise le constructeur de base
         {
-            Id = id;
-            Username = username;
-            Password = password;
-            FirstName = firstName;
-            LastName = lastName;
+            FirstName = firstName ?? throw new ArgumentNullException("First name can't be null.");
+            LastName = lastName ?? throw new ArgumentNullException("Last name can't be null.");
         }
 
         public override string ToString()

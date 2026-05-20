@@ -17,27 +17,22 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public Shop(int _id, string _name, string _insertMap, Adress _adress)
         {
             Id = _id;
-            Name = _name;
-            InsertMap = _insertMap;
-            Adress = _adress;
+            Name = _name ?? throw new ArgumentNullException(nameof(_name), "There is no name for the shop.");
+            InsertMap = _insertMap ?? throw new ArgumentNullException(nameof(_insertMap), "The map of the shop is null.");
+            Adress = _adress ?? throw new ArgumentNullException(nameof(_adress), "There is no address for the shop.");
         }
 
         public Shop(int _id, string _name, string _insertMap, Adress _adress, List<Timeslot> _ts)
+            : this(_id, _name, _insertMap, _adress) // i'm just going to use the key word this to use the first constructor.
         {
-            Id = _id;
-            Name = _name;
-            InsertMap = _insertMap;
-            Adress = _adress;
             Timeslots = _ts;
         }
 
         public Shop(int _id, string _name, string _insertMap, Adress _adress, Timeslot _ts)
+            : this(_id, _name, _insertMap, _adress) // same
         {
-            Id = _id;
-            Name = _name;
-            InsertMap = _insertMap;
-            Adress = _adress;
-            Timeslots.Add(_ts);
+            if (_ts != null)
+                Timeslots.Add(_ts);
         }
 
         public int Id
@@ -71,7 +66,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public List<Timeslot> Timeslots
         {
             get { return timeslots; }
-            set { timeslots = value; }
+            set { timeslots = value ?? new List<Timeslot>(); }
         }
 
         public override string ToString()

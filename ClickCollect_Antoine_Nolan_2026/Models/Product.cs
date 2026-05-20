@@ -67,6 +67,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             set { categoryProduct = value; }
         }
 
+        public Product(int productId, string name, string description, double price, string imageLink, Category category)
+        {
+            ProductId = productId;
+            Name = name ?? throw new ArgumentNullException("The name of the product can't be null !");
+            Description = description ?? string.Empty;
+            Price = price;
+            ImageLink = imageLink ?? throw new ArgumentNullException("The link for the image of the product is null ! ");
+            categoryProduct.Add(category ?? throw new ArgumentNullException("There is no category for the product !"));
+        }
+
         public override string ToString()
             => $"{ProductId} : {Name} {Price}";
 
