@@ -31,7 +31,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public Category(int id, string nameCategory)
         {
             Id = id;
-            NameCategory = nameCategory;
+            NameCategory = nameCategory ?? throw new ArgumentNullException("The name of the category can't be null.");
         }
 
         public override string ToString()

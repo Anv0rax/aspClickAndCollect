@@ -12,7 +12,14 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public Timeslot(DateTime _datefrom, Shop _shop)
         {
             StartTime = _datefrom;
-            InShop = _shop;
+            InShop = _shop ?? throw new ArgumentNullException("The shop is required to to put the timeslot !");
+        }
+
+        public Timeslot(DateTime _datefrom, Shop _shop, Order _order)
+            : this(_datefrom, _shop)
+        {
+            if (_order != null)
+                orders.Add(_order);
         }
 
         public Shop InShop

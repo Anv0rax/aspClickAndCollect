@@ -26,7 +26,9 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             {
                 int shopId = HttpContext.Session.GetInt32("ShopId") ?? 1;
 
-                List<Order> ordersToPrepare = await _orderDAL.GetOrdersToPrepareAsync(shopId);
+                Preparer preparer = new Preparer {ShopId = shopId };
+
+                List<Order> ordersToPrepare = await preparer.GetOrdersToPrepareAsync(_orderDAL, shopId);
 
                 return View(ordersToPrepare);
             }
@@ -42,9 +44,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         {
             try
             {
-                Order? order = await _orderDAL.GetOrderDetailsAsync(id);
+                Preparer preparer = new Preparer();
 
-                if(order == null)
+                Order? order = await preparer.GetOrderDetailsAsync(_orderDAL, id);
+
+                if (order == null)
                 {
                     ViewData["Error"] = "This order could not be found infortunealy.";
                     return RedirectToAction("Index");
@@ -64,7 +68,8 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         {
             try
             {
-                Order? order = await _orderDAL.GetOrderDetailsAsync(id);
+                Preparer preparer = new Preparer();
+                Order? order = await preparer.GetOrderDetailsAsync(_orderDAL, id);
 
                 if (order == null)
                 {
@@ -88,10 +93,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         {
             try
             {
+                Preparer preparer = new Preparer();
                 if (numberOfBoxUsed < 1)
                 {
                     ViewData["Error"] = "You must use at least 1 box.";
-                    Order? orderError = await _orderDAL.GetOrderDetailsAsync(id);
+                    Order? orderError = await preparer.GetOrderDetailsAsync(_orderDAL, id);
                     return View(orderError);
                 }
 

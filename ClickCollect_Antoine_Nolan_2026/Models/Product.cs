@@ -61,11 +61,15 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         [Required(ErrorMessage = "You need at least one category for your product. A product can't be without a category.")]
         [MinLength(1, ErrorMessage = "You should take at least one category.")]
+        // I'm checking if the value is null in the property. If its the case, im creating a new list of category.
         public List<Category> CategoryProduct
         {
             get { return categoryProduct; }
-            set { categoryProduct = value; }
+            set { categoryProduct = value ?? new List<Category>();}
         }
+
+        // Constructor that accepts a single Category — a product can belong to one or more categories,
+        // but it must have at least one. This avoids having to manually create a list before constructing the object.
 
         public Product(int productId, string name, string description, double price, string imageLink, Category category)
         {
@@ -80,11 +84,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public Product(int productId, string name, string description, double price, string imageLink, List<Category> categories)
         {
             ProductId = productId;
-            Name = name ?? throw new ArgumentNullException("The name of the product can't be null !");
+            Name = name ?? throw new ArgumentNullException(nameof(name), "Name cannot be null.");
             Description = description ?? string.Empty;
             Price = price;
-            ImageLink = imageLink ?? string.Empty;
-            CategoryProduct = categories ?? throw new ArgumentNullException("There is no category for the product !");
+            ImageLink = imageLink ?? throw new ArgumentNullException(nameof(imageLink), "ImageLink cannot be null.");
+            categoryProduct = categories ?? new List<Category>();
         }
 
         public Product(int productId, string name, string description, double price, string imageLink)
@@ -104,7 +108,10 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             ImageLink = imageLink ?? string.Empty;
         }
 
-        public Product() { }
+        public Product()
+        {
+
+        }
 
         public override string ToString()
             => $"{ProductId} : {Name} {Price}";
