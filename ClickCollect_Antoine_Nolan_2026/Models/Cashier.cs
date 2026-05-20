@@ -4,18 +4,18 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 {
     public class Cashier : User
     {
-        private int? shopId;
+        private Shop shop;
 
-        public int? ShopId
+        public Shop ItsShop
         {
-            get { return shopId; }
-            set { shopId = value; }
+            get { return shop; }
+            set { shop = value; }
         }
 
-        public Cashier(int id, string username, string password, int shopId)
-            : base(id, username, password)
+        public Cashier(int _id, string _username, string _password, Shop _shop)
+            : base(_id, _username, _password)
         {
-            ShopId = shopId;
+            ItsShop = shop;
         }
 
     }

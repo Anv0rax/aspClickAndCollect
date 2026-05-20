@@ -12,10 +12,8 @@
             <p class="card-text">Welcome to your workspace. This is where you can manage and approve the store's order list.</p>
             <hr />
 
-            @if (ViewData["Error"] != null)
-            {
-                <div class="alert alert-danger">@ViewData["Error"]</div>
-            }
+            <partial name="_ErrorSuccessMessagesPartial" />
+
             else if (Model == null || Model.Count == 0)
             {
                 <div class="alert alert-success d-flex align-items-center border-success" role="alert">

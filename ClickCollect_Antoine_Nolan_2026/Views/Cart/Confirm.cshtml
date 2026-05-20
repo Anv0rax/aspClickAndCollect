@@ -6,13 +6,7 @@
 
     <partial name="_CartContentPartial" model="@Model.Cart"></partial>
 
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            @TempData["Error"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
+    <partial name="_ErrorSuccessMessagesPartial" />
 
     <form method="post" asp-controller="Cart" asp-action="ValidCommand">
         <input type="hidden" name="shopId" value="@Model.Shop.Id" />

@@ -5,13 +5,9 @@
 }
 
 <div class="container py-5">
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            @TempData["Error"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
+
+    <partial name="_ErrorSuccessMessagesPartial" />
+
     <div class="row py-5">
         <!--I'm going to place the image of the product on the left side of the page.-->
         <div class="col-md-5 text-center">

@@ -7,13 +7,7 @@
 <div class="container mt-5">
     <h2 class="mb-4">My Orders</h2>
 
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show">
-            @TempData["Success"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
+    <partial name="_ErrorSuccessMessagesPartial" />
 
     @if (Model == null || Model.Count == 0)
     {
