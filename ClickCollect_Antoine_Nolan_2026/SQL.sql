@@ -78,7 +78,7 @@ CREATE TABLE Customers (
     phoneNumber NVARCHAR(20),
     adressId INT,
     PRIMARY KEY (userId),
-    FOREIGN KEY (userId) REFERENCES Users(userId),
+    FOREIGN KEY (userId) REFERENCES Users(userId)
     FOREIGN KEY (adressId) REFERENCES Adresses(adressId)
 );
 
@@ -1338,11 +1338,11 @@ SET IDENTITY_INSERT Shops OFF;
 
 SET IDENTITY_INSERT Users ON;
 
-INSERT INTO Users (userId, firstname, lastname, username, password)
-VALUES (1, N'Antoine', N'Dupond', N'antoine', N'$2a$12$sowLz7SNuY9vP7U3FF5h3OHqe2amG4.7o1MIDvr0yIhxsnDf8MQIC');
+INSERT INTO Users (userId, firstname, lastname, username, password, adressId)
+VALUES (1, N'Antoine', N'Dupond', N'antoine', N'$2a$12$sowLz7SNuY9vP7U3FF5h3OHqe2amG4.7o1MIDvr0yIhxsnDf8MQIC', 1);
 
-INSERT INTO Users (userId, firstname, lastname, username, password)
-VALUES (2, N'Nolan', N'Martin', N'nolan', N'$2a$12$lJ80eyCNqCL9HBF3Gfg4o.Tu4bNvUmw/vONYHBWIahRuntduqZwLq');
+INSERT INTO Users (userId, firstname, lastname, username, password, adressId)
+VALUES (2, N'Nolan', N'Martin', N'nolan', N'$2a$12$lJ80eyCNqCL9HBF3Gfg4o.Tu4bNvUmw/vONYHBWIahRuntduqZwLq', 1);
 
 SET IDENTITY_INSERT Users OFF;
 
