@@ -9,7 +9,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         private string name = string.Empty;
         private string description = string.Empty;
         private string imageLink = string.Empty;
-        private double price = 0.01;
+        private double price = 0.00;
         private List<Category> categoryProduct = new List<Category>();
 
         public int ProductId
@@ -73,9 +73,38 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             Name = name ?? throw new ArgumentNullException("The name of the product can't be null !");
             Description = description ?? string.Empty;
             Price = price;
-            ImageLink = imageLink ?? throw new ArgumentNullException("The link for the image of the product is null ! ");
+            ImageLink = imageLink ?? string.Empty;
             categoryProduct.Add(category ?? throw new ArgumentNullException("There is no category for the product !"));
         }
+
+        public Product(int productId, string name, string description, double price, string imageLink, List<Category> categories)
+        {
+            ProductId = productId;
+            Name = name ?? throw new ArgumentNullException("The name of the product can't be null !");
+            Description = description ?? string.Empty;
+            Price = price;
+            ImageLink = imageLink ?? string.Empty;
+            CategoryProduct = categories ?? throw new ArgumentNullException("There is no category for the product !");
+        }
+
+        public Product(int productId, string name, string description, double price, string imageLink)
+        {
+            ProductId = productId;
+            Name = name ?? throw new ArgumentNullException("The name of the product can't be null !");
+            Description = description ?? string.Empty;
+            Price = price;
+            ImageLink = imageLink ?? string.Empty;
+        }
+
+        public Product(int productId, string name, double price, string imageLink)
+        {
+            ProductId = productId;
+            Name = name ?? throw new ArgumentNullException("The name of the product can't be null !");
+            Price = price;
+            ImageLink = imageLink ?? string.Empty;
+        }
+
+        public Product() { }
 
         public override string ToString()
             => $"{ProductId} : {Name} {Price}";

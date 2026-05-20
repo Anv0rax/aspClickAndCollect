@@ -35,7 +35,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public List<Order> Orders
         {
             get => orders;
-            private set { orders = value; }
+            set { orders = value; }
         }
 
         public void AddOrder(Order o)

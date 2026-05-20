@@ -112,9 +112,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
         {
             var orders = new List<Order>();
 
-            // TODO: Put back DateTime.Today.AddDays(1) on the 19-05-26 bcz the timeslot are not going this much
-            DateTime nextDay = new DateTime(2026, 05, 20);
-
+            DateTime nextDay = DateTime.Now.AddHours(24);
             
             string query = @"SELECT o.orderId AS OrderId, o.status AS OrderStatus, 
                             o.numberOfBoxUsed AS BoxUsed, o.numberOfBoxReturned AS BoxReturned,
@@ -219,12 +217,8 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                         if(!await reader.IsDBNullAsync(7))
                         {
                             Product product = new Product
-                            {
-                                ProductId = reader.GetInt32(7),
-                                Name = reader.GetString(8),
-                                Price = (double)reader.GetDecimal(9),
-                                ImageLink = reader.GetString(10)
-                            };
+                            (reader.GetInt32(7), reader.GetString(8), (double)reader.GetDecimal(9), reader.GetString(10)
+                            );
 
                             order.Content.Add(new ProductQuantity(product, reader.GetInt32(11)));
                         }

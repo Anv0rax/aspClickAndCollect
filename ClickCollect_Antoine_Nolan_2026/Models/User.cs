@@ -72,6 +72,14 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             Password = password ?? throw new ArgumentNullException("The password is null.");
         }
 
+        public User(int id, string username, string firstName, string lastName)
+        {
+            Id = id;
+            Username = username ?? throw new ArgumentNullException("The user must have a username.");
+            FirstName = firstName ?? throw new ArgumentNullException("First name can't be null.");
+            LastName = lastName ?? throw new ArgumentNullException("Last name can't be null.");
+        }
+
         public User(int id, string username, string password, string firstName, string lastName)
             : this(id, username, password) // ← réutilise le constructeur de base
         {

@@ -110,5 +110,99 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
             }
             return shops;
         }
+
+        public async Task<Shop?> GetShopCompleteAsync(int shopId)
+        {
+            using (SqlConnection co = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand(
+                    @"SELECT
+                        s.shopId, s.name, s.maplink,
+                        a.adressId, a.street, a.number, a.city, a.country, a.longitude, a.latitude,
+                        t.timeslot,
+                        o.orderId, o.status, o.numberOfBoxUsed, o.numberOfBoxReturned, o.userId,
+                        u.firstname, u.lastname, u.username,
+                        p.productId, p.name AS productName, p.price, p.imageLink,
+                        pq.quantity
+                    FROM Timeslots t
+                    INNER JOIN Shops s ON t.shopId = s.shopId
+                    INNER JOIN Adresses a ON a.adressId = s.adressId
+                    LEFT JOIN Orders o ON o.timeslot = t.timeslot AND o.shopId = t.shopId
+                    LEFT JOIN Users u ON u.userId = o.userId
+                    LEFT JOIN ProductQuantity pq ON pq.orderId = o.orderId
+                    LEFT JOIN Products p ON p.productId = pq.productId
+                    WHERE s.shopId = @shopId
+                    ORDER BY t.timeslot, o.orderId;", co);
+
+                cmd.Parameters.AddWithValue("@shopId", shopId);
+                await co.OpenAsync();
+
+                Shop? currentShop = null;
+                Timeslot? currentTimeslot = null;
+                DateTime currentTimeslotDt = DateTime.MinValue;
+                Order? currentOrder = null;
+                int currentOrderId = 0;
+
+                using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        if (currentShop == null)
+                        {
+                            Adress shopAdress = new Adress(reader.GetInt32("adressId"), 
+                                reader.GetString("street"), reader.GetString("number"), 
+                                reader.GetString("city"), reader.GetString("country"),
+                                (double)reader.GetDecimal("longitude"), (double)reader.GetDecimal("latitude"));
+
+                            currentShop = new Shop(reader.GetInt32("shopId"),
+                                reader.GetString("name"), reader.GetString("maplink"),
+                                shopAdress);
+                        }
+
+                        if (!reader.IsDBNull(reader.GetOrdinal("timeslot")))
+                        {
+                            DateTime ts = reader.GetDateTime("timeslot");
+                            if (ts != currentTimeslotDt)
+                            {
+                                currentTimeslotDt = ts;
+                                currentTimeslot = new Timeslot(ts, currentShop);
+                                currentShop.Timeslots.Add(currentTimeslot);
+                                currentOrder = null;
+                                currentOrderId = 0;
+                            }
+
+                            if (!reader.IsDBNull(reader.GetOrdinal("orderId")))
+                            {
+                                int rowOrderId = reader.GetInt32("orderId");
+                                if (rowOrderId != currentOrderId)
+                                {
+                                    currentOrderId = rowOrderId;
+
+                                    Customer customer = new Customer(reader.GetInt32("userId"),
+                                        reader.GetString("username"), reader.GetString("firstname"), reader.GetString("lastname"));
+
+                                    currentOrder = new Order(rowOrderId,
+                                        reader.GetString("status"), reader.GetInt32("numberOfBoxUsed"),
+                                        reader.GetInt32("numberOfBoxReturned"), currentTimeslot!, customer);
+
+                                    currentTimeslot!.Orders.Add(currentOrder);
+                                }
+
+                                if (currentOrder != null && !reader.IsDBNull(reader.GetOrdinal("productId")))
+                                {
+                                    Product product = new Product(reader.GetInt32("productId"),
+                                        reader.GetString("productName"), (double)reader.GetDecimal("price"),
+                                        reader.GetString("imageLink"));
+
+                                    ProductQuantity pq = new ProductQuantity(product, reader.GetInt32("quantity"));
+                                    currentOrder.Content.Add(pq);
+                                }
+                            }
+                        }
+                    }
+                }
+                return currentShop;
+            }
+        }
     }
 }

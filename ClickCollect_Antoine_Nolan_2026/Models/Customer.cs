@@ -66,5 +66,10 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             : base(id, username, password)
         {
         }
+
+        public Customer(int id, string username, string firstname, string lastname)
+            : base(id, username, firstname, lastname)
+        {
+        }
     }
 }

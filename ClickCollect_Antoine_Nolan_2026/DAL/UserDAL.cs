@@ -113,26 +113,26 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
 
                 // Insert the user and retrieve its generated ID
                 SqlCommand cmdUser = new SqlCommand(
-                    @"INSERT INTO Users (firstname, lastname, username, password, adressId)
-              VALUES (@Firstname, @Lastname, @Username, @Password, @AddressId);
+                    @"INSERT INTO Users (firstname, lastname, username, password)
+              VALUES (@Firstname, @Lastname, @Username, @Password);
               SELECT SCOPE_IDENTITY();", co);
 
                 cmdUser.Parameters.AddWithValue("Firstname", customer.FirstName);
                 cmdUser.Parameters.AddWithValue("Lastname", customer.LastName);
                 cmdUser.Parameters.AddWithValue("Username", customer.Username);
                 cmdUser.Parameters.AddWithValue("Password", hashedPassword);
-                cmdUser.Parameters.AddWithValue("AddressId", addressId);
 
                 int userId = Convert.ToInt32(await cmdUser.ExecuteScalarAsync());
 
                 // Link the user to the Customers table
                 SqlCommand cmdCustomer = new SqlCommand(
-                    @"INSERT INTO Customers (userId, email, phoneNumber)
-              VALUES (@UserId, @Email, @PhoneNumber)", co);
+                    @"INSERT INTO Customers (userId, email, phoneNumber, adressId)
+              VALUES (@UserId, @Email, @PhoneNumber, @AddressId)", co);
 
                 cmdCustomer.Parameters.AddWithValue("UserId", userId);
                 cmdCustomer.Parameters.AddWithValue("Email", customer.Email);
                 cmdCustomer.Parameters.AddWithValue("PhoneNumber", customer.PhoneNumber);
+                cmdUser.Parameters.AddWithValue("AddressId", addressId);
 
                 await cmdCustomer.ExecuteNonQueryAsync();
             }
@@ -202,7 +202,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                      a.adressId, a.street, a.number, a.city, a.country, a.longitude, a.latitude
                         FROM Users u
                         INNER JOIN Customers cu ON u.userId = cu.userId
-                        INNER JOIN Adresses a ON u.adressId = a.adressId
+                        INNER JOIN Adresses a ON cu.adressId = a.adressId
                         WHERE u.userId = @UserId", co);
 
                 cmd.Parameters.AddWithValue("UserId", userId);
@@ -248,5 +248,10 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
 
             return customer;
         }
+
+        //public async Task<Cashier?> GetCashierAsync(int cashierId)
+        //{
+
+        //}
     }
 }

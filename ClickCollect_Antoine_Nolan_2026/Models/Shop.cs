@@ -100,5 +100,8 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         public static async Task<List<Shop>?> GetShopsAsync(IShopDAL shopDAL)
             => await shopDAL.GetShopsAsync();
+
+        public static async Task<Shop?> GetShopCompleteAsync(IShopDAL shopDAL)
+            => await shopDAL.GetShopCompleteAsync();
     }
 }
