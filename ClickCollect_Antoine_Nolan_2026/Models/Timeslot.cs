@@ -74,5 +74,8 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         {
             return ToString().GetHashCode();
         }
+
+        public static DateTime RoundDateTime(DateTime date)
+            => new DateTime(date.Year, date.Month, date.Day, date.Hour, 0, 0);
     }
 }

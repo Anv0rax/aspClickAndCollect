@@ -7,11 +7,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 {
     public class PreparerController : BaseController
     {
-        private readonly IOrderDAL _orderDAL;
+        private readonly IOrderDAL orderDAL;
 
         public PreparerController(IOrderDAL orderDAL)
         {
-            _orderDAL = orderDAL;
+            this.orderDAL = orderDAL;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -26,7 +26,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             {
                 int shopId = HttpContext.Session.GetInt32("ShopId") ?? 1;
 
-                List<Order> ordersToPrepare = await _orderDAL.GetOrdersToPrepareAsync(shopId);
+                List<Order> ordersToPrepare = await Order.GetOrdersToPrepareAsync(orderDAL, shopId);
 
                 return View(ordersToPrepare);
             }
@@ -42,7 +42,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         {
             try
             {
-                Order? order = await _orderDAL.GetOrderDetailsAsync(id);
+                Order? order = await Order.GetOrderDetailsAsync(orderDAL, id);
 
                 if(order == null)
                 {
@@ -64,7 +64,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         {
             try
             {
-                Order? order = await _orderDAL.GetOrderDetailsAsync(id);
+                Order? order = await Order.GetOrderDetailsAsync(orderDAL, id);
 
                 if (order == null)
                 {
@@ -91,11 +91,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 if (numberOfBoxUsed < 1)
                 {
                     ViewData["Error"] = "You must use at least 1 box.";
-                    Order? orderError = await _orderDAL.GetOrderDetailsAsync(id);
+                    Order? orderError = await Order.GetOrderDetailsAsync(orderDAL, id);
                     return View(orderError);
                 }
 
-                await _orderDAL.UpdateOrderStatusAsync(id, OrderStatusEnum.Ready, numberOfBoxUsed);
+                await Order.UpdateOrderStatusAsync(orderDAL, id, OrderStatusEnum.Ready, numberOfBoxUsed, 0);
                 TempData["Success"] = "The order has been marked as ready.";
                 return RedirectToAction("Index");
             }

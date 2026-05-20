@@ -1349,6 +1349,32 @@ SET IDENTITY_INSERT Users OFF;
 INSERT INTO Cachiers (userId, shopId) VALUES (1, 1);
 INSERT INTO Preparers (userId, shopId) VALUES (2, 1);
 
+SET IDENTITY_INSERT Users ON;
+
+INSERT INTO Users (userId, firstname, lastname, username, password)
+VALUES (4, N'Theo', N'Pendant', N'theo', N'$2a$12$o1FsZdYGOYZZKHVnsSY2Lurayh9cjgTZ2TbrZGpG.EoTV8OULBfL6');
+
+INSERT INTO Users (userId, firstname, lastname, username, password)
+VALUES (5, N'Augustin', N'Miam', N'august', N'$2a$12$TP4MwvVOENID0HSqR7dRx.e9QOn6CsoI6hbNxySpNeh7f8AnRSFDu');
+
+SET IDENTITY_INSERT Users OFF;
+
+INSERT INTO Cachiers (userId, shopId) VALUES (4, 2);
+INSERT INTO Cachiers (userId, shopId) VALUES (5, 3);
+
+SET IDENTITY_INSERT Users ON;
+
+INSERT INTO Users (userId, firstname, lastname, username, password)
+VALUES (6, N'Momo', N'Fair', N'Momo', N'$2a$12$uWqUw9CuqIOO7hFw07WI9.czI3fVDFSKIWw1DsG92iEtdlCVphqiK');
+
+INSERT INTO Users (userId, firstname, lastname, username, password)
+VALUES (7, N'Lucas', N'Lou', N'lucas', N'$2a$12$ewn2JjrqhAtA0p/AGW.NcuhX3/bt2D/kxbHIMuJsVvBS3QTRNwkw6');
+
+SET IDENTITY_INSERT Users OFF;
+
+INSERT INTO Preparers (userId, shopId) VALUES (6, 2);
+INSERT INTO Preparers (userId, shopId) VALUES (7, 3);
+
 INSERT INTO Timeslots (shopId, timeslot) VALUES (1, '2026-05-18 08:00:00');
 INSERT INTO Timeslots (shopId, timeslot) VALUES (2, '2026-05-18 08:00:00');
 INSERT INTO Timeslots (shopId, timeslot) VALUES (3, '2026-05-18 08:00:00');

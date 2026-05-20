@@ -1,3 +1,5 @@
+@model CashierViewModel
+
 @{
     ViewData["Title"] = "Cashier Area";
 }
@@ -7,11 +9,51 @@
     <div class="card border-primary mb-3">
         <div class="card-header bg-primary text-white fw-bold">🛒 Cashier Area</div>
         <div class="card-body">
-            <h5 class="card-title">Hello, @ViewData["Username"] !</h5>
-            <p class="card-text">Welcome to your checkout station. This is where you'll be able to look up customer orders to confirm their pickup.</p>
+            <h5 class="card-title">Hello, @Model.Employee.FirstName !</h5>
+            <p class="card-text">Welcome to your checkout station. At @Model.Employee.ItsShop.Name.</p>
             <hr />
-            <div class="alert alert-info">
-                <strong>Status :</strong> Secure access for the Cashier role is now fully operational.
+
+            <partial name="_ErrorSuccessMessagesPartial" />
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle border">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Pickup Time</th>
+                            <th>Client Name</th>
+                            <th>Status</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="5">
+                                <h3 class="text-center">
+                                    @Timeslot.RoundDateTime(DateTime.Now).ToString("HH:mm")
+                                     - 
+                                    @Timeslot.RoundDateTime(DateTime.Now.AddHours(1)).ToString("HH:mm")
+                                </h3>
+                            </td>
+                        </tr>
+                        @foreach (var order in Model.Slot.Orders)
+                        {
+                            <partial name="_OrderListCashierPartial" model="@order"> </partial>
+                        }
+                        <tr>
+                            <td colspan="5"></td>
+                        <tr>
+                            <td colspan="5">
+                                <hr />
+                                <h3 class="text-center">Old Orders</h3>
+                            </td>
+                        </tr>
+                        @foreach (var order in Model.OldOrders)
+                        {
+                            <partial name="_OrderListCashierPartial" model="@order"> </partial>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

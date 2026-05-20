@@ -30,14 +30,14 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                             a.adressId, a.street, a.number, a.city, a.country, a.longitude, a.latitude,
                             t.timeslot,
                             COUNT(o.orderId) as ordersPerTimeslot
-                        FROM Timeslots t
-                        INNER JOIN Shops s ON t.shopId = s.shopId
+                        FROM Shops s
                         INNER JOIN Adresses a ON a.adressId = s.adressId
+                        LEFT JOIN Timeslots t ON t.shopId = s.shopId
                         LEFT JOIN Orders o ON o.timeslot = t.timeslot AND o.shopId = t.shopId
                         GROUP BY s.shopId, s.name, s.maplink, 
                                  a.adressId, a.street, a.number, a.city, a.country, a.longitude, a.latitude,
                                  t.timeslot
-                        ORDER BY s.shopId;", co);
+                        ORDER BY s.shopId", co);
 
                     await co.OpenAsync();
 

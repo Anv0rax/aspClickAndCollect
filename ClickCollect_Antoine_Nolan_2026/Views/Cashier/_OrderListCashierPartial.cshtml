@@ -1,0 +1,16 @@
+﻿@model Order
+
+<tr>
+    <td><span class="badge bg-secondary">#@Model.OrderId</span></td>
+    <td>
+        <i class="bi bi-clock me-1"></i> @Model.Slot.StartTime.ToString("dd/MM/yyyy HH:mm")
+    </td>
+    <td><strong>@Model.Client.LastName</strong> @Model.Client.FirstName</td>
+    <td>@Model.Status.ToString()</td>
+    <td class="text-end">
+        <a class="btn btn-sm btn-success fw-bold"
+           asp-controller="Cashier" asp-action="Payment" asp-route-id="@Model.OrderId">
+            Payment
+        </a>
+    </td>
+</tr>

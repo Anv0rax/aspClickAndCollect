@@ -13,7 +13,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
 
         public Task<Order?> GetOrderDetailsAsync(int orderId);
 
-        public Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatusEnum status, int numberOfBoxUsed);
+        public Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatusEnum status, int numberOfBoxUsed, int boxReturned);
 
         // This method will be use, so I can get the orders of each customers, and display them.
         public Task<List<Order>> GetOrdersByCustomerAsync(int userId);

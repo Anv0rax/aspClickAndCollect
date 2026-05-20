@@ -218,14 +218,23 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public static async Task<List<Order>> GetOrdersByCustomerAsync(IOrderDAL orderDAL, int userId)
             => await orderDAL.GetOrdersByCustomerAsync(userId);
 
-        public async Task<bool> UpdateStatusAsync(IOrderDAL orderDAL, OrderStatusEnum newStatus, int numberOfBoxes)
+        public async Task<bool> UpdateStatusAsync(IOrderDAL orderDAL, OrderStatusEnum newStatus, int numberOfBoxes, int boxReturned=0)
         {
             if (numberOfBoxes < 0)
                 throw new ArgumentException("Number of boxes cannot be negative.");
-            this.status = newStatus;
-            this.numberOfBoxUsed = numberOfBoxes;
-            return await orderDAL.UpdateOrderStatusAsync(this.orderId, newStatus, numberOfBoxes);
+            Status = newStatus;
+            NumberOfBoxUsed = numberOfBoxes;
+            return await orderDAL.UpdateOrderStatusAsync(this.orderId, newStatus, numberOfBoxes, boxReturned);
         }
+
+        public static async Task<bool> UpdateOrderStatusAsync(IOrderDAL orderDAL, int orderId, OrderStatusEnum newStatus, int numberOfBoxes, int boxReturned = 0)
+            => await orderDAL.UpdateOrderStatusAsync(orderId, newStatus, numberOfBoxes, boxReturned);
+
+        public static async Task<Order?> GetOrderDetailsAsync(IOrderDAL orderDAL, int orderId)
+            => await orderDAL.GetOrderDetailsAsync(orderId);
+
+        public static async Task<List<Order>> GetOrdersToPrepareAsync(IOrderDAL orderDAL, int shopId)
+            => await orderDAL.GetOrdersToPrepareAsync(shopId);
 
         public override string ToString()
             => $"Order {orderId} - {status} - {slot?.StartTime:dd/MM/yyyy} - {customer?.Username}";

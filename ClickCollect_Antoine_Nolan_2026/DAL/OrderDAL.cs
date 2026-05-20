@@ -228,17 +228,18 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
             return order;
         }
 
-        public async Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatusEnum status, int numberOfBoxUsed)
+        public async Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatusEnum status, int numberOfBoxUsed, int boxReturned=0)
         {
             using (SqlConnection co = new SqlConnection(connectionString))
             {
                 SqlCommand cmd = new SqlCommand(
                     @"UPDATE Orders 
-              SET status = @Status, numberOfBoxUsed = @NumberOfBoxUsed
+              SET status = @Status, numberOfBoxUsed = @NumberOfBoxUsed, numberOfBoxReturned = @numberOfBoxReturned
               WHERE orderId = @OrderId", co);
 
                 cmd.Parameters.AddWithValue("@Status", status.ToString());
                 cmd.Parameters.AddWithValue("@NumberOfBoxUsed", numberOfBoxUsed);
+                cmd.Parameters.AddWithValue("@NumberOfBoxReturned", boxReturned);
                 cmd.Parameters.AddWithValue("@OrderId", orderId);
 
                 await co.OpenAsync();
