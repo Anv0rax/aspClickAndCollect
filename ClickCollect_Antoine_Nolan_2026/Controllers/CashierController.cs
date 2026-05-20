@@ -13,8 +13,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             RestrictToRole(context, "Cashier");
         }
 
-        // That means that only the cashier will see the view "Cashier"
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
         }

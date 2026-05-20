@@ -40,6 +40,9 @@
                                 <input type="radio" name="timeslot" id="ts-@i" value="@Model.Shop.Timeslots[i].StartTime" class="ts-radio" hidden />
                                 <label for="ts-@i" class="list-group-item d-flex justify-content-between align-items-center px-2 m-2">
                                         @Model.Shop.Timeslots[i].StartTime.ToString("dd'/'MM'/'yyyy ': From' HH")h00 to @Model.Shop.Timeslots[i].EndTime.ToString("HH")h00
+                                    <span class="badge bg-secondary rounded-pill">
+                                        @(10 - Model.Shop.Timeslots[i].NumberOfOrders)
+                                    </span>
                                 </label>
                             }
                         }

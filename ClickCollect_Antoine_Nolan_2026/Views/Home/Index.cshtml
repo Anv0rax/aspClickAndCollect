@@ -16,7 +16,7 @@
                 <form method="get" asp-action="Index" class="card-body">
                     <h5 class="mb-3">Search</h5>
                     <div class="input-group">
-                        <input type="text" name="search" class="form-control border-light" placeholder="Pomme, miel..." aria-label="Search" value="@search" />
+                        <input type="text" name="search" class="form-control border-light" placeholder="Apple, pasta..." aria-label="Search" value="@search" />
                         @if(!string.IsNullOrEmpty(selectedCategory))
                         {
                             <input type="hidden" name="category" value="@selectedCategory" />

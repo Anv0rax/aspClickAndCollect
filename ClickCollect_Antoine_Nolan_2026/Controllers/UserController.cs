@@ -37,7 +37,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                ViewData["Error"] = "The username or password is missing.";
+                TempData["Error"] = "The username or password is missing.";
                 return View();
             }
 
@@ -51,7 +51,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             if (user == null)
             {
                 // if null, the username is null or BCrypt.Verify sent "False" in the DAL
-                ViewData["Error"] = "The username or password is incorrect.";
+                TempData["Error"] = "The username or password is incorrect.";
                 return View();
             }
 
@@ -129,7 +129,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             }
             catch (ArgumentException ex)
             {
-                ViewData["Error"] = $" {ex.Message} | Try again !";
+                TempData["Error"] = $" {ex.Message} | Try again !";
                 return View(customer);
             }
             catch (Exception)
@@ -139,7 +139,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
             if (await Models.User.UsernameExistsAsync(userDAL, customer.Username))
             {
-                ViewData["Error"] = "This username is already taken.";
+                TempData["Error"] = "This username is already taken.";
                 return View(customer);
             }
 

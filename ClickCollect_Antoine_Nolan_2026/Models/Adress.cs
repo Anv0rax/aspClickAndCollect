@@ -98,7 +98,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         }
 
         public override string ToString()
-            => $"This adress is located at {number}, {street}, {city}, {country}";
+            => $"{number}, {street}, {city}, {country}";
 
         public bool Equals(Adress a)
             => a.Id == this.Id;

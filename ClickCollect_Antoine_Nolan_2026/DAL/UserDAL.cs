@@ -132,11 +132,12 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                 cmdCustomer.Parameters.AddWithValue("UserId", userId);
                 cmdCustomer.Parameters.AddWithValue("Email", customer.Email);
                 cmdCustomer.Parameters.AddWithValue("PhoneNumber", customer.PhoneNumber);
-                cmdUser.Parameters.AddWithValue("AddressId", addressId);
+                cmdCustomer.Parameters.AddWithValue("AddressId", addressId);
 
-                await cmdCustomer.ExecuteNonQueryAsync();
+                await cmdCustomer.ExecuteScalarAsync();
             }
         }
+
         public async Task<User?> GetUserByUsernameAsync(string username)
         {
             User? user = null;

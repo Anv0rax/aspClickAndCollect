@@ -262,6 +262,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             if (number > 0)
             {
                 TempData["Success"] = $"Order Confirmed at {thisShop.Name} For {thisTimeslot.StartTime.ToString("dd'/'MM'/'yyyy ': between' HH")}h00 and {thisTimeslot.EndTime.ToString("HH")}h00";
+                SaveCartToSession(new List<ProductQuantity>());
                 return RedirectToAction("Index", "Home");
             }
 

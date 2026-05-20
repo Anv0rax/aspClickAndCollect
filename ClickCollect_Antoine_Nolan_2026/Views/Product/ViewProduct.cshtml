@@ -11,7 +11,7 @@
     <div class="row py-5">
         <!--I'm going to place the image of the product on the left side of the page.-->
         <div class="col-md-5 text-center">
-            <img src="@Model.ImageLink" alt="@Model.Name" class="img-fluid rounded shadow" style="max-height : 400px; object-fit : contain;"/>
+            <img src="@(Model.ImageLink.Replace(".200.jpg", ".full.jpg"))" alt="@Model.Name" class="img-fluid rounded shadow" style="max-height : 400px; object-fit : contain;"/>
         </div>
 
 
