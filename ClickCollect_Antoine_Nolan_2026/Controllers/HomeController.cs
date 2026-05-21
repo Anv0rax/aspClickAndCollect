@@ -59,11 +59,6 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             return View(catalog);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
