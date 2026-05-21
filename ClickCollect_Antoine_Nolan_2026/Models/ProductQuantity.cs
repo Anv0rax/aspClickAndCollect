@@ -49,10 +49,8 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             return false;
         }
 
-        //public override int GetHashCode()
-        //    => product.ProductId.GetHashCode();
-
         public override int GetHashCode()
-            => this.ToString().GetHashCode();
+            => product.ProductId.GetHashCode();
+
     }
 }

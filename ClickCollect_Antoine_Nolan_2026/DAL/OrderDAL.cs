@@ -112,7 +112,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
         {
             var orders = new List<Order>();
 
-            DateTime nextDay = DateTime.Now.AddHours(24);
+            DateTime nextDay = DateTime.Now.AddHours(32);
             
             string query = @"SELECT o.orderId AS OrderId, o.status AS OrderStatus, 
                             o.numberOfBoxUsed AS BoxUsed, o.numberOfBoxReturned AS BoxReturned,

@@ -5,12 +5,12 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 {
     public class Preparer : User
     {
-        private int? shopId;
+        private Shop? shop;
 
-        public int? ShopId
+        public Shop? Shop
         {
-            get { return shopId; }
-            set { shopId = value; }
+            get { return shop; }
+            set { shop = value; }
         }
 
         public Preparer()
@@ -18,16 +18,22 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         }
 
-        public Preparer(int id, string username, string password, int shopId)
+        public Preparer(int id, string username, string password, Shop shop)
             : base(id, username, password)
         {
-            ShopId = shopId;
+            Shop = shop;
         }
 
-        public async Task<List<Order>> GetOrdersToPrepareAsync(IOrderDAL orderDAL, int shopId)
-            => await orderDAL.GetOrdersToPrepareAsync(shopId);
+        public async Task<List<Order>> GetOrdersToPrepareAsync(IOrderDAL orderDAL)
+        {
+            if (Shop == null) return new List<Order>();
+            return await orderDAL.GetOrdersToPrepareAsync(Shop.Id);
+        }
 
         public async Task<Order?> GetOrderDetailsAsync(IOrderDAL orderDAL, int orderId)
             => await orderDAL.GetOrderDetailsAsync(orderId);
+
+        public async Task<bool> UpdateOrderStatusAsync(IOrderDAL orderDAL, int orderId, OrderStatusEnum status, int numberOfBoxUsed)
+            => await orderDAL.UpdateOrderStatusAsync(orderId, status, numberOfBoxUsed);
     }
 }

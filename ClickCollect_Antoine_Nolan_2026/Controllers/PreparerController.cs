@@ -26,9 +26,9 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             {
                 int shopId = HttpContext.Session.GetInt32("ShopId") ?? 1;
 
-                Preparer preparer = new Preparer {ShopId = shopId };
+                Preparer preparer = new Preparer();
 
-                List<Order> ordersToPrepare = await preparer.GetOrdersToPrepareAsync(_orderDAL, shopId);
+                List<Order> ordersToPrepare = await preparer.GetOrdersToPrepareAsync(_orderDAL);
 
                 return View(ordersToPrepare);
             }
@@ -101,7 +101,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                     return View(orderError);
                 }
 
-                await _orderDAL.UpdateOrderStatusAsync(id, OrderStatusEnum.Ready, numberOfBoxUsed);
+                await preparer.UpdateOrderStatusAsync(_orderDAL, id, OrderStatusEnum.Ready, numberOfBoxUsed);
                 TempData["Success"] = "The order has been marked as ready.";
                 return RedirectToAction("Index");
             }
