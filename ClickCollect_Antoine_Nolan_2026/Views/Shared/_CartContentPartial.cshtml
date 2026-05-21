@@ -1,18 +1,20 @@
 ﻿@model List<ProductQuantity>
 
 @{
-    double malus = 0;
+    double boxes = 0;
 
-    if(TempData["LateMalus"] != null)
+    if(TempData["Boxes"] != null)
     {
         try
         {
-            malus = (double)TempData["LateMalus"];
+            boxes = (int)TempData["Boxes"];
         }
         catch (Exception ex) { }
     }
+
+    double price = ((Model.Sum(p => p.Product.Price * p.Quantity) + @Order.TaxOfService + (boxes * Order.BoxDeposit)));
 }
-<h1 class="h1 fw-bold m-3">Your cart</h1>
+<h1 class="h1 fw-bold m-3">The Cart</h1>
 
 <table class="table table-hover align-middle">
     <thead class="table-light">
@@ -48,17 +50,19 @@
             <td colspan="3" class="text-end fw-bold">Service fee :</td>
             <td class="fw-bold text-primary">@Order.TaxOfService €</td>
         </tr>
-        @if(malus > 0)
+        @if(boxes > 0)
         {
             <tr>
-                <td colspan="3" class="text-end fw-bold text-danger">Tax on delay :</td>
-                <td class="fw-bold text-danger">+ @malus €</td>
+                <td colspan="3" class="text-end fw-bold text-danger">Tax for boxes (@boxes) :</td>
+                <td class="fw-bold text-danger">+ @(boxes * Order.BoxDeposit) €</td>
             </tr>
         }
         <tr>
-            <td colspan="3" class="text-end fw-bold">Your total is :</td>
-            <td class="fw-bold text-primary">
-                @((Model.Sum(p => p.Product.Price * p.Quantity) + @Order.TaxOfService + malus).ToString("F2")) €
+            <td colspan="3" class="text-end fw-bold">Total is :</td>
+            <td class="fw-bold text-primary" >
+                <p class="d-none" id="final_price_cart">@price</p>
+                <p id="final_price_cart_display" class="d-inline">@price.ToString("F2")</p>
+                <p class ="d-inline"> €</p>
             </td>
         </tr>
     </tfoot>

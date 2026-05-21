@@ -5,15 +5,13 @@
 }
 
 <div class="container mt-5">
-    <partial name="_ErrorSuccessMessagesPartial" />
+    <partial name="_ErrorSuccessMessagesPartial"> </partial>
     <div class="card border-primary mb-3">
         <div class="card-header bg-primary text-white fw-bold">🛒 Cashier Area</div>
         <div class="card-body">
             <h5 class="card-title">Hello, @Model.Employee.FirstName !</h5>
             <p class="card-text">Welcome to your checkout station. At @Model.Employee.ItsShop.Name.</p>
             <hr />
-
-            <partial name="_ErrorSuccessMessagesPartial" />
 
             <div class="table-responsive">
                 <table class="table table-hover align-middle border">
@@ -30,16 +28,23 @@
                         <tr>
                             <td colspan="5">
                                 <h3 class="text-center">
-                                    @Timeslot.RoundDateTime(DateTime.Now).ToString("HH:mm")
-                                     - 
-                                    @Timeslot.RoundDateTime(DateTime.Now.AddHours(1)).ToString("HH:mm")
+                                    Today @(DateTime.Today.ToString("dd'/'MM'/'yyyy"))
                                 </h3>
                             </td>
                         </tr>
-                        @foreach (var order in Model.Slot.Orders)
+
+                        @if (Model.TodayOrders.Count() == 0)
                         {
-                            <partial name="_OrderListCashierPartial" model="@order"> </partial>
+                            <tr>
+                                <td colspan="5" class="text-center"> No order for today</td>
+                            </tr>
                         }
+
+                        @foreach (var order in Model.TodayOrders)
+                        {
+                            <partial name="_OrderListCashierPartial" model="@order" />
+                        }
+                        
                         <tr>
                             <td colspan="5"></td>
                         <tr>

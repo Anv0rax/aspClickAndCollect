@@ -3,6 +3,7 @@ using ClickCollect_Antoine_Nolan_2026.Models;
 using ClickCollect_Antoine_Nolan_2026.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.VisualBasic;
 using System.Runtime.InteropServices;
 
 namespace ClickCollect_Antoine_Nolan_2026.Controllers
@@ -28,9 +29,24 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             RestrictToRole(context, "Cashier");
         }
 
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> Confirm(int id, int boxesUsed, int boxesReturned)
+        {
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                TempData["Error"] = "Be connected !";
+                return RedirectToAction("Login", "User");
+            }
+
+            await Order.UpdateOrderStatusAsync(orderDAL, id, OrderStatusEnum.Fullfilled, boxesUsed, boxesReturned);
+
+            TempData["Success"] = $"{id} valided";
+            return RedirectToAction("Index");
+        }
+
         public async Task<IActionResult> Payment(int id)
         {
-            Console.WriteLine("????????");
             if (HttpContext.Session.GetInt32("UserId") == null)
             {
                 TempData["Error"] = "Be connected !";
@@ -44,7 +60,9 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 return RedirectToAction("Index", "Cashier");
             }
 
-            return View();
+            TempData["Boxes"] = order.NumberOfBoxUsed;
+
+            return View(order);
         }
 
         public async Task<IActionResult> Index()
@@ -73,7 +91,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             List<Order> oldOrders = new List<Order>();
             foreach (Timeslot ts in theShop.Timeslots)
             {
-                if (ts.StartTime < DateTime.Now)
+                if (ts.StartTime.Date < DateTime.Today)
                 {
                     foreach (Order o in ts.Orders)
                     {
@@ -84,18 +102,27 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 else { break; }
             }
 
-            Timeslot slot = theShop.Timeslots?.FirstOrDefault(t 
-                => t.StartTime == Timeslot.RoundDateTime(DateTime.Now)) ?? new Timeslot();
-
-            slot.Orders = slot.Orders.Where(o
-                => o.Status == OrderStatusEnum.Ready).ToList();
+            List<Timeslot> timeslots = theShop.Timeslots.Where(t => t.StartTime.Date == DateTime.Today).ToList();
+            List<Order> todayOrders = new List<Order>();
+            foreach (Timeslot ts in timeslots)
+            {
+                if (ts.StartTime.Date == DateTime.Today)
+                {
+                    foreach (Order o in ts.Orders)
+                    {
+                        if (o.Status == OrderStatusEnum.Ready)
+                            todayOrders.Add(o);
+                    }
+                }
+                else { break; }
+            }
 
             cashier.ItsShop = theShop;
 
             CashierViewModel vm = new CashierViewModel();
             vm.Employee = cashier;
             vm.OldOrders = oldOrders;
-            vm.Slot = slot;
+            vm.TodayOrders = todayOrders;
 
             return View(vm);
         }
