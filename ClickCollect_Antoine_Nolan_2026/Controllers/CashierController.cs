@@ -102,9 +102,8 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 else { break; }
             }
 
-            List<Timeslot> timeslots = theShop.Timeslots.Where(t => t.StartTime.Date == DateTime.Today).ToList();
             List<Order> todayOrders = new List<Order>();
-            foreach (Timeslot ts in timeslots)
+            foreach (Timeslot ts in theShop.Timeslots.Where(t => t.StartTime.Date == DateTime.Today).ToList())
             {
                 if (ts.StartTime.Date == DateTime.Today)
                 {
@@ -120,7 +119,6 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             cashier.ItsShop = theShop;
 
             CashierViewModel vm = new CashierViewModel();
-            vm.Employee = cashier;
             vm.OldOrders = oldOrders;
             vm.TodayOrders = todayOrders;
 

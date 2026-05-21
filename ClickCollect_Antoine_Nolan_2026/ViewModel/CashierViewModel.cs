@@ -7,7 +7,6 @@ namespace ClickCollect_Antoine_Nolan_2026.ViewModel
         public CashierViewModel() { }
 
         public List<Order> OldOrders { get; set; }
-        public Cashier Employee { get; set; }
         public List<Order> TodayOrders { get; set; }
     }
 }
