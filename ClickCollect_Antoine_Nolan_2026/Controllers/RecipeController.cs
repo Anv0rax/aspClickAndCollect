@@ -26,7 +26,12 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<Recipe> recipes = await Recipe.GetRecipesAsync(recipeDAL);
+            List<Recipe>? recipes = await Recipe.GetRecipesAsync(recipeDAL);
+            if(recipes == null || recipes.Count == 0)
+            {
+                TempData["Error"] = "No recipe found...";
+                return View(new List<Recipe>());
+            }
             return View(recipes);
         }
 

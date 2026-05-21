@@ -13,11 +13,11 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
             connectionString = _connectionString;
         }
 
-        public async Task<List<Recipe>> GetRecipesAsync()
+        public async Task<List<Recipe>?> GetRecipesAsync()
         {
-            List<Recipe> recipes = new List<Recipe>();
-            try 
+            try
             {
+                List<Recipe> recipes = new List<Recipe>();
                 using (SqlConnection co = new SqlConnection(connectionString))
                 {
                     SqlCommand cmd = new SqlCommand(
@@ -61,7 +61,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                 }
                 return recipes;
             }
-            catch { return new List<Recipe>(); }
+            catch { return null; }
         }
 
         public async Task<Recipe?> GetRecipeByIdAsync(int recipeId)

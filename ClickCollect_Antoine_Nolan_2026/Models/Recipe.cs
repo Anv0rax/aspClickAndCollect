@@ -59,7 +59,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public override int GetHashCode()
             => this.ToString().GetHashCode();
 
-        public static async Task<List<Recipe>> GetRecipesAsync(IRecipeDAL recipeDAL)
+        public static async Task<List<Recipe>?> GetRecipesAsync(IRecipeDAL recipeDAL)
             => await recipeDAL.GetRecipesAsync();
 
         public static async Task<Recipe?> GetRecipeByIdAsync(IRecipeDAL recipeDAL, int recipeId)
