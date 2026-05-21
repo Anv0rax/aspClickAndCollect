@@ -25,6 +25,7 @@ namespace ClickCollect_Antoine_Nolan_2026
             builder.Services.AddTransient<IProductDAL>(p => new ProductDAL(connectionString!));
             builder.Services.AddTransient<IShopDAL>(s => new ShopDAL(connectionString!));
             builder.Services.AddTransient<IOrderDAL>(t => new OrderDAL(connectionString!));
+            builder.Services.AddTransient<IRecipeDAL>(r => new RecipeDAL(connectionString!));
 
             var app = builder.Build();
 

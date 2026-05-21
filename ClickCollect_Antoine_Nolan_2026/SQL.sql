@@ -18076,7 +18076,7 @@ INSERT INTO Ingredients (productId, recipeId, quantity, unit) VALUES (73, 1, 1, 
 
 
 
-INSERT INTO Ingredients (productId, recipeId, quantity, unit) VALUES (85, 2, , N'g');
+INSERT INTO Ingredients (productId, recipeId, quantity, unit) VALUES (85, 2, 4, N'g');
 INSERT INTO Ingredients (productId, recipeId, quantity, unit) VALUES (4,  2, 2, N'g');
 INSERT INTO Ingredients (productId, recipeId, quantity, unit) VALUES (73, 2, 1, N'g');
 

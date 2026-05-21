@@ -92,7 +92,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                             if (recipe == null)
                             {
                                 recipe = new Recipe(reader.GetInt32("recipeId"),
-                                    reader.IsDBNull("description") ? string.Empty : reader.GetString("productId"));
+                                    reader.IsDBNull("description") ? string.Empty : reader.GetString("description"));
                             }
 
                             if (!reader.IsDBNull("productId"))
@@ -111,7 +111,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                     }
                 }
                 return recipe;
-            }
+        }
             catch { return null; }
         }
     }

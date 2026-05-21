@@ -49,9 +49,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         public override bool Equals(object? obj)
         {
-            if (obj is Recipe other)
-                return recipeId == other.recipeId;
-            return false;
+            try
+            {
+                return obj.ToString() == this.ToString();
+            }
+            catch { return false; }
         }
 
         public override int GetHashCode()
