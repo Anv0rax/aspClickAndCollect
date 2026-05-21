@@ -1,5 +1,6 @@
-﻿using ClickCollect_Antoine_Nolan_2026.DAL;
+using ClickCollect_Antoine_Nolan_2026.DAL;
 using ClickCollect_Antoine_Nolan_2026.Models;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -14,6 +15,13 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
         {
             this.recipeDAL = recipeDAL;
             this.productDAL = productDAL;
+        }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            base.OnActionExecuting(context);
+
+            RestrictToCustomersOnly(context);
         }
 
         public async Task<IActionResult> Index()

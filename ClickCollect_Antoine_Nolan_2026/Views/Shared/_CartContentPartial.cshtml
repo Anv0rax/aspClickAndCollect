@@ -1,4 +1,4 @@
-﻿@model List<ProductQuantity>
+@model List<ProductQuantity>
 
 @{
     double boxes = 0;
@@ -9,7 +9,7 @@
         {
             boxes = (int)TempData["Boxes"];
         }
-        catch (Exception ex) { }
+        catch (Exception) { }
     }
 
     double price = ((Model.Sum(p => p.Product.Price * p.Quantity) + @Order.TaxOfService + (boxes * Order.BoxDeposit)));

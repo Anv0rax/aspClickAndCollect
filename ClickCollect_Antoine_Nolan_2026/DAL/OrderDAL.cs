@@ -112,7 +112,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
         {
             var orders = new List<Order>();
 
-            DateTime nextDay = DateTime.Now.AddHours(32);
+            DateTime nextDay = DateTime.Now.AddDays(1);
             
             string query = @"SELECT o.orderId AS OrderId, o.status AS OrderStatus, 
                             o.numberOfBoxUsed AS BoxUsed, o.numberOfBoxReturned AS BoxReturned,
@@ -302,6 +302,55 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
                 }
             }
 
+            return orders;
+        }
+
+        public async Task<List<Order>> GetReadyOrdersByShopAsync(int shopId)
+        {
+            List<Order> orders = new List<Order>();
+
+            string query = @"SELECT o.orderId, o.status, o.numberOfBoxUsed, o.numberOfBoxReturned, o.timeslot,
+                            u.userId, u.username
+                     FROM Orders o
+                     INNER JOIN Users u ON o.userId = u.userId
+                     WHERE o.shopId = @ShopId AND o.status = 'Ready'";
+
+            using (SqlConnection co = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, co))
+                {
+                    cmd.Parameters.AddWithValue("@ShopId", shopId);
+                    await co.OpenAsync();
+
+                    using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            Customer customer = new Customer(
+                                reader.GetInt32(5),
+                                reader.GetString(6),
+                                string.Empty
+                            );
+
+                            Timeslot timeslot = new Timeslot
+                            {
+                                StartTime = reader.GetDateTime(4)
+                            };
+
+                            Order order = new Order(
+                                reader.GetInt32(0),  
+                                reader.GetString(1),
+                                reader.GetInt32(2), 
+                                reader.GetInt32(3),  
+                                timeslot,
+                                customer
+                            );
+
+                            orders.Add(order);
+                        }
+                    }
+                }
+            }
             return orders;
         }
     }

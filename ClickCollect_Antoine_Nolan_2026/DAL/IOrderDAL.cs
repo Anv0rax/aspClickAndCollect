@@ -17,5 +17,8 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
 
         // This method will be use, so I can get the orders of each customers, and display them.
         public Task<List<Order>> GetOrdersByCustomerAsync(int userId);
+
+        // Récupère uniquement les commandes prêtes (Ready) pour un magasin spécifique
+        Task<List<Order>> GetReadyOrdersByShopAsync(int shopId);
     }
 }

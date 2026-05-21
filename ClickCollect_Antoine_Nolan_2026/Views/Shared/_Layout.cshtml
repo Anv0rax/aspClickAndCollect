@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -33,6 +33,9 @@
                     <li>
                         @if ((bool?)ViewData["IsLoggedIn"] == true && (string?)ViewData["Role"] == "Customer")
                         {
+                            <a asp-controller="Recipe" asp-action="Index" class="btn btn-outline-danger">
+                                Recipes
+                            </a>
                             <a asp-controller="Order" asp-action="History" class="btn btn-outline-secondary me-2">
                                 My Orders
                             </a>

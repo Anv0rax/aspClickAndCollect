@@ -86,46 +86,13 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 return RedirectToAction("Login", "User");
             }
 
-            Shop? theShop = await Shop.GetShopCompleteAsync(shopDAL, cashier.ItsShop.Id);
-            if (theShop == null)
-            {
-                TempData["Error"] = "There is an error with your shop";
-                return RedirectToAction("Index", "Home");
-            }
+            List<Order> readyOrders = await orderDAL.GetReadyOrdersByShopAsync(cashier.ItsShop.Id);
 
-            List<Order> oldOrders = new List<Order>();
-            foreach (Timeslot ts in theShop.Timeslots)
-            {
-                if (ts.StartTime.Date < DateTime.Today)
-                {
-                    foreach (Order o in ts.Orders)
-                    {
-                        if (o.Status == OrderStatusEnum.Ready)
-                            oldOrders.Add(o);
-                    }
-                }
-                else { break; }
-            }
-
-            List<Order> todayOrders = new List<Order>();
-            foreach (Timeslot ts in theShop.Timeslots.Where(t => t.StartTime.Date == DateTime.Today).ToList())
-            {
-                if (ts.StartTime.Date == DateTime.Today)
-                {
-                    foreach (Order o in ts.Orders)
-                    {
-                        if (o.Status == OrderStatusEnum.Ready)
-                            todayOrders.Add(o);
-                    }
-                }
-                else { break; }
-            }
-
-            cashier.ItsShop = theShop;
-
+            DateTime today = DateTime.Today;
             CashierViewModel vm = new CashierViewModel();
-            vm.OldOrders = oldOrders;
-            vm.TodayOrders = todayOrders;
+
+            vm.TodayOrders = readyOrders.Where(o => o.Slot != null && o.Slot.StartTime.Date == today).ToList();
+            vm.OldOrders = readyOrders.Where(o => o.Slot != null && o.Slot.StartTime.Date < today).ToList();
 
             return View(vm);
         }
