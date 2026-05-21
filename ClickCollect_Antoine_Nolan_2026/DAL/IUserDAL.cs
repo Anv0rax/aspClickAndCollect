@@ -16,5 +16,7 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
         Task<User?> GetUserByUsernameAsync(string username);
 
         Task<Customer?> GetCustomerByIdAsync(int id);
+
+        Task<Cashier?> GetCashierAsync(int cashierId);
     }
 }

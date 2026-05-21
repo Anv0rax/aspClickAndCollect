@@ -141,7 +141,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 return RedirectToAction("Login", "User");
 
             List<Shop>? shops = await Shop.GetShopsAsync(shopDAL);
-            if (shops == null)
+            if (shops == null || shops.Count() == 0)
             {
                 TempData["Error"] = "Error with shop selection";
                 return RedirectToAction("Index", "Home");
@@ -184,7 +184,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             ConfirmCartViewModel vm = new ConfirmCartViewModel();
             vm.Cart = GetCartFromSession();
             List<Shop>? shops = await Shop.GetShopsAndTimeslotsAsync(shopDAL);
-            if (shops == null)
+            if (shops == null || shops.Count() == 0)
             {
                 TempData["Error"] = "Error with shop selection";
                 return RedirectToAction("Index", "Home");
@@ -225,7 +225,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             }
 
             List<Shop>? shops = await Shop.GetShopsAndTimeslotsAsync(shopDAL);
-            if(shops == null)
+            if(shops == null || shops.Count() == 0)
             {
                 TempData["Error"] = "Error with shop selection";
                 return RedirectToAction("Index", "Home");
@@ -239,7 +239,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             }
 
             Timeslot? thisTimeslot = thisShop.Timeslots.FirstOrDefault(t => t.StartTime == timeslot);
-            if (thisTimeslot == null && thisTimeslot.NumberOfOrders > 9)
+            if (thisTimeslot == null || thisTimeslot.NumberOfOrders > 9)
             {
                 TempData["Error"] = "Take another timeslot";
                 return RedirectToAction("Confirm", new { shopId = shopId });

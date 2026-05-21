@@ -22,11 +22,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 return RedirectToAction("Login", "User");
 
             List<Order> orders = await Order.GetOrdersByCustomerAsync(orderDAL, userId.Value);
-            Console.WriteLine($"Orders count: {orders.Count}");
-            foreach (var o in orders)
-            {
-                Console.WriteLine($"Order {o.OrderId} - Status: {o.Status}");
-            }
+            //Console.WriteLine($"Orders count: {orders.Count}");
+            //foreach (var o in orders)
+            //{
+            //    Console.WriteLine($"Order {o.OrderId} - Status: {o.Status}");
+            //}
             return View(orders);
         }
     }

@@ -33,7 +33,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public async Task<Order?> GetOrderDetailsAsync(IOrderDAL orderDAL, int orderId)
             => await orderDAL.GetOrderDetailsAsync(orderId);
 
-        public async Task<bool> UpdateOrderStatusAsync(IOrderDAL orderDAL, int orderId, OrderStatusEnum status, int numberOfBoxUsed)
-            => await orderDAL.UpdateOrderStatusAsync(orderId, status, numberOfBoxUsed);
+        public async Task<bool> UpdateOrderStatusAsync(IOrderDAL orderDAL, int orderId, OrderStatusEnum status, int numberOfBoxUsed, int numberOfBoxReturned)
+            => await orderDAL.UpdateOrderStatusAsync(orderId, status, numberOfBoxUsed, numberOfBoxReturned);
     }
 }

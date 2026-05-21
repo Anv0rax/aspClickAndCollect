@@ -73,9 +73,9 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
             {
                 HttpContext.Session.SetInt32("ShopId", cashier.ItsShop.Id);
             }
-            else if (user is Preparer preparer && preparer.ShopId.HasValue)
+            else if (user is Preparer preparer && preparer.Shop != null)
             {
-                HttpContext.Session.SetInt32("ShopId", preparer.ShopId.Value);
+                HttpContext.Session.SetInt32("ShopId", preparer.Shop.Id);
             }
 
             // this just redirects the user to his correct view according to his role

@@ -228,24 +228,29 @@ namespace ClickCollect_Antoine_Nolan_2026.DAL
             return order;
         }
 
-        public async Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatusEnum status, int numberOfBoxUsed)
+        public async Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatusEnum status, int numberOfBoxUsed, int boxReturned=0)
         {
-            using (SqlConnection co = new SqlConnection(connectionString))
+            try
             {
-                SqlCommand cmd = new SqlCommand(
-                    @"UPDATE Orders 
-              SET status = @Status, numberOfBoxUsed = @NumberOfBoxUsed
-              WHERE orderId = @OrderId", co);
+                using (SqlConnection co = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(
+                        @"UPDATE Orders 
+                  SET status = @Status, numberOfBoxUsed = @NumberOfBoxUsed, numberOfBoxReturned = @numberOfBoxReturned
+                  WHERE orderId = @OrderId", co);
 
-                cmd.Parameters.AddWithValue("@Status", status.ToString());
-                cmd.Parameters.AddWithValue("@NumberOfBoxUsed", numberOfBoxUsed);
-                cmd.Parameters.AddWithValue("@OrderId", orderId);
+                    cmd.Parameters.AddWithValue("@Status", status.ToString());
+                    cmd.Parameters.AddWithValue("@NumberOfBoxUsed", numberOfBoxUsed);
+                    cmd.Parameters.AddWithValue("@NumberOfBoxReturned", boxReturned);
+                    cmd.Parameters.AddWithValue("@OrderId", orderId);
 
-                await co.OpenAsync();
+                    await co.OpenAsync();
 
-                int rows = await cmd.ExecuteNonQueryAsync();
-                return rows > 0;
+                    int rows = await cmd.ExecuteNonQueryAsync();
+                    return rows > 0;
+                }
             }
+            catch { return false; }
         }
 
         public async Task<List<Order>> GetOrdersByCustomerAsync(int userId)
