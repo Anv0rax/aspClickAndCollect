@@ -10,14 +10,14 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         private int numberOfBoxUsed = 0;
         private int numberOfBoxReturned = 0;
         private Timeslot slot = new Timeslot();
-        private Customer customer = new Customer();
+        private Customer client = new Customer();
         private List<ProductQuantity> content = new List<ProductQuantity>();
         private static double taxOfService = 5.95;
         private static double boxDeposit = 5.95;
 
         public Order() { }
 
-        public Order(int _orderId, string _status, int _numberOfBoxUsed, int _numberOfBoxReturned, Timeslot _slot, Customer _customer)
+        public Order(int _orderId, string _status, int _numberOfBoxUsed, int _numberOfBoxReturned, Timeslot _slot, Customer _client)
         {
             OrderId = _orderId;
             NumberOfBoxUsed = _numberOfBoxUsed;
@@ -30,18 +30,18 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             {
                 this.status = parsedStatus;
             }
-            Slot = _slot ?? throw new ArgumentNullException("The timeslot of the order can not be null !");
-            Client = _customer ?? throw new ArgumentNullException("The customer of the order must be in the order !");
+            Slot = _slot;
+            Client = _client;
         }
 
-        public Order(int _orderId, string _status, int _numberOfBoxUsed, int _numberOfBoxReturned, Timeslot _slot, Customer _customer, List<ProductQuantity> _content)
-            : this (_orderId, _status, _numberOfBoxUsed, _numberOfBoxReturned, _slot, _customer)
+        public Order(int _orderId, string _status, int _numberOfBoxUsed, int _numberOfBoxReturned, Timeslot _slot, Customer _client, List<ProductQuantity> _content)
+            : this (_orderId, _status, _numberOfBoxUsed, _numberOfBoxReturned, _slot, _client)
         {
             Content = _content;
         }
 
-        public Order(int _orderId, string _status, int _numberOfBoxUsed, int _numberOfBoxReturned, Timeslot _slot, Customer _customer, ProductQuantity _content)
-            : this(_orderId, _status, _numberOfBoxUsed, _numberOfBoxReturned, _slot, _customer)
+        public Order(int _orderId, string _status, int _numberOfBoxUsed, int _numberOfBoxReturned, Timeslot _slot, Customer _client, ProductQuantity _content)
+            : this(_orderId, _status, _numberOfBoxUsed, _numberOfBoxReturned, _slot, _client)
         {
             if (_content != null)
             {
@@ -63,14 +63,14 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         public Customer Client
         {
-            get => customer;
-            set { customer = value; }
+            get => client;
+            set { client = value ?? throw new ArgumentNullException("Client value can't be null."); }
         }
 
         public Timeslot Slot
         {
             get => slot;
-            set { slot = value; }
+            set { slot = value ?? throw new ArgumentNullException("Slot value can't be null."); }
         }
 
         [Range(0,100)]
@@ -102,7 +102,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         }
 
         // This is the estimate price of the products, plus the service fee without any boxes.
-        // This will be used to inform the customer of how many euros of the order before the pickup
+        // This will be used to inform the client of how many euros of the order before the pickup
         public double GetEstimatePrice()
         {
             double total = taxOfService;
@@ -137,7 +137,6 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             return Math.Round(total, 2);
         }
 
-        // Ajoute une ligne de commande — si le produit existe déjà, augmente la quantité
         // This add a new order
         // checks if the products aleardy exist. If thats the case, we increase the quantity.
         public void AddOrderLine(ProductQuantity pq)
@@ -237,7 +236,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
             => await orderDAL.GetOrdersToPrepareAsync(shopId);
 
         public override string ToString()
-            => $"Order {orderId} - {status} - {slot?.StartTime:dd/MM/yyyy} - {customer?.Username}";
+            => $"Order {orderId} - {status} - {slot?.StartTime:dd/MM/yyyy} - {client?.Username}";
     }
 
     public enum OrderStatusEnum

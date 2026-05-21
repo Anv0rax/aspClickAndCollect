@@ -10,7 +10,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public Shop ItsShop
         {
             get { return shop; }
-            set { shop = value; }
+            set { shop = value ?? throw new ArgumentNullException("Shop cannot be null."); }
         }
 
         public Cashier(int _id, string _username, string _password, Shop _shop)

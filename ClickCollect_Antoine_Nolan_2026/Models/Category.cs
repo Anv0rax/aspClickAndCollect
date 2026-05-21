@@ -20,7 +20,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public string NameCategory
         {
             get { return _nameCategory; }
-            set { _nameCategory = value; }
+            set { _nameCategory = value ?? throw new ArgumentNullException("The name of the category can't be null."); }
         }
 
         public Category()
@@ -31,7 +31,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public Category(int id, string nameCategory)
         {
             Id = id;
-            NameCategory = nameCategory ?? throw new ArgumentNullException("The name of the category can't be null.");
+            NameCategory = nameCategory;
         }
 
         public override string ToString()

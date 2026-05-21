@@ -1,5 +1,6 @@
 using ClickCollect_Antoine_Nolan_2026.DAL;
 using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace ClickCollect_Antoine_Nolan_2026.Models
 {
@@ -24,7 +25,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public string Username
         {
             get { return username; }
-            set { username = value; }
+            set
+            {
+                value = value.Trim();
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentNullException("Username can't be empty");
+                }
+
+                username = value;
+            }
         }
 
         [Display(Name = "Password")]
@@ -36,7 +46,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public string Password
         {
             get { return password; }
-            set { password = value; }
+            set
+            {
+                value = value.Trim();
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentNullException("Password can't be empty");
+                }
+
+                password = value;
+            }
         }
 
         [Display(Name = "Last name")]
@@ -46,7 +65,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public string LastName
         {
             get { return lastName; }
-            set { lastName = value; }
+            set
+            {
+                value = value.Trim();
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentNullException("Lastname can't be empty");
+                }
+
+                lastName = value;
+            }
         }
 
         [Display(Name = "First name")]
@@ -56,7 +84,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public string FirstName 
         {
             get { return firstName; }
-            set { firstName = value; }
+            set
+            {
+                value = value.Trim();
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentNullException("Firstname can't be empty");
+                }
+
+                firstName = value;
+            }
         }
 
 
@@ -68,23 +105,23 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public User(int id, string username, string password)
         {
             Id = id;
-            Username = username ?? throw new ArgumentNullException("The user must have a username.");
-            Password = password ?? throw new ArgumentNullException("The password is null.");
+            Username = username;
+            Password = password;
         }
 
         public User(int id, string username, string firstName, string lastName)
         {
             Id = id;
-            Username = username ?? throw new ArgumentNullException("The user must have a username.");
-            FirstName = firstName ?? throw new ArgumentNullException("First name can't be null.");
-            LastName = lastName ?? throw new ArgumentNullException("Last name can't be null.");
+            Username = username;
+            FirstName = firstName;
+            LastName = lastName;
         }
 
         public User(int id, string username, string password, string firstName, string lastName)
-            : this(id, username, password) // ← réutilise le constructeur de base
+            : this(id, username, password)
         {
-            FirstName = firstName ?? throw new ArgumentNullException("First name can't be null.");
-            LastName = lastName ?? throw new ArgumentNullException("Last name can't be null.");
+            FirstName = firstName;
+            LastName = lastName;
         }
 
         public override string ToString()

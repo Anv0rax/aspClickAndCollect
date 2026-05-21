@@ -27,10 +27,10 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public Adress(int _id, string _street, string _number, string _city, string _country)
         {
             id = _id;
-            Street = _street ?? throw new ArgumentNullException("Street can be null.");
-            Number = _number ?? throw new ArgumentNullException("Number cannot be null.");
-            City = _city ?? throw new ArgumentNullException("City cannot be null.");
-            Country = _country ?? throw new ArgumentNullException("Country cannot be null.");
+            Street = _street;
+            Number = _number;
+            City = _city;
+            Country = _country;
         }
 
         public Adress(int _id, string _street, string _number, string _city, string _country, double _lon, double _lat)
@@ -58,7 +58,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public string Number
         {
             get => number;
-            set => number = value; 
+            set
+            {
+                value = value.Trim();
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentNullException("Can't be empty");
+                }
+
+                number = value;
+            }
         }
 
         [Display(Name = "Street")]
@@ -67,7 +76,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public string Street
         {
             get => street;
-            set { street = value; }
+            set
+            {
+                value = value.Trim();
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentNullException("Can't be empty");
+                }
+
+                street = value;
+            }
         }
 
         [Display(Name = "City")]
@@ -94,7 +112,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public string Country
         {
             get => country;
-            set { country = value; }
+            set
+            {
+                value = value.Trim();
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentNullException("Can't be empty");
+                }
+
+                country = value;
+            }
         }
 
         public override string ToString()

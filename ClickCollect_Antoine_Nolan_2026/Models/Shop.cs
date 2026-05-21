@@ -1,6 +1,7 @@
 using ClickCollect_Antoine_Nolan_2026.DAL;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace ClickCollect_Antoine_Nolan_2026.Models
 {
@@ -28,9 +29,9 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public Shop(int _id, string _name, string _insertMap, Adress _adress)
         {
             Id = _id;
-            Name = _name ?? throw new ArgumentNullException(nameof(_name), "There is no name for the shop.");
-            InsertMap = _insertMap ?? throw new ArgumentNullException(nameof(_insertMap), "The map of the shop is null.");
-            Adress = _adress ?? throw new ArgumentNullException(nameof(_adress), "There is no address for the shop.");
+            Name = _name;
+            InsertMap = _insertMap;
+            Adress = _adress;
         }
 
         public Shop(int _id, string _name, string _insertMap, Adress _adress, List<Timeslot> _ts)
@@ -65,13 +66,22 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public string Name
         {
             get { return name; }
-            set { name = value; }
+            set { name = value ?? throw new ArgumentNullException("There is no name for the shop."); }
         }
 
         public string InsertMap
         {
             get => insertMap;
-            private set => insertMap = value;
+            private set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("Can't be empty");
+                }
+                value = value.Trim();
+
+                insertMap = value;
+            }
         }
 
         public List<Timeslot> Timeslots

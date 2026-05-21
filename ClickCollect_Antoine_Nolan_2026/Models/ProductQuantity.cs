@@ -11,7 +11,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public Product Product
         {
             get { return product; }
-            set { product = value; }
+            set { product = value ?? throw new ArgumentNullException("A product is required to put a quantity on it."); }
         }
 
         [Range(1, 500)]
@@ -30,7 +30,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         public ProductQuantity(Product p, int quantity)
         {
-            Product = p ?? throw new ArgumentNullException("A product is required to put a quantity on it.");
+            Product = p;
             Quantity = quantity;
         }
 
@@ -51,6 +51,5 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         public override int GetHashCode()
             => product.ProductId.GetHashCode();
-
     }
 }

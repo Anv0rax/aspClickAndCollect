@@ -23,7 +23,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public string Email
         {
             get { return email; }
-            set { email = value; }
+            set { email = value ?? throw new ArgumentNullException("Email can't be null."); }
         }
 
         [Display(Name = "Phone number")]
@@ -33,7 +33,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public string PhoneNumber
         {
             get { return phoneNumber; }
-            set { phoneNumber = value; }
+            set { phoneNumber = value ?? throw new ArgumentNullException("Email can't be null."); }
         }
 
         public Adress? Adress

@@ -12,7 +12,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public Timeslot(DateTime _datefrom, Shop _shop)
         {
             StartTime = _datefrom;
-            InShop = _shop ?? throw new ArgumentNullException("The shop is required to to put the timeslot !");
+            InShop = _shop;
         }
 
         public Timeslot(DateTime _datefrom, Shop _shop, Order _order)
@@ -25,7 +25,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public Shop InShop
         {
             get { return shop; }
-            set { shop = value; }
+            set { shop = value ?? throw new ArgumentNullException("The shop is required to to put the timeslot !"); }
         }
 
         public DateTime StartTime
@@ -42,7 +42,12 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public List<Order> Orders
         {
             get => orders;
-            set { orders = value; }
+            set { orders = value ?? throw new ArgumentNullException("Orders can't be null !"); }
+        }
+
+        public static int MaxOrders
+        {
+            get => maxOrders; 
         }
 
         public void AddOrder(Order o)

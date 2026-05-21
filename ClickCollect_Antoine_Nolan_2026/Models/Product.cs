@@ -1,5 +1,6 @@
 using ClickCollect_Antoine_Nolan_2026.DAL;
 using System.ComponentModel.DataAnnotations;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ClickCollect_Antoine_Nolan_2026.Models
 {
@@ -23,7 +24,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public string Name
         {
             get { return name; }
-            set { name =  value; }
+            set
+            {
+                value = value.Trim();
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentNullException("Can't be empty");
+                }
+
+                name = value;
+            }
         }
 
         [StringLength(500, ErrorMessage = "The description of the product is way too long !")]
@@ -32,7 +42,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public string Description
         {
             get { return description; }
-            set { description = value; }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("Can't be empty");
+                }
+                value = value.Trim();
+
+                description = value;
+            }
         }
 
         [Required(ErrorMessage = "Each product must have a price !")]
@@ -56,7 +75,16 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public string ImageLink
         {
             get { return imageLink; }
-            set { imageLink = value; }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("Can't be empty");
+                }
+                value = value.Trim();
+
+                imageLink = value;
+            }
         }
 
         [Required(ErrorMessage = "You need at least one category for your product. A product can't be without a category.")]
@@ -74,36 +102,36 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public Product(int productId, string name, string description, double price, string imageLink, Category category)
         {
             ProductId = productId;
-            Name = name ?? throw new ArgumentNullException("The name of the product can't be null !");
-            Description = description ?? string.Empty;
+            Name = name;
+            Description = description;
             Price = price;
-            ImageLink = imageLink ?? string.Empty;
+            ImageLink = imageLink;
             categoryProduct.Add(category ?? throw new ArgumentNullException("There is no category for the product !"));
         }
 
         public Product(int productId, string name, string description, double price, string imageLink, List<Category> categories)
         {
             ProductId = productId;
-            Name = name ?? throw new ArgumentNullException(nameof(name), "Name cannot be null.");
-            Description = description ?? string.Empty;
+            Name = name;
+            Description = description;
             Price = price;
-            ImageLink = imageLink ?? throw new ArgumentNullException(nameof(imageLink), "ImageLink cannot be null.");
+            ImageLink = imageLink;
             categoryProduct = categories ?? new List<Category>();
         }
 
         public Product(int productId, string name, string description, double price, string imageLink)
         {
             ProductId = productId;
-            Name = name ?? throw new ArgumentNullException("The name of the product can't be null !");
-            Description = description ?? string.Empty;
+            Name = name;
+            Description = description;
             Price = price;
-            ImageLink = imageLink ?? string.Empty;
+            ImageLink = imageLink;
         }
 
         public Product(int productId, string name, double price, string imageLink)
         {
             ProductId = productId;
-            Name = name ?? throw new ArgumentNullException("The name of the product can't be null !");
+            Name = name;
             Price = price;
             ImageLink = imageLink ?? string.Empty;
         }
@@ -138,12 +166,6 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public static async Task<List<Product>> GetCatalogAsync(IProductDAL productDAL)
         {
             return await productDAL.GetAllProductsAsync();
-        }
-
-        // Searches products by category and/or keyword
-        public static async Task<List<Product>> SearchAsync(IProductDAL productDAL, Category? cat = null, string input = "")
-        {
-            return await productDAL.SearchProductsAsync(cat, input);
         }
 
         public static async Task<Product?> GetProductByIdAsync(IProductDAL productDAL, int id)
