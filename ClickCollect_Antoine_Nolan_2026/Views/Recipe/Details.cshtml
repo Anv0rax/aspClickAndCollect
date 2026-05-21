@@ -1,0 +1,86 @@
+﻿@model Recipe
+@{
+    ViewData["Title"] = "Recipe Details";
+}
+
+<div class="container py-5">
+
+    <partial name="_ErrorSuccessMessagesPartial" />
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-success text-white fw-bold">
+            Recipe #@Model.RecipeId
+        </div>
+        <div class="card-body">
+
+            <p class="text-muted mb-4">@Model.Description</p>
+
+            <h5 class="fw-bold mb-3">Ingredients needed</h5>
+
+            @if (Model.Ingredients == null || Model.Ingredients.Count == 0)
+            {
+                <div class="alert alert-warning">No ingredients found for this recipe.</div>
+            }
+            else
+            {
+                <table class="table table-hover align-middle border mb-4">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ingredient in Model.Ingredients)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="@ingredient.Product.ImageLink"
+                                             alt="@ingredient.Product.Name"
+                                             style="width: 50px; height: 50px; object-fit: contain;" />
+                                        <span>@ingredient.Product.Name</span>
+                                    </div>
+                                </td>
+                                <td>@ingredient.Quantity</td>
+                                <td>@ingredient.Unit</td>
+                                <td>@ingredient.Product.Price.ToString("F2") €</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="table-light fw-bold">
+                        <tr>
+                            <td colspan="3">Estimated total</td>
+                            <td>
+                                @Model.Ingredients.Sum(i => i.Product.Price * i.Quantity).ToString("F2") €
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                @if ((bool?)ViewData["IsLoggedIn"] == true)
+                {
+                    <form method="post" asp-controller="Recipe" asp-action="AddIngredientsToCart">
+                        <input type="hidden" name="recipeId" value="@Model.RecipeId" />
+                        <button type="submit" class="btn btn-success btn-lg w-100">
+                            Add all ingredients to cart
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        <a asp-controller="User" asp-action="Login">Log in</a> to add ingredients to your cart.
+                    </div>
+                }
+            }
+
+            <a asp-action="Index" class="btn btn-outline-secondary mt-3 w-100">
+                Back to recipes
+            </a>
+
+        </div>
+    </div>
+</div>

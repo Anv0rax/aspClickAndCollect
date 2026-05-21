@@ -38,6 +38,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 TempData["Error"] = "Be connected !";
                 return RedirectToAction("Login", "User");
             }
+            if(id < 0 || boxesUsed < 0 || boxesReturned < 0)
+            {
+                TempData["Error"] = "Error with the informations given !";
+                return RedirectToAction("Payment", "Cashier", id);
+            }
 
             await Order.UpdateOrderStatusAsync(orderDAL, id, OrderStatusEnum.Fullfilled, boxesUsed, boxesReturned);
 

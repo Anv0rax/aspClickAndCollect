@@ -42,7 +42,12 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public List<Order> Orders
         {
             get => orders;
-            set { orders = value ?? throw new ArgumentNullException("Orders can't be null !"); }
+            set 
+            {
+                if (value == null || value.Count > MaxOrders)
+                    throw new ArgumentException($"Orders can't be null ! or more than {MaxOrders}");
+                orders = value; 
+            }
         }
 
         public static int MaxOrders
@@ -52,7 +57,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 
         public void AddOrder(Order o)
         { 
-            if(orders.Count < maxOrders && !orders.Contains(o) && o != null)
+            if(orders.Count < maxOrders && o != null && !orders.Contains(o) )
             {
                 orders.Add(o);
             }

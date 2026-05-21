@@ -65,7 +65,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public double Price
         {
             get { return price; }
-            set { price = value; }
+            set 
+            { 
+                if (value > 0)
+                    price = value; 
+            }
         }
 
         [Required(ErrorMessage = "The image link is required.")]

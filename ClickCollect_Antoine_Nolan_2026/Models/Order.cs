@@ -78,7 +78,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public int NumberOfBoxReturned
         {
             get => numberOfBoxReturned;
-            set { numberOfBoxReturned = value; }
+            set
+            {
+                if (value > 0)
+                    numberOfBoxReturned = value;
+            }
         }
 
         [Range(0, 100)]
@@ -86,7 +90,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public int NumberOfBoxUsed
         {
             get => numberOfBoxUsed;
-            set { numberOfBoxUsed = value; }
+            set 
+            { 
+                if (value > 0)
+                    numberOfBoxUsed = value; 
+            }
         }
 
         public OrderStatusEnum Status
@@ -102,7 +110,6 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         }
 
         // This is the estimate price of the products, plus the service fee without any boxes.
-        // This will be used to inform the client of how many euros of the order before the pickup
         public double GetEstimatePrice()
         {
             double total = taxOfService;
@@ -112,7 +119,6 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         }
 
         // This is the price with the box used : the products + service fee + box caution.
-        // This will be used for the cashier, to know how many boxes are added to have the final price !
         public double GetTotalPrice()
         {
             double total = taxOfService;
@@ -123,7 +129,6 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         }
 
         // This is the final price : the price of the products + the service fee + the box caution + the box retuned.
-        // used for the end of the process order
         public double GetFinalTotalPrice(int boxesReturned)
         {
             if (boxesReturned < 0)

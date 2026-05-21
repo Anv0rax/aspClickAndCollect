@@ -5,12 +5,12 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
 {
     public class Preparer : User
     {
-        private Shop shop;
+        private Shop shop = new Shop();
 
         public Shop Shop
         {
             get { return shop; }
-            set { shop = value; }
+            set { shop = value ?? throw new ArgumentNullException("Shop can't be null"); }
         }
 
         public Preparer()

@@ -189,7 +189,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 TempData["Error"] = "Error with shop selection";
                 return RedirectToAction("Index", "Home");
             }
-            vm.Shop = shops.FirstOrDefault(s => s.Id == shopId) ?? shops[1];
+            vm.Shop = shops.FirstOrDefault(s => s.Id == shopId) ?? shops[0];
 
             Customer? thisUser = await Models.User.GetCustomerByIdAsync(userDAL, (int)userId);
             if (thisUser == null)

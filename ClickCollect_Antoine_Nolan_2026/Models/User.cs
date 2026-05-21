@@ -46,16 +46,7 @@ namespace ClickCollect_Antoine_Nolan_2026.Models
         public string Password
         {
             get { return password; }
-            set
-            {
-                value = value.Trim();
-                if (string.IsNullOrEmpty(value))
-                {
-                    throw new ArgumentNullException("Password can't be empty");
-                }
-
-                password = value;
-            }
+            set { password = value; }
         }
 
         [Display(Name = "Last name")]
