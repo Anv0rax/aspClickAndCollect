@@ -44,7 +44,11 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
                 return RedirectToAction("Payment", "Cashier", id);
             }
 
-            await Order.UpdateOrderStatusAsync(orderDAL, id, OrderStatusEnum.Fullfilled, boxesUsed, boxesReturned);
+            if(! await Order.UpdateOrderStatusAsync(orderDAL, id, OrderStatusEnum.Fullfilled, boxesUsed, boxesReturned))
+            {
+                TempData["Error"] = "Error with the informations given !";
+                return RedirectToAction("Payment", "Cashier", id);
+            }
 
             TempData["Success"] = $"{id} valided";
             return RedirectToAction("Index");
@@ -88,11 +92,10 @@ namespace ClickCollect_Antoine_Nolan_2026.Controllers
 
             List<Order> readyOrders = await orderDAL.GetReadyOrdersByShopAsync(cashier.ItsShop.Id);
 
-            DateTime today = DateTime.Today;
             CashierViewModel vm = new CashierViewModel();
 
-            vm.TodayOrders = readyOrders.Where(o => o.Slot != null && o.Slot.StartTime.Date == today).ToList();
-            vm.OldOrders = readyOrders.Where(o => o.Slot != null && o.Slot.StartTime.Date < today).ToList();
+            vm.TodayOrders = readyOrders.Where(o => o.Slot != null && o.Slot.StartTime.Date == DateTime.Today).ToList();
+            vm.OldOrders = readyOrders.Where(o => o.Slot != null && o.Slot.StartTime.Date < DateTime.Today).ToList();
 
             return View(vm);
         }
